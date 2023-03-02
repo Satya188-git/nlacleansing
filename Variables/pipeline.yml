@@ -1,0 +1,68 @@
+variables:
+  #Metadata variables for use with sample terraform files
+  - name: organization
+    value: COMPANY-NAME
+  - name: appName
+    value: APP-NAME
+  - name: applicationCode
+    value: APP-CODE
+  - name: applicationUse
+    value: APP-USE
+  - name: companyCode
+    value: COMPANY-USE
+  - name: owner
+    value: OWNER
+  - name: description
+    value: DESCRIPTION
+  - name: billingGuid
+    value: BILLING-GUID
+  - name: awsSecondaryRegionAbbreviation
+    value: AWS-SECONDARY-REGION-ABBREVIATION
+  #This variable must not be used in the S3 Upload task as documented in the S3 Upload wiki page.
+  - name: awsRegionCode
+    value: AWS-REGION-CODE
+  - name: awsSecondaryRegionCode
+    value: AWS-SECONDARY-REGION-CODE
+  #Variables required for upload to S3
+  #More information on S3 Upload can be found here: https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3594/S3-Upload
+  #Bucket names are built like: '$(organization)-$(applicationCode)-${{ parameters.Environment }}-${{ item.awsRegionAbbreviation }}}-s3-${{ item.bucketSuffix }}'
+  #S3 Upload Template information: https://dev.azure.com/SempraUtilities/SempraUtilities/_git/shared-it-devsecops-yaml?path=%2FPipeline-Templates%2FStandalone%2FSteps%2FAWS%2FS3%2FS3-Upload-Param.yml&version=GBmaster&_a=contents
+  - name: bucketSuffix
+    value: BUCKET-SUFFIX
+  - name: sourceFolder
+    value: $(Pipeline.Workspace)/ARTIFACT-NAME
+  - name: globExpressions
+    value: '**/*.*'
+  - name: awsRegionAbbreviation
+    value: AWS-REGION-ABBREVIATION
+  #Variables required for terraform
+  - name: adoRepoName
+    value: 'REPONAME'
+  - name: terraformWorkingDirectory
+    value: './terraform'
+  - name: terraformDeployDirectory
+    value: '$(Pipeline.Workspace)/terraform'
+  - name: terraformVersion
+    value: '0.15.3'
+  - name: terraformHostname
+    value: 'app.terraform.io'
+  #General pipeline variables
+  - name: agentPool
+    value: 'SEU RHEL8 VX Shared'
+  - name: canaryPool
+    value: 'SEU RHEL8 VX Dev'
+  #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline by the `LocalBuildYAML`, `LocalPreTFYAML` and/or `LocalReleaseYAML` pipeline parameters
+  #More information: 
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3585/LocalPreTFYAML
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3583/LocalReleaseYAML
+  # Below are for Azure Cloud Deployment
+  - name: azureSubscriptionID
+    value: 'Azure Subscription ID'
+  - name: azureTenantID
+    value: 'TenantID'
+  #Below are for GCP Cloud Deployment
+  - name: GCPCloudSDKVersion
+    value: ''
+  - name: GCPSourceFolder
+    value: $(Pipeline.Workspace)/ARTIFACT-NAME

@@ -1,0 +1,25 @@
+variables:
+  #Add variables here when they are unique per environment and needed in steps added to the pipeline by the `LocalPreTFYAML` or `LocalReleaseYAML` pipeline parameters
+  #More information: 
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3585/LocalPreTFYAML
+  #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3583/LocalReleaseYAML
+  - name: environment
+    value: tst
+  - name: terraformWorkspace
+    value: '$(company_code)-$(environment)_$(adoRepoName)'
+  #Below is for AzureCloud Deployment
+  - name: azureClientID
+    value: 'ChangeMeIfNeeded'
+   #Below is for GCP Cloud Deployment
+  - name: GCPBucketDestinationFolder
+    value: ''
+  - name: GCPRegion
+    value: ''
+  #Below are for AWS Terraform Container - Push. 
+  - name: awsEcrAccount
+    value: ''
+  - name: awsEcrRegion
+    value: ''
+  #Replace the below  with the value of the adoRepoName variable (Not the variable itself! It wont work!) and the environment name at the end
+  #For example, if adoRepoName is `shared-it-devsecops` and environment is `dev` this value is `shared-it-devsecops-dev`
+  - group: sdge-it-nla-tst
