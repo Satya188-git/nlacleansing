@@ -1,0 +1,1 @@
+print('ccc_macie_lambda')

@@ -1,16 +1,20 @@
-variable "unrefinedLambdaRole-arn" {
+variable "transcribe_lambda_role_arn" {
   type=string
 }
 
-variable "initialLambdaRole-arn" {
+variable "comprehend_lambda_role_arn" {
   type=string
 }
 
-variable "cleanLambdaRole-arn" {
+variable "informational_macie_lambda_role_arn" {
   type=string
 }
 
-variable "dirtyLambdaRole-arn" {
+variable "macie_lambda_role_arn" {
+  type=string
+}
+
+variable "trigger_macie_lambda_role_arn" {
   type=string
 }
 
