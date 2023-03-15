@@ -40,15 +40,7 @@ locals {
       type="S"
     },
     {
-      name="Path"
-      type="S"
-    },
-    {
       name="FileName"
-      type=""
-    },
-    {
-      name="Status"
       type="S"
     },
     {
@@ -116,67 +108,19 @@ locals {
   range_key        = "internalSegmentClientStartTime"
   dynamodb_attributes= [
     {
-      name="companyName"
-      type="S"
-    },
-    {
-      name="fileName"
+      name="fileID"
       type="N"
     },
     {
-      name="fullName"
-      type="S"
-    },
-    {
-      name="participantPhoneNumber"
-      type="S"
-    },
-    {
-      name="participantAreaCode"
-      type="S"
-    },
-    {
-      name="segmentID"
-      type="S"
-    },
-    {
-      name="segmentDialedNumber"
-      type="S"
-    },
-    {
-      name="segmentStartTime"
-      type="S"
-    },
-    {
-      name="segmentStopTime"
-      type="S"
-    },
-    {
-      name="segmentVectorNumber"
-      type="S"
+      name="participantAgentId"
+      type="N"
     },
     {
       name="internalSegmentClientStartTime"
       type="S"
     },
     {
-      name="internalSegmentClientStartTime"
-      type="S"
-    },
-    {
-      name="language"
-      type="N"
-    },
-    {
-      name="customerType"
-      type="S"
-    },
-    {
-      name="ivrCallcategory"
-      type="S"
-    },
-    {
-      name="batchName"
+      name="internalSegmentClientStopTime"
       type="S"
     }
   ]

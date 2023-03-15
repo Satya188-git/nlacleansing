@@ -176,7 +176,7 @@ module "ccc_notification_forwarder_lambda" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "sns-notification-forwarder"
-
+  
   description   = "nla sns notification lambda"
   handler       = "run.lambda_handler"
   runtime       = "python3.8"
@@ -192,6 +192,8 @@ module "ccc_notification_forwarder_lambda" {
   tracing_mode = "PassThrough"
   lambda_role      = var.sns_lambda_role_arn
   update_role      = false
+
+  local_existing_package = ""
 
   tags = merge (local.tags,
     {
