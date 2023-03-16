@@ -30,7 +30,7 @@ module "ccc_transcribe_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "transcribe-source-files"
+  application_use  = "transcribe"
 
   description   = "nla transcribe source files lambda"
   handler       = "run.lambda_handler"
@@ -57,14 +57,21 @@ module "ccc_transcribe_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-transcribe-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
     },
   )
+  allowed_triggers = {
+    AllowExecutionFromS3Bucket = {
+      principal  = "s3.amazonaws.com"
+      source_arn = var.ccc_unrefined_call_data_bucket_arn
+    }
+  }
 }
 resource "aws_lambda_permission" "unrefined_data_trigger" {
+  # depends_on = [module.ccc_transcribe_lambda]
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-transcribe-lambda"
+  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
   principal     = "s3.amazonaws.com"
   source_arn    = var.ccc_unrefined_call_data_bucket_arn
 } 
@@ -78,7 +85,7 @@ module "ccc_comprehend_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "comprehend-transcribed-source-file-data"
+  application_use  = "comprehend-lambda"
 
   description   = "nla comprehend source files lambda"
   handler       = "run.lambda_handler"
@@ -109,13 +116,14 @@ module "ccc_comprehend_lambda" {
   )
 }
 
-resource "aws_lambda_permission" "comprehend_data_trigger" {
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend-lambda"
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.ccc_initial_bucket_arn
-} 
+# resource "aws_lambda_permission" "comprehend_data_trigger" {
+#   depends_on = [module.ccc_comprehend_lambda]
+#   statement_id  = "AllowExecutionFromS3Bucket"
+#   action        = "lambda:InvokeFunction"
+#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend-lambda"
+#   principal     = "s3.amazonaws.com"
+#   source_arn    = var.ccc_initial_bucket_arn
+# } 
 
 # CustomerCallCenter-Lambda-MacieInformational
 module "ccc_informational_macie_lambda" {
@@ -126,7 +134,7 @@ module "ccc_informational_macie_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "informational-macie-file-data"
+  application_use  = "info-macie-lambda"
 
   description   = "nla transcribed data macie informational lambda"
   handler       = "run.lambda_handler"
@@ -153,18 +161,19 @@ module "ccc_informational_macie_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-informational-macie-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie-lambda"
     },
   )
 }
 
-resource "aws_lambda_permission" "macie_info_trigger" {
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-informational-macie-lambda"
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.ccc_maciefindings_bucket_arn
-} 
+# resource "aws_lambda_permission" "macie_info_trigger" {
+#   depends_on = [module.ccc_informational_macie_lambda]
+#   statement_id  = "AllowExecutionFromS3Bucket"
+#   action        = "lambda:InvokeFunction"
+#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie-lambda"
+#   principal     = "s3.amazonaws.com"
+#   source_arn    = var.ccc_maciefindings_bucket_arn
+# } 
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
@@ -175,7 +184,7 @@ module "ccc_notification_forwarder_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "sns-notification-forwarder"
+  application_use  = "notification-lambda"
   
   description   = "nla sns notification lambda"
   handler       = "run.lambda_handler"
@@ -201,13 +210,15 @@ module "ccc_notification_forwarder_lambda" {
     },
   )
 }
-resource "aws_lambda_permission" "sns_notification_trigger" {
-  statement_id  = "AllowExecutionFromSNS"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification-lambda"
-  principal     = "s3.amazonaws.com"
-  source_arn    = "arn:aws:sns:us-west-2:544868842803:aws-controltower-SecurityNotifications"
-}
+
+# resource "aws_lambda_permission" "sns_notification_trigger" {
+#   depends_on = [module.ccc_notification_forwarder_lambda]
+#   statement_id  = "AllowExecutionFromSNS"
+#   action        = "lambda:InvokeFunction"
+#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification-lambda"
+#   principal     = "s3.amazonaws.com"
+#   source_arn    = "arn:aws:sns:us-west-2:544868842803:aws-controltower-SecurityNotifications"
+# }
 
 # Trigger-Macie-Scan
 module "ccc_macie_scan_trigger_lambda" {
@@ -218,7 +229,7 @@ module "ccc_macie_scan_trigger_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "trigger-macie"
+  application_use  = "macie-scan-lambda"
 
   description   = "nla trigger of macie scan lambda"
   handler       = "run.lambda_handler"
@@ -244,17 +255,18 @@ module "ccc_macie_scan_trigger_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-trigger-macie-scan-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan-lambda"
     },
   )
 }
-resource "aws_lambda_permission" "macie_scan_trigger" {
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-trigger-macie-scan-lambda"
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.ccc_cleaned_bucket_arn
-}
+# resource "aws_lambda_permission" "macie_scan_trigger" {
+#   depends_on = [module.ccc_macie_scan_trigger_lambda]
+#   statement_id  = "AllowExecutionFromS3Bucket"
+#   action        = "lambda:InvokeFunction"
+#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan-lambda"
+#   principal     = "s3.amazonaws.com"
+#   source_arn    = var.ccc_cleaned_bucket_arn
+# }
 
 # CustomerCallCenter-Lambda-Macie
 module "ccc_macie_lambda" {
@@ -265,7 +277,7 @@ module "ccc_macie_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "ccc-macie-lambda"
+  application_use  = "macie-lambda"
 
   description   = "nla macie lambda"
   handler       = "run.lambda_handler"
@@ -304,7 +316,7 @@ module "ccc_audit_call_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "ccc-macie-lambda"
+  application_use  = "audit-call-lambda"
 
   description   = "nla macie lambda"
   handler       = "run.lambda_handler"

@@ -21,25 +21,25 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
-module "cloudwatch" {
-  source              = "./modules/cloudwatch"
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  namespace           = var.namespace
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  region_code         = var.region_code
-  owner               = var.owner
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
-}
+# module "cloudwatch" {
+#   source              = "./modules/cloudwatch"
+#   region              = var.region
+#   environment         = var.environment
+#   application_use     = var.application_use
+#   namespace           = var.namespace
+#   company_code        = var.company_code
+#   application_code    = var.application_code
+#   environment_code    = var.environment_code
+#   region_code         = var.region_code
+#   owner               = var.owner
+#   tag-version         = var.tag-version
+#   billing-guid        = var.billing-guid
+#   unit                = var.unit
+#   portfolio           = var.portfolio
+#   support-group       = var.support-group
+#   cmdb-ci-id          = var.cmdb-ci-id
+#   data-classification = var.data-classification
+# }
 
 module "dynamodb" {
   source                 = "./modules/dynamodb"

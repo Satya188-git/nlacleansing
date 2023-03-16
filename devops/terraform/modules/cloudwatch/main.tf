@@ -19,21 +19,20 @@ locals {
   }
 }
 
-module "lambda_log_group" {
-  source = "app.terraform.io/SempraUtilities/seu-cloudwatch-log-group/aws"
-  #name              = "lambda-log-group"
-  retention_in_days = 7
+# module "lambda_log_group" {
+#   source = "app.terraform.io/SempraUtilities/seu-cloudwatch-log-group/aws"
+#   retention_in_days = 7
 
-  company_code     = local.company_code
-  application_code = local.application_code
-  application_use  = local.application_use
-  environment_code = local.environment_code
-  region_code      = local.region_code
+#   company_code     = local.company_code
+#   application_code = local.application_code
+#   application_use  = local.application_use
+#   environment_code = local.environment_code
+#   region_code      = local.region_code
 
-  tags = merge(
-    local.tags,
-    {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-generic-log-group"
-    },
-  )
-}
+#   tags = merge(
+#     local.tags,
+#     {
+#       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-generic-log-group"
+#     },
+#   )
+# }

@@ -69,7 +69,7 @@ resource "aws_kms_key" "piimetadata_kms_key" {
   enable_key_rotation = true
 }
 resource "aws_kms_alias" "piimetadata_kms_key" {
-  name          = "alias/maciefindings_kms_key"
+  name          = "alias/piimetadata_kms_key"
   target_key_id = aws_kms_key.piimetadata_kms_key.key_id
 }
 
@@ -80,7 +80,7 @@ resource "aws_kms_key" "athenaresults_kms_key" {
   enable_key_rotation = true
 }
 resource "aws_kms_alias" "athenaresults_kms_key" {
-  name          = "alias/maciefindings_kms_key"
+  name          = "alias/athenaresults_kms_key"
   target_key_id = aws_kms_key.athenaresults_kms_key.key_id
 }
 

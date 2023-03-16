@@ -182,7 +182,7 @@ module "autoscaler_iam_role" {
 
 #comprehend_lambda_role
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonComprehendFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/ComprehendFullAccess"
   role       = module.comprehend_lambda_role.name
 }
 
