@@ -8,9 +8,3 @@ terraform {
     }
   }
 }
-
-# terraform {
-#   backend "local" {
-#     path = "devops/terraform/pii_cleansing/.terraform/terraform.tfstate"
-#   }
-# }
