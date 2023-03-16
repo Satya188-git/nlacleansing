@@ -235,6 +235,7 @@ def regex_content_cleaning(content):
     cleaned_content = re.sub(r'\w*DIGITS\w*', 'DIGITS',
                              cleaned_content, flags=re.IGNORECASE)
 
+
 # Regex 3
 # ...
 
@@ -254,13 +255,13 @@ def comprehend_content_cleaning(comprehend, content):
             Text=cleaned_content,
             LanguageCode='en'
         )
- # we are not able to pass any TAGS with this request
+        # we are not able to pass any TAGS with this request
 
         # Replacing the PII with PII Type name
         for NER in reversed(comprehend_pii_response['Entities']):
-        cleaned_content = cleaned_content[:NER['BeginOffset']
-                                          ] + NER['Type'] + cleaned_content[NER['EndOffset']:]
-        # reversed to not modify the offsets of other entities when substituting
+            cleaned_content = cleaned_content[:NER['BeginOffset']
+                                              ] + NER['Type'] + cleaned_content[NER['EndOffset']:]
+            # reversed to not modify the offsets of other entities when substituting
 
         # send to comprehend to detect the ENTITIES
         comprehend_entitites_response = comprehend.detect_entities(
@@ -271,9 +272,9 @@ def comprehend_content_cleaning(comprehend, content):
 
         # Replacing the PI with Entity Type name
         for NER in reversed(comprehend_entitites_response['Entities']):
-        cleaned_content = cleaned_content[:NER['BeginOffset']
-                                          ] + NER['Type'] + cleaned_content[NER['EndOffset']:]
-        # reversed to not modify the offsets of other entities when substituting
+            cleaned_content = cleaned_content[:NER['BeginOffset']
+                                              ] + NER['Type'] + cleaned_content[NER['EndOffset']:]
+            # reversed to not modify the offsets of other entities when substituting
 
     return cleaned_content
 
