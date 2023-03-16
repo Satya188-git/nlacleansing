@@ -85,6 +85,22 @@ module "iam" {
 }
 module "kms" {
   source = "./modules/kms"
+  region              = var.region
+  environment         = var.environment
+  application_use     = var.application_use
+  company_code        = var.company_code
+  application_code    = var.application_code
+  environment_code    = var.environment_code
+  owner               = var.owner
+  namespace           = var.namespace
+  region_code         = var.region_code
+  tag-version         = var.tag-version
+  billing-guid        = var.billing-guid
+  unit                = var.unit
+  portfolio           = var.portfolio
+  support-group       = var.support-group
+  cmdb-ci-id          = var.cmdb-ci-id
+  data-classification = var.data-classification
   transcribe_lambda_role_arn             = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn             = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn    = module.iam.informational_macie_lambda_role_arn
@@ -130,7 +146,22 @@ module "lambda" {
 }
 module "s3" {
   source                         = "./modules/s3"
-  environment                    = var.environment
+  region              = var.region
+  environment         = var.environment
+  application_use     = var.application_use
+  company_code        = var.company_code
+  application_code    = var.application_code
+  environment_code    = var.environment_code
+  owner               = var.owner
+  namespace           = var.namespace
+  region_code         = var.region_code
+  tag-version         = var.tag-version
+  billing-guid        = var.billing-guid
+  unit                = var.unit
+  portfolio           = var.portfolio
+  support-group       = var.support-group
+  cmdb-ci-id          = var.cmdb-ci-id
+  data-classification = var.data-classification
   kms_key_ccc_unrefined_arn      = module.kms.kms_key_ccc_unrefined_arn
   kms_key_ccc_initial_arn        = module.kms.kms_key_ccc_initial_arn
   kms_key_ccc_clean_arn          = module.kms.kms_key_ccc_clean_arn

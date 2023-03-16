@@ -48,7 +48,7 @@ module "ccc_transcribe_lambda" {
   lambda_role      = var.transcribe_lambda_role_arn
   update_role      = false
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-transcribe-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-transcribe-lambda.zip"
 
   environment_variables = {
     CONF_DESTINATION_BUCKET_NAME = var.ccc_initial_bucket_id
@@ -67,14 +67,14 @@ module "ccc_transcribe_lambda" {
     }
   }
 }
-resource "aws_lambda_permission" "unrefined_data_trigger" {
-  # depends_on = [module.ccc_transcribe_lambda]
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
-  function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.ccc_unrefined_call_data_bucket_arn
-} 
+# resource "aws_lambda_permission" "unrefined_data_trigger" {
+#   # depends_on = [module.ccc_transcribe_lambda]
+#   statement_id  = "AllowExecutionFromS3Bucket"
+#   action        = "lambda:InvokeFunction"
+#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
+#   principal     = "s3.amazonaws.com"
+#   source_arn    = var.ccc_unrefined_call_data_bucket_arn
+# } 
 
 # CustomerCallCenter-Lambda-Comprehend
 module "ccc_comprehend_lambda" {
@@ -107,7 +107,7 @@ module "ccc_comprehend_lambda" {
     CLEANED_BUCKET_NAME = var.ccc_cleaned_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-comprehend-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-comprehend-lambda.zip"
 
   tags = merge (local.tags,
     {
@@ -157,7 +157,7 @@ module "ccc_informational_macie_lambda" {
     DESTINATION_BUCKET_NAME_DIRTY = var.ccc_dirty_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-informational-macie-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-informational-macie-lambda.zip"
 
   tags = merge (local.tags,
     {
@@ -202,7 +202,7 @@ module "ccc_notification_forwarder_lambda" {
   lambda_role      = var.sns_lambda_role_arn
   update_role      = false
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-notification-forwarder-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-notification-forwarder-lambda.zip"
 
   tags = merge (local.tags,
     {
@@ -251,7 +251,7 @@ module "ccc_macie_scan_trigger_lambda" {
     SCAN_BUCKET_NAME_VERIFIED = var.ccc_cleaned_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-macie-scan-trigger-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-macie-scan-trigger-lambda.zip"
 
   tags = merge (local.tags,
     {
@@ -298,7 +298,7 @@ module "ccc_macie_lambda" {
     TARGET_BUCKETS_LIST = var.ccc_cleaned_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-macie-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-macie-lambda.zip"
 
   tags = merge (local.tags,
     {
@@ -335,7 +335,7 @@ module "ccc_audit_call_lambda" {
   update_role      = false
 
 
-  local_existing_package = "${path.root}/../../backend/python/src/zip_packages/ccc-audit-call-lambda.zip"
+  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-audit-call-lambda.zip"
 
   tags = merge (local.tags,
     {
