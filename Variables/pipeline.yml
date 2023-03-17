@@ -1,17 +1,17 @@
 variables:
   #Metadata variables for use with sample terraform files
   - name: organization
-    value: COMPANY-NAME
+    value: sdge
   - name: appName
-    value: APP-NAME
+    value: ccc
   - name: applicationCode
-    value: APP-CODE
+    value: dtdes
   - name: applicationUse
-    value: APP-USE
+    value: nla
   - name: companyCode
-    value: COMPANY-USE
+    value: sdge
   - name: owner
-    value: OWNER
+    value: IAC Team
   - name: description
     value: DESCRIPTION
   - name: billingGuid
@@ -20,7 +20,7 @@ variables:
     value: AWS-SECONDARY-REGION-ABBREVIATION
   #This variable must not be used in the S3 Upload task as documented in the S3 Upload wiki page.
   - name: awsRegionCode
-    value: AWS-REGION-CODE
+    value: wus2
   - name: awsSecondaryRegionCode
     value: AWS-SECONDARY-REGION-CODE
   #Variables required for upload to S3
@@ -32,37 +32,37 @@ variables:
   - name: sourceFolder
     value: $(Pipeline.Workspace)/ARTIFACT-NAME
   - name: globExpressions
-    value: '**/*.*'
+    value: "**/*.*"
   - name: awsRegionAbbreviation
     value: AWS-REGION-ABBREVIATION
   #Variables required for terraform
   - name: adoRepoName
-    value: 'REPONAME'
+    value: "REPONAME"
   - name: terraformWorkingDirectory
-    value: './terraform'
+    value: "./terraform"
   - name: terraformDeployDirectory
-    value: '$(Pipeline.Workspace)/terraform'
+    value: "$(Pipeline.Workspace)/terraform"
   - name: terraformVersion
-    value: '0.15.3'
+    value: "0.15.3"
   - name: terraformHostname
-    value: 'app.terraform.io'
+    value: "app.terraform.io"
   #General pipeline variables
   - name: agentPool
-    value: 'SEU RHEL8 VX Shared'
+    value: "SEU RHEL8 VX Shared"
   - name: canaryPool
-    value: 'SEU RHEL8 VX Dev'
+    value: "SEU RHEL8 VX Dev"
   #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline by the `LocalBuildYAML`, `LocalPreTFYAML` and/or `LocalReleaseYAML` pipeline parameters
-  #More information: 
+  #More information:
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3585/LocalPreTFYAML
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3583/LocalReleaseYAML
   # Below are for Azure Cloud Deployment
   - name: azureSubscriptionID
-    value: 'Azure Subscription ID'
+    value: "Azure Subscription ID"
   - name: azureTenantID
-    value: 'TenantID'
+    value: "TenantID"
   #Below are for GCP Cloud Deployment
   - name: GCPCloudSDKVersion
-    value: ''
+    value: ""
   - name: GCPSourceFolder
     value: $(Pipeline.Workspace)/ARTIFACT-NAME
