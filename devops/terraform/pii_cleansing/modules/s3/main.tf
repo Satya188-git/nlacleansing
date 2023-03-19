@@ -26,7 +26,7 @@ module "ccc_unrefined_call_data_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-unrefined-s3"
+  application_use   = "${local.application_use}-unrefined"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -61,7 +61,7 @@ module "ccc_initial_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-pii-transcription-s3"
+  application_use   = "${local.application_use}-pii-transcription"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -97,7 +97,7 @@ module "ccc_cleaned_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-cleaned-s3"
+  application_use   = "${local.application_use}-cleaned"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -133,7 +133,7 @@ module "ccc_verified_clean_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-verified-clean-s3"
+  application_use   = "${local.application_use}-verified-clean"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -169,7 +169,7 @@ module "ccc_dirty_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-dirty-s3"
+  application_use   = "${local.application_use}-dirty"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -204,7 +204,7 @@ module "ccc_maciefindings_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-macie-findings-s3"
+  application_use   = "${local.application_use}-macie-findings"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -239,7 +239,7 @@ module "ccc_piimetadata_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-pii-metadata-s3"
+  application_use   = "${local.application_use}-pii-metadata"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false
@@ -274,7 +274,7 @@ module "ccc_athenaresults_bucket" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-athena-results-s3"
+  application_use   = "${local.application_use}-athena-results"
   owner                          = "IAC Team"
   create_bucket                  = true
   create_log_bucket              = false

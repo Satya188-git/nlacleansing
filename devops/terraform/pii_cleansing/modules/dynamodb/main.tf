@@ -23,7 +23,7 @@ locals {
   region           = local.region
   region_code      = local.region_code
   source           = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
-  table_name       = "ccc-call-audit-${var.environment_code}"
+  table_name       = "ccc-call-audit"
   hash_key         = "UUID"
   range_key        = "DateTimeStamp"
   dynamodb_attributes= [
