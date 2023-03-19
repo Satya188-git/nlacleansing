@@ -111,7 +111,7 @@ module "ccc_comprehend_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend"
     },
   )
 }
@@ -161,7 +161,7 @@ module "ccc_informational_macie_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie"
     },
   )
 }
@@ -206,7 +206,7 @@ module "ccc_notification_forwarder_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification"
     },
   )
 }
@@ -255,7 +255,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan"
     },
   )
 }
@@ -302,7 +302,7 @@ module "ccc_macie_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie"
     },
   )
 }
@@ -339,7 +339,7 @@ module "ccc_audit_call_lambda" {
 
   tags = merge (local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call-lambda"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
     },
   )
 }
