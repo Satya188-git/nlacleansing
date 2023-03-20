@@ -50,7 +50,7 @@ module "ccc_transcribe_lambda" {
   update_role      = false
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-transcribe-lambda.zip"
   }
   
@@ -71,14 +71,6 @@ module "ccc_transcribe_lambda" {
     }
   }
 }
-# resource "aws_lambda_permission" "unrefined_data_trigger" {
-#   # depends_on = [module.ccc_transcribe_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_unrefined_call_data_bucket_arn
-# } 
 
 # CustomerCallCenter-Lambda-Comprehend
 module "ccc_comprehend_lambda" {
@@ -112,7 +104,7 @@ module "ccc_comprehend_lambda" {
   }
   
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-comprehend-lambda.zip"
   }
 
@@ -122,15 +114,6 @@ module "ccc_comprehend_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "comprehend_data_trigger" {
-#   depends_on = [module.ccc_comprehend_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_initial_bucket_arn
-# } 
 
 # CustomerCallCenter-Lambda-MacieInformational
 module "ccc_informational_macie_lambda" {
@@ -165,7 +148,7 @@ module "ccc_informational_macie_lambda" {
   }
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-informational-macie-lambda.zip"
   }
 
@@ -175,15 +158,6 @@ module "ccc_informational_macie_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "macie_info_trigger" {
-#   depends_on = [module.ccc_informational_macie_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_maciefindings_bucket_arn
-# } 
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
@@ -213,7 +187,7 @@ module "ccc_notification_forwarder_lambda" {
   update_role      = false
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-notification-forwarder-lambda.zip"
   }
 
@@ -223,15 +197,6 @@ module "ccc_notification_forwarder_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "sns_notification_trigger" {
-#   depends_on = [module.ccc_notification_forwarder_lambda]
-#   statement_id  = "AllowExecutionFromSNS"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = "arn:aws:sns:us-west-2:544868842803:aws-controltower-SecurityNotifications"
-# }
 
 # Trigger-Macie-Scan
 module "ccc_macie_scan_trigger_lambda" {
@@ -265,7 +230,7 @@ module "ccc_macie_scan_trigger_lambda" {
   }
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-macie-scan-trigger-lambda.zip"
   }
 
@@ -275,14 +240,6 @@ module "ccc_macie_scan_trigger_lambda" {
     },
   )
 }
-# resource "aws_lambda_permission" "macie_scan_trigger" {
-#   depends_on = [module.ccc_macie_scan_trigger_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_cleaned_bucket_arn
-# }
 
 # CustomerCallCenter-Lambda-Macie
 module "ccc_macie_lambda" {
@@ -315,7 +272,7 @@ module "ccc_macie_lambda" {
   }
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-macie-lambda.zip"
   }
 
@@ -326,7 +283,6 @@ module "ccc_macie_lambda" {
   )
 }
 
-# Lambda to send audit call data to DynamoDb table
 module "ccc_audit_call_lambda" {
   depends_on = [var.audit_call_lambda_role_arn]
   source     = "app.terraform.io/SempraUtilities/seu-lambda/aws"
@@ -355,7 +311,7 @@ module "ccc_audit_call_lambda" {
 
 
   s3_existing_package = {
-    bucket = var.tfArtifactsS3
+    bucket = var.tf_artifact_s3
     key    = "ccc-audit-call-lambda.zip"
   }
 

@@ -92,6 +92,7 @@ module "kms" {
 
 module "lambda" {
   source  = "./modules/lambda"
+  tf_artifact_s3      = var.tf_artifact_s3
   region              = var.region
   environment         = var.environment
   application_use     = var.application_use
@@ -130,7 +131,6 @@ module "lambda" {
 
 module "s3" {
   source                         = "./modules/s3"
-  tf_artifact_s3      = var.tf_artifact_s3
   region              = var.region
   environment         = var.environment
   application_use     = var.application_use

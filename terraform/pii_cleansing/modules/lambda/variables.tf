@@ -74,35 +74,24 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
-# transcribe_lambda_role_arn
 variable "transcribe_lambda_role_arn" {
   type=string
 }
-# comprehend_lambda_role_arn
 variable "comprehend_lambda_role_arn" {
   type=string
 }
-# informational_macie_lambda_role_arn
 variable "informational_macie_lambda_role_arn" {
   type=string
 }
-
-# macie_lambda_role_arn
 variable "macie_lambda_role_arn" {
   type=string
 }
-
-# trigger_macie_lambda_role_arn
 variable "trigger_macie_lambda_role_arn" {
   type=string
 }
-
-# sns_lambda_role_arn
 variable "sns_lambda_role_arn" {
   type=string
 }
-
-# audit_call_lambda_role_arn
 variable "audit_call_lambda_role_arn" {
   type=string
 }
@@ -113,7 +102,6 @@ variable "ccc_unrefined_call_data_bucket_arn" {
 variable "ccc_verified_clean_bucket_arn" {
   type=string
 }
-# there may be other triggers for macie process
 variable "ccc_maciefindings_bucket_arn" {
   type=string
 }
@@ -123,8 +111,6 @@ variable "ccc_cleaned_bucket_arn" {
 variable "ccc_initial_bucket_arn" {
   type=string
 }
-
-
 variable "ccc_initial_bucket_id" {
   type        = string
   description = "ccc_initial_bucket_id"
@@ -135,20 +121,19 @@ variable "ccc_unrefined_call_data_bucket_id" {
   description = "ccc_unrefined_call_data_bucket_id"
 }
 
-
 variable "ccc_cleaned_bucket_id" {
   type        = string
   description = "ccc_cleaned_bucket_id"
 }
-
-
 variable "ccc_verified_clean_bucket_id" {
   type        = string
   description = "ccc_verified_clean_bucket_id"
 }
-
 variable "ccc_dirty_bucket_id" {
   type        = string
   description = "ccc_dirty_bucket_id"
 }
 
+variable "tf_artifact_s3" {
+  type        = string
+}

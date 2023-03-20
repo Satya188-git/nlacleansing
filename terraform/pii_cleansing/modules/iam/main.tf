@@ -179,36 +179,26 @@ module "autoscaler_iam_role" {
 }
 
 # Policies
-
-#comprehend_lambda_role
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ComprehendFullAccess"
   role       = module.comprehend_lambda_role.name
 }
-
-#transcribe_lambda_role check
 resource "aws_iam_role_policy_attachment" "AmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
   role       = module.transcribe_lambda_role.name
 }
-
 resource "aws_iam_role_policy_attachment" "InfoAmazonMacieFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
   role       = module.informational_macie_lambda_role.name
 }
-
-# # macie_lambda_role check
 resource "aws_iam_role_policy_attachment" "AmazonMacieFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
   role       = module.macie_lambda_role.name
 }
-
-# athena_lambda_role
 resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
   role       = module.athena_lambda_role.name
 }
-
 resource "aws_iam_role_policy_attachment" "AmazonDynamoDBFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
   role       = module.transcribe_lambda_role.name
@@ -217,7 +207,6 @@ resource "aws_iam_role_policy_attachment" "AmazonDynamoDBFullAccess2" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
   role       = module.audit_call_lambda_role.name
 }
-
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole1" {
   role       = module.comprehend_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -246,7 +235,6 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole7" {
   role       = module.athena_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
   role       = module.audit_call_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"

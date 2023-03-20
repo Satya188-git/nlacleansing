@@ -47,7 +47,7 @@ variable "region_code" {
 }
 
 variable "owner" {
-  default     = "IAC Team"
+  default     = "NLA Team"
   type        = string
   description = "The AWS Terraform resources owner"
 }
