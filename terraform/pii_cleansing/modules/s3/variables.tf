@@ -98,3 +98,7 @@ variable "kms_key_ccc_piimetadata_arn" {
 variable "kms_key_ccc_athenaresults_arn" {
   type=string
 }
+
+variable "tfArtifactS3" {
+  type        = string
+}
