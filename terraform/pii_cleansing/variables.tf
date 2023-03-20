@@ -93,3 +93,9 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
+variable "tfArtifactS3" {
+  default     = "sdge-dtdes-dev-wus2-s3-tf-artifacts"
+  type        = string
+  description = "Terraform deployment artifact s3"
+}

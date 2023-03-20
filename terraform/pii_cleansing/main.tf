@@ -64,6 +64,7 @@ module "iam" {
   account_id          = local.account_id
 
 }
+
 module "kms" {
   source = "./modules/kms"
   region              = var.region
@@ -88,6 +89,7 @@ module "kms" {
   macie_lambda_role_arn                  = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn          = module.iam.trigger_macie_lambda_role_arn
 }
+
 module "lambda" {
   source  = "./modules/lambda"
   region              = var.region
@@ -125,8 +127,10 @@ module "lambda" {
   ccc_dirty_bucket_id = module.s3.ccc_dirty_bucket_id
   
 }
+
 module "s3" {
   source                         = "./modules/s3"
+  tfArtifactsS3       = var.tfArtifactS3
   region              = var.region
   environment         = var.environment
   application_use     = var.application_use
