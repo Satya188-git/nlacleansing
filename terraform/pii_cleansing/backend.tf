@@ -4,7 +4,8 @@ terraform {
    organization = "SempraUtilities"
  
    workspaces {
-      name = "#{terraformWorkspace}#"
+      # name = "#{terraformWorkspace}#"
+      name = "sdge-dev_sdge-it-nla"
     }
   }
 }

@@ -121,11 +121,12 @@ module "lambda" {
   ccc_maciefindings_bucket_arn        = module.s3.ccc_maciefindings_bucket_arn
   ccc_cleaned_bucket_arn              = module.s3.ccc_cleaned_bucket_arn
   ccc_initial_bucket_arn              = module.s3.ccc_initial_bucket_arn
-  ccc_initial_bucket_id  = module.s3.ccc_initial_bucket_id
-  ccc_unrefined_call_data_bucket_id = module.s3.ccc_unrefined_call_data_bucket_id
-  ccc_cleaned_bucket_id = module.s3.ccc_cleaned_bucket_id
-  ccc_verified_clean_bucket_id = module.s3.ccc_verified_clean_bucket_id
-  ccc_dirty_bucket_id = module.s3.ccc_dirty_bucket_id
+  ccc_initial_bucket_id               = module.s3.ccc_initial_bucket_id
+  ccc_unrefined_call_data_bucket_id   = module.s3.ccc_unrefined_call_data_bucket_id
+  ccc_cleaned_bucket_id               = module.s3.ccc_cleaned_bucket_id
+  ccc_verified_clean_bucket_id        = module.s3.ccc_verified_clean_bucket_id
+  ccc_dirty_bucket_id                 = module.s3.ccc_dirty_bucket_id
+  kms_key_ccc_sns_lambda_arn          = module.kms.kms_key_ccc_sns_lambda_arn
   
 }
 

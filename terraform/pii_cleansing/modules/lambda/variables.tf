@@ -137,3 +137,8 @@ variable "ccc_dirty_bucket_id" {
 variable "tf_artifact_s3" {
   type        = string
 }
+
+variable "kms_key_ccc_sns_lambda_arn" {
+  type        = string
+   description = "kms_key_ccc_sns_lambda_arn"
+}

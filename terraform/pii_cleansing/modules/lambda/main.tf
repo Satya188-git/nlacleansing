@@ -169,7 +169,7 @@ module "ccc_notification_forwarder_lambda" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "notification-lambda"
-  
+  kms_key_arn = var.kms_key_ccc_sns_lambda_arn
   description   = "nla sns notification lambda"
   handler       = "run.lambda_handler"
   runtime       = "python3.8"

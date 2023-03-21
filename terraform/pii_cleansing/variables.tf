@@ -99,3 +99,7 @@ variable "tf_artifact_s3" {
   type        = string
   description = "Terraform deployment artifact s3"
 }
+
+variable "aws_assume_role" {
+  type = string
+}
