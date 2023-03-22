@@ -12,19 +12,19 @@ from botocore.exceptions import ClientError
 
 
 target_buckets_list = ['customercallcenterpiicleaned']
-#target_buckets_list = ['customercallcenterpiitranscription']
+# target_buckets_list = ['customercallcenterpiitranscription']
 
 
-#job_name = 'Scanning the Transcription bucket (unclean)'
+# job_name = 'Scanning the Transcription bucket (unclean)'
 job_name = 'Scanning the Cleaned bucket 5'
 
-#job_desc = 'This is a test to scan unclean data'
+# job_desc = 'This is a test to scan unclean data'
 job_desc = "This is a test to scan clean data"
 
 job_tags = {
-            '4BBB57DFE4C0A8939C612246DFE85EAE': '4BBB57DFE4C0A8939C612246DFE85EAE',
-            'Customer Sentiment': 'PII Cleansing'
-        }
+    '4BBB57DFE4C0A8939C612246DFE85EAE': '4BBB57DFE4C0A8939C612246DFE85EAE',
+    'Customer Sentiment': 'PII Cleansing'
+}
 """
 custom_data_identifiers_list = [
     {
@@ -65,39 +65,36 @@ custom_data_identifiers_list = [
 ]
 
 
-
 def lambda_handler(event, context):
-    
-    #print(event)
 
-    #record = event['Records'][0]
-    
-    #s3bucket = record['s3']['bucket']['name']
-    #s3object = record['s3']['object']['key']
-    #s3object = unquote_plus(s3object)
-    #print(s3bucket)
-    #print(s3object)
+    # print(event)
 
+    # record = event['Records'][0]
+
+    # s3bucket = record['s3']['bucket']['name']
+    # s3object = record['s3']['object']['key']
+    # s3object = unquote_plus(s3object)
+    # print(s3bucket)
+    # print(s3object)
 
     ##########################################################
-    ###we need to change the job creation to only look at blob content and not the rest
-
+    # we need to change the job creation to only look at blob content and not the rest
 
     # removing the subfolder name and keeping only the filename
-    #s3filename = s3object.split('/')[-1]
-    #s3filename = "".join(s3filename.split('.')[:-1])    #removing the file extension
-    #print("The actual file name is:", s3filename)
-    
+    # s3filename = s3object.split('/')[-1]
+    # s3filename = "".join(s3filename.split('.')[:-1])    #removing the file extension
+    # print("The actual file name is:", s3filename)
+
     # Creating the clients
-    #s3client = boto3.client('s3')
+    # s3client = boto3.client('s3')
     s3client = boto3.resource('s3')
-    
+
     ssm_client = boto3.client('ssm')
     sts_client = boto3.client('sts')
     macie_client = boto3.client('macie2')
 
-
-    my.create_custom_data_identifiers(macie_client, custom_data_identifiers_list, job_tags)
+    my.create_custom_data_identifiers(
+        macie_client, custom_data_identifiers_list, job_tags)
 
     """
     logging.basicConfig(format='[%(asctime)s] %(levelname)s – %(message)s', level=logging.INFO)
@@ -150,6 +147,3 @@ def lambda_handler(event, context):
     #    logging.error(e)
     #    sys.exit(e)
     """
-
-
-
