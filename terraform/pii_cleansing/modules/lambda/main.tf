@@ -16,6 +16,7 @@ locals {
     data-classification = var.data-classification
   }
 }
+
 module "layers" {
   source                                = "./layers"
 }
@@ -48,8 +49,11 @@ module "ccc_transcribe_lambda" {
   lambda_role      = var.transcribe_lambda_role_arn
   update_role      = false
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-transcribe-lambda.zip"
-
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-transcribe-lambda.zip"
+  }
+  
   environment_variables = {
     CONF_DESTINATION_BUCKET_NAME = var.ccc_initial_bucket_id
     CONF_S3BUCKET_OUTPUT = var.ccc_unrefined_call_data_bucket_id
@@ -67,14 +71,6 @@ module "ccc_transcribe_lambda" {
     }
   }
 }
-# resource "aws_lambda_permission" "unrefined_data_trigger" {
-#   # depends_on = [module.ccc_transcribe_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_unrefined_call_data_bucket_arn
-# } 
 
 # CustomerCallCenter-Lambda-Comprehend
 module "ccc_comprehend_lambda" {
@@ -106,8 +102,11 @@ module "ccc_comprehend_lambda" {
   environment_variables = {
     CLEANED_BUCKET_NAME = var.ccc_cleaned_bucket_id
   }
-
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-comprehend-lambda.zip"
+  
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-comprehend-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {
@@ -115,15 +114,6 @@ module "ccc_comprehend_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "comprehend_data_trigger" {
-#   depends_on = [module.ccc_comprehend_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_initial_bucket_arn
-# } 
 
 # CustomerCallCenter-Lambda-MacieInformational
 module "ccc_informational_macie_lambda" {
@@ -157,7 +147,10 @@ module "ccc_informational_macie_lambda" {
     DESTINATION_BUCKET_NAME_DIRTY = var.ccc_dirty_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-informational-macie-lambda.zip"
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-informational-macie-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {
@@ -165,15 +158,6 @@ module "ccc_informational_macie_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "macie_info_trigger" {
-#   depends_on = [module.ccc_informational_macie_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_maciefindings_bucket_arn
-# } 
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
@@ -185,7 +169,7 @@ module "ccc_notification_forwarder_lambda" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "notification-lambda"
-  
+  kms_key_arn = var.kms_key_ccc_sns_lambda_arn
   description   = "nla sns notification lambda"
   handler       = "run.lambda_handler"
   runtime       = "python3.8"
@@ -202,7 +186,10 @@ module "ccc_notification_forwarder_lambda" {
   lambda_role      = var.sns_lambda_role_arn
   update_role      = false
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-notification-forwarder-lambda.zip"
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-notification-forwarder-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {
@@ -210,15 +197,6 @@ module "ccc_notification_forwarder_lambda" {
     },
   )
 }
-
-# resource "aws_lambda_permission" "sns_notification_trigger" {
-#   depends_on = [module.ccc_notification_forwarder_lambda]
-#   statement_id  = "AllowExecutionFromSNS"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = "arn:aws:sns:us-west-2:544868842803:aws-controltower-SecurityNotifications"
-# }
 
 # Trigger-Macie-Scan
 module "ccc_macie_scan_trigger_lambda" {
@@ -251,7 +229,10 @@ module "ccc_macie_scan_trigger_lambda" {
     SCAN_BUCKET_NAME_VERIFIED = var.ccc_cleaned_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-macie-scan-trigger-lambda.zip"
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-macie-scan-trigger-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {
@@ -259,14 +240,6 @@ module "ccc_macie_scan_trigger_lambda" {
     },
   )
 }
-# resource "aws_lambda_permission" "macie_scan_trigger" {
-#   depends_on = [module.ccc_macie_scan_trigger_lambda]
-#   statement_id  = "AllowExecutionFromS3Bucket"
-#   action        = "lambda:InvokeFunction"
-#   function_name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan-lambda"
-#   principal     = "s3.amazonaws.com"
-#   source_arn    = var.ccc_cleaned_bucket_arn
-# }
 
 # CustomerCallCenter-Lambda-Macie
 module "ccc_macie_lambda" {
@@ -298,7 +271,10 @@ module "ccc_macie_lambda" {
     TARGET_BUCKETS_LIST = var.ccc_cleaned_bucket_id
   }
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-macie-lambda.zip"
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-macie-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {
@@ -307,7 +283,6 @@ module "ccc_macie_lambda" {
   )
 }
 
-# Lambda to send audit call data to DynamoDb table
 module "ccc_audit_call_lambda" {
   depends_on = [var.audit_call_lambda_role_arn]
   source     = "app.terraform.io/SempraUtilities/seu-lambda/aws"
@@ -335,7 +310,10 @@ module "ccc_audit_call_lambda" {
   update_role      = false
 
 
-  local_existing_package = "${path.root}/../../../backend/python/src/zip_packages/ccc-audit-call-lambda.zip"
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc-audit-call-lambda.zip"
+  }
 
   tags = merge (local.tags,
     {

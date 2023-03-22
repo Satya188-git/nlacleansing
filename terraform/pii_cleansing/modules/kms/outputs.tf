@@ -31,3 +31,7 @@ output "kms_key_ccc_athenaresults_arn" {
   value = aws_kms_key.athenaresults_kms_key.arn
 }
 
+output "kms_key_ccc_sns_lambda_arn" {
+  value = aws_kms_key.sns_lambda_kms_key.arn
+}
+

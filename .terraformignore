@@ -3,4 +3,4 @@
 /shared/
 /ui/
 /devops/azure-pipelines/
-/devops/terraform/.terraform/
+/terraform/pii_cleansing/.terraform/

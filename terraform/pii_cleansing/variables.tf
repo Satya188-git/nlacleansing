@@ -47,7 +47,7 @@ variable "region_code" {
 }
 
 variable "owner" {
-  default     = "IAC Team"
+  default     = "NLA Team"
   type        = string
   description = "The AWS Terraform resources owner"
 }
@@ -92,4 +92,14 @@ variable "data-classification" {
   default     = "confidential"
   type        = string
   description = "Data privacy classification"
+}
+
+variable "tf_artifact_s3" {
+  default     = "sdge-dtdes-dev-wus2-s3-tf-artifacts"
+  type        = string
+  description = "Terraform deployment artifact s3"
+}
+
+variable "aws_assume_role" {
+  type = string
 }

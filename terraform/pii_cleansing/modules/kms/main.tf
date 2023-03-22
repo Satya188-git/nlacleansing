@@ -20,6 +20,7 @@ resource "aws_kms_key" "unrefined_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 
 resource "aws_kms_alias" "unrefined_kms_key" {
@@ -32,6 +33,7 @@ resource "aws_kms_key" "initial_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 resource "aws_kms_alias" "initial_kms_key" {
   name          = "alias/${local.application_use}-initial_kms_key"
@@ -42,6 +44,7 @@ resource "aws_kms_key" "clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 
 resource "aws_kms_alias" "clean_kms_key" {
@@ -53,6 +56,7 @@ resource "aws_kms_key" "dirty_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 
 resource "aws_kms_alias" "dirty_kms_key" {
@@ -64,6 +68,7 @@ resource "aws_kms_key" "verified_clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 resource "aws_kms_alias" "verified_clean_kms_key" {
   name          = "alias/${local.application_use}-verified_clean_kms_key"
@@ -74,6 +79,7 @@ resource "aws_kms_key" "maciefindings_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 resource "aws_kms_alias" "maciefindings_kms_key" {
   name          = "alias/${local.application_use}-maciefindings_kms_key"
@@ -85,6 +91,7 @@ resource "aws_kms_key" "piimetadata_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 resource "aws_kms_alias" "piimetadata_kms_key" {
   name          = "alias/${local.application_use}-piimetadata_kms_key"
@@ -96,10 +103,21 @@ resource "aws_kms_key" "athenaresults_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation = true
+  tags = local.tags
 }
 resource "aws_kms_alias" "athenaresults_kms_key" {
   name          = "alias/${local.application_use}-athenaresults_kms_key"
   target_key_id = aws_kms_key.athenaresults_kms_key.key_id
+}
+resource "aws_kms_key" "sns_lambda_kms_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+  enable_key_rotation = true
+  tags = local.tags
+}
+resource "aws_kms_alias" "sns_lambda_kms_key" {
+  name          = "alias/${local.application_use}-sns_lambda_kms_key"
+  target_key_id = aws_kms_key.sns_lambda_kms_key.key_id
 }
 
 
