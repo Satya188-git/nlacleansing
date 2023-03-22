@@ -40,7 +40,7 @@ def lambda_handler(event, context):
 
     split_file = file.split('_')
     call_type = split_file[1]
-    call_id = split_file[2]
+    file_id = split_file[2]
 
     status = ""
 
@@ -72,5 +72,5 @@ def lambda_handler(event, context):
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 
     table.put_item(
-        Item={"UUID": id, "CallType": call_type, "CallID": call_id, "Path": path, "FileName": file, "Status": status,
+        Item={"UUID": id, "CallType": call_type, "FileID": file_id, "Path": path, "FileName": file, "Status": status,
               "DateTimeStamp": dt_string})
