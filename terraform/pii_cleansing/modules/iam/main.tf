@@ -185,9 +185,8 @@ module "custom_transcribe_lambda_role" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = local.application_use
-  description       = local.description
-  service_resources = ["transcribe.amazonaws.com"]
+  application_use   = "${local.application_use}-custom-transcribe"
+  service_resources = ["transcribe.amazonaws.com", "lambda.amazonaws.com"]
 
   tags = merge(
     local.tags,
@@ -462,6 +461,6 @@ resource "aws_iam_role_policy_attachment" "CustomAmazonTranscribeFullAccess" {
   role       = module.custom_transcribe_lambda_role.name
 }
 resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
-  policy_arn = aws_iam_policy.transcribe_bucket_access.arn
+  policy_arn = aws_iam_policy.custom_transcribe_lambda_policy.arn
   role       = module.custom_transcribe_lambda_role.name
 }
