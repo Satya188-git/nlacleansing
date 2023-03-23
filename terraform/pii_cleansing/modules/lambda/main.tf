@@ -24,7 +24,7 @@ module "layers" {
 
 # CustomerCallCenter-Lambda-Transcribe
 module "ccc_transcribe_lambda" {
-  depends_on       = [var.transcribe_lambda_role_arn]
+  depends_on       = [var.transcribe_lambda_role_arn, module.layers.ccc_transcribe_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -51,7 +51,7 @@ module "ccc_transcribe_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-transcribe-lambda.zip"
+    key    = "ccc_transcribe_lambda.zip"
   }
 
   environment_variables = {
@@ -74,7 +74,7 @@ module "ccc_transcribe_lambda" {
 
 # CustomerCallCenter-Lambda-Comprehend
 module "ccc_comprehend_lambda" {
-  depends_on       = [var.comprehend_lambda_role_arn]
+  depends_on       = [var.comprehend_lambda_role_arn, module.layers.ccc_comprehend_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -105,7 +105,7 @@ module "ccc_comprehend_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-comprehend-lambda.zip"
+    key    = "ccc_comprehend_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -117,7 +117,7 @@ module "ccc_comprehend_lambda" {
 
 # CustomerCallCenter-Lambda-MacieInformational
 module "ccc_informational_macie_lambda" {
-  depends_on       = [var.informational_macie_lambda_role_arn]
+  depends_on       = [var.informational_macie_lambda_role_arn, module.layers.ccc_informational_macie_lambda_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -149,7 +149,7 @@ module "ccc_informational_macie_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-informational-macie-lambda.zip"
+    key    = "ccc_informational_macie_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -161,7 +161,7 @@ module "ccc_informational_macie_lambda" {
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
-  depends_on                        = [var.sns_lambda_role_arn]
+  depends_on                        = [var.sns_lambda_role_arn, module.layers.ccc_notification_forwarder_lambda_archive_id]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version                           = "6.0.0-prerelease"
   company_code                      = local.company_code
@@ -188,7 +188,7 @@ module "ccc_notification_forwarder_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-notification-forwarder-lambda.zip"
+    key    = "ccc_notification_forwarder_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -200,7 +200,7 @@ module "ccc_notification_forwarder_lambda" {
 
 # Trigger-Macie-Scan
 module "ccc_macie_scan_trigger_lambda" {
-  depends_on       = [var.trigger_macie_lambda_role_arn]
+  depends_on       = [var.trigger_macie_lambda_role_arn, module.layers.ccc_macie_scan_trigger_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -231,7 +231,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-macie-scan-trigger-lambda.zip"
+    key    = "ccc_macie_scan_trigger_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -243,7 +243,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
 # CustomerCallCenter-Lambda-Macie
 module "ccc_macie_lambda" {
-  depends_on       = [var.macie_lambda_role_arn]
+  depends_on       = [var.macie_lambda_role_arn, module.layers.ccc_macie_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -270,10 +270,9 @@ module "ccc_macie_lambda" {
   environment_variables = {
     TARGET_BUCKETS_LIST = var.ccc_cleaned_bucket_id
   }
-
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-macie-lambda.zip"
+    key    = "ccc_macie_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -284,7 +283,7 @@ module "ccc_macie_lambda" {
 }
 
 module "ccc_audit_call_lambda" {
-  depends_on       = [var.audit_call_lambda_role_arn]
+  depends_on       = [var.audit_call_lambda_role_arn, module.layers.ccc_audit_call_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -309,10 +308,17 @@ module "ccc_audit_call_lambda" {
   lambda_role                       = var.audit_call_lambda_role_arn
   update_role                       = false
 
-
+  environment_variables = {
+    CLEANED_BUCKET_NAME          = "sdge-dtdes-dev-wus2-s3-nla-cleaned"
+    CLEANED_VERIFIED_BUCKET_NAME = "sdge-dtdes-dev-wus2-s3-nla-verified-clean"
+    DIRTY_BUCKET_NAME            = "sdge-dtdes-dev-wus2-s3-nla-dirty"
+    TABLE_NAME                   = "sdge-dtdes-dev-wus2-dydb-nla-ccc-call-audit"
+    TRANSCRIPTION_BUCKET_NAME    = "sdge-dtdes-dev-wus2-s3-nla-pii-transcription"
+    UNREFINED_BUCKET_NAME        = "sdge-dtdes-dev-wus2-s3-nla-unrefined"
+  }
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc-audit-call-lambda.zip"
+    key    = "ccc_audit_call_lambda.zip"
   }
 
   tags = merge(local.tags,

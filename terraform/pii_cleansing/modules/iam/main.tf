@@ -203,7 +203,7 @@ resource "aws_iam_policy" "kms_full_access" {
         {
           "Effect"   = "Allow",
           "Action"   = "kms:*",
-          "Resource" = "arn:aws:kms:*:544868842803:key/*"
+          "Resource" = "arn:aws:kms:*:183095018968:key/*"
         }
       ]
   })
@@ -245,7 +245,7 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole1" {
 }
 
 resource "aws_iam_role_policy_attachment" "ComprehendAmazonAthenaFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
   role       = module.comprehend_lambda_role.name
 }
 
@@ -265,23 +265,23 @@ resource "aws_iam_role_policy_attachment" "s3_put_read" {
 }
 
 resource "aws_iam_role_policy_attachment" "ComprehendAmazonS3ReadOnlyAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = module.comprehend_lambda_role.name
 }
 
 # transribe lambda permissions
-resource "aws_iam_role_policy_attachment" "AmazonTranscribeFullAccess" {
+resource "aws_iam_role_policy_attachment" "TranscribeAmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
   role       = module.transcribe_lambda_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "TranscribeAmazonAthenaFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
-  role       = module.transcribe_lambda_role.name
-}
+# resource "aws_iam_role_policy_attachment" "TranscribeAmazonAthenaFullAccess" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+#   role       = module.transcribe_lambda_role.name
+# }
 
-resource "aws_iam_role_policy_attachment" "TranscribeAmazonS3ReadOnlyAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
+resource "aws_iam_role_policy_attachment" "TranscribeAmazonS3FullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = module.transcribe_lambda_role.name
 }
 
@@ -357,7 +357,7 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
 }
 
 resource "aws_iam_role_policy_attachment" "AuditAmazonS3ReadOnlyAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
   role       = module.audit_call_lambda_role.name
 }
 
