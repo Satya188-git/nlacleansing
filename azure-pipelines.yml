@@ -187,7 +187,7 @@ parameters:
 
   #Enable logic to source application build job(s) from triggering repository
   - name: LocalBuildYAML
-    default: false
+    default: true
     displayName: "Use Build Job YAML From Local Repo"
     type: boolean
 

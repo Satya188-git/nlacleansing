@@ -1,0 +1,113 @@
+parameters:
+  - name: CanaryMode
+    default: false
+  - name: VariableLocation
+    default: "../../Variables"
+  - name: Environments
+    default: { dev, tst, qa, prd }
+    type: object
+  - name: MyCustomObject
+    default: {}
+    type: object
+
+jobs:
+  # Template referenced from shared-it-devsecops-yaml repository
+  # This template uses no tasks that rely on software dependencies and does not need to honor canary mode.
+  # - template: Pipeline-Templates/Standalone/Jobs/StaticBuild/StaticBuild.yml@DevSecOpsYAML
+  #   parameters:
+  #     SourcePath: $(Build.SourcesDirectory)
+  #     targetPath: $(Build.ArtifactStagingDirectory)
+  #     contents: '**'
+  #     CleanTargetFolder: true
+  # Template referenced from local repository using @self built-in reference
+  # Custom jobs from local repository should honor Canary Mode option in most cases.
+  # - template: pipeline/jobs/custom-build-job.yml@self
+  #   parameters:
+  #     MyCustomParameter: MyCustomParameterValue
+  #     MyCustomObject: ${{ parameters.MyCustomObject }}
+  #     CanaryMode: ${{ paramters.CanaryMode }}
+  #     VariableLocation: ${{ paramters.VariableLocation }}
+  # Job declared directly within this YAML file
+  # Job honors CanaryMode parameter.
+  - job: BuildNLAArtifacts
+    ${{ if eq(parameters['CanaryMode'], 'true') }}:
+      pool:
+        name: $(canaryMode)
+    displayName: "Build NLA Artifacts"
+    dependsOn: []
+    variables:
+      - template: ${{ parameters.VariableLocation }}\build.yml
+    steps:
+      - checkout: self
+        fetchDepth: 2
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "16.x"
+        displayName: "Install Node.js"
+      - task: CopyFiles@2
+        displayName: "Copy lambda layer files"
+        inputs:
+          sourceFolder: "$(Build.Repository.LocalPath)/backend/python/src/layers"
+          contents: "*.zip"
+          targetFolder: "$(Build.ArtifactStagingDirectory)"
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda audit_call files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_audit_call_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_audit_call_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_comprehend_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_comprehend_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_comprehend_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_informational_macie_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_informational_macie_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_informational_macie_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_macie_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_macie_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_macie_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_macie_scan_trigger_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_macie_scan_trigger_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_macie_scan_trigger_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_notification_forwarder_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_notification_forwarder_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_notification_forwarder_lambda.zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_transcribe_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_transcribe_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_transcribe_lambda.zip"
+          replaceExistingArchive: true
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: "$(Build.ArtifactStagingDirectory)" # Required
+          artifactName: "$(Build.SourceBranchName)" # Optional
+          artifactType: "pipeline" # Required. Options: pipeline, filepath. Default value: pipeline
