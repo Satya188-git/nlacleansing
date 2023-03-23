@@ -10,7 +10,7 @@ trigger:
   - main
   - dev
   - develop
-  - feature/*
+  # - feature/*
   - bundle/*
   - release/*
 
@@ -69,9 +69,9 @@ parameters:
     default:
       - bucketSuffix: $(bucketSuffix)
         sourceFolder: $(sourceFolder)
-        targetFolder: targetFolderName
+        targetFolder: pipeline-artifact
         globExpressions: $(globExpressions)
-        awsRegionCode: us-west-2
+        awsRegionCode: $(awsRegionCode)
         awsRegionAbbreviation: $(awsRegionAbbreviation)
     #- bucketSuffix: $(bucketSuffix2)
     #  sourceFolder: $(sourceFolder2)
@@ -79,27 +79,27 @@ parameters:
     #  globExpressions: $(globExpressions2)
     #  awsRegionCode: us-east-1
     #  awsRegionAbbreviation: $(awsRegionAbbreviation2)
-  - name: "AzureInfo"
-    displayName: "Azure Upload Information"
-    type: object
-    default:
-      - sourceFolder: ""
-        containerName: ""
-        blobPrefix: ""
-        additionalArgumentsForBlobCopy: ""
-        cleanTargetBeforeCopy: false
-        azRegionCode: ""
+  # - name: "AzureInfo"
+  #   displayName: "Azure Upload Information"
+  #   type: object
+  #   default:
+  #     - sourceFolder: ""
+  #       containerName: ""
+  #       blobPrefix: ""
+  #       additionalArgumentsForBlobCopy: ""
+  #       cleanTargetBeforeCopy: false
+  #       azRegionCode: ""
 
-  #Below is Container Info Object for Terraform Container deployment
-  - name: "ContainerInfo"
-    displayName: "Terraform Container Info"
-    type: object
-    default:
-      - sourceDirectory: ""
-        name: ""
-        tag: ""
-        dockerFile: ""
-        build: true
+  # #Below is Container Info Object for Terraform Container deployment
+  # - name: "ContainerInfo"
+  #   displayName: "Terraform Container Info"
+  #   type: object
+  #   default:
+  #     - sourceDirectory: ""
+  #       name: ""
+  #       tag: ""
+  #       dockerFile: ""
+  #       build: true
 
   #Timeout in minutes for all jobs in this run, default is 60 minutes.
   #DevSecOps gets alerts for jobs that run longer than 120 minutes.
@@ -278,9 +278,9 @@ extends:
   parameters:
     DestinationCloud: ${{ parameters.DestinationCloud }}
     IncludeContainer: ${{ parameters.IncludeContainer }}
-    ContainerInfo: ${{ parameters.ContainerInfo }}
+    # ContainerInfo: ${{ parameters.ContainerInfo }}
     S3Info: ${{ parameters.S3Info }}
-    AzureInfo: ${{ parameters.AzureInfo }}
+    # AzureInfo: ${{ parameters.AzureInfo }}
     Environments: ${{ parameters.Environments }}
     TimeoutInMinutes: ${{ parameters.TimeoutInMinutes }}
     SCName: ${{ parameters.SCName }}
