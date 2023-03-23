@@ -46,7 +46,7 @@ module "ccc_transcribe_lambda" {
   memory_size                       = 128
   timeout                           = 3
   tracing_mode                      = "PassThrough"
-  lambda_role                       = var.custom_transcribe_lambda_role_arn
+  lambda_role                       = var.transcribe_lambda_role_arn
   update_role                       = false
 
   s3_existing_package = {
@@ -57,6 +57,7 @@ module "ccc_transcribe_lambda" {
   environment_variables = {
     CONF_DESTINATION_BUCKET_NAME = var.ccc_initial_bucket_id
     CONF_S3BUCKET_OUTPUT         = var.ccc_unrefined_call_data_bucket_id
+    CONF_ROLE_ARN                = var.custom_transcribe_lambda_role_arn
   }
 
   tags = merge(local.tags,

@@ -77,6 +77,9 @@ variable "data-classification" {
 variable "custom_transcribe_lambda_role_arn" {
   type = string
 }
+variable "transcribe_lambda_role_arn" {
+  type = string
+}
 variable "comprehend_lambda_role_arn" {
   type = string
 }

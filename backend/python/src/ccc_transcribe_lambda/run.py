@@ -2,7 +2,7 @@
 import json
 import boto3
 import functions_definitions as my
-# import os
+import os
 # billing-guid = os.environ(billing-guid)
 
 CONF_VOCAB_FILTER_MODE = 'mask'
@@ -43,7 +43,7 @@ CONF_ENTITYCONF = float(0.5)
 CONF_API_MODE = "standard"
 
 # CONF_ROLE_ARN = "arn:aws:iam::544868842803:role/LambdaExecutionRoleFull"
-CONF_ROLE_ARN = "arn:aws:iam::183095018968:role/sdge-dtdes-dev-wus2-iam-role-nla-transcribe"
+CONF_ROLE_ARN = os.environ["CONF_ROLE_ARN"]
 
 
 # job_tags = [{
