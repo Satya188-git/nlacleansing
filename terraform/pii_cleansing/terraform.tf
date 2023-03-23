@@ -1,10 +1,10 @@
 terraform {
   backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "SempraUtilities"
+    hostname     = "#{ terraformHostname }#"
+    organization = "#{ System.TeamProject }#"
 
     workspaces {
-      name = "#{terraformWorkspace}#"
+      name = "#{ terraformWorkspace }#"
     }
   }
 }
