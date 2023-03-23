@@ -22,7 +22,7 @@ locals {
 # Define IAM roles
 module "comprehend_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -39,7 +39,7 @@ module "comprehend_lambda_role" {
 }
 module "transcribe_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -56,7 +56,7 @@ module "transcribe_lambda_role" {
 }
 module "informational_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -73,7 +73,7 @@ module "informational_macie_lambda_role" {
 }
 module "macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -91,7 +91,7 @@ module "macie_lambda_role" {
 
 module "trigger_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -109,7 +109,7 @@ module "trigger_macie_lambda_role" {
 
 module "sns_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -126,7 +126,7 @@ module "sns_lambda_role" {
 }
 module "athena_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -143,7 +143,7 @@ module "athena_lambda_role" {
 }
 module "audit_call_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "6.0.0-prerelease"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -179,15 +179,14 @@ module "autoscaler_iam_role" {
 
 module "custom_transcribe_lambda_role" {
   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "6.0.0-prerelease"
+  version = "4.0.2"
 
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = local.application_use
-  description       = local.description
-  service_resources = ["transcribe.amazonaws.com"]
+  application_use   = "${local.application_use}-custom-transcribe"
+  service_resources = ["transcribe.amazonaws.com", "lambda.amazonaws.com"]
 
   tags = merge(
     local.tags,
@@ -462,6 +461,6 @@ resource "aws_iam_role_policy_attachment" "CustomAmazonTranscribeFullAccess" {
   role       = module.custom_transcribe_lambda_role.name
 }
 resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
-  policy_arn = aws_iam_policy.transcribe_bucket_access.arn
+  policy_arn = aws_iam_policy.custom_transcribe_lambda_policy.arn
   role       = module.custom_transcribe_lambda_role.name
 }

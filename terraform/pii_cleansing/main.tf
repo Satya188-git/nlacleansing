@@ -110,7 +110,7 @@ module "lambda" {
   support-group                       = var.support-group
   cmdb-ci-id                          = var.cmdb-ci-id
   data-classification                 = var.data-classification
-  transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
+  custom_transcribe_lambda_role_arn   = module.iam.custom_transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
   macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
