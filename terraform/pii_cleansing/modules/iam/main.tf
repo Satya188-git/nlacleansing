@@ -21,8 +21,8 @@ locals {
 
 # Define IAM roles
 module "comprehend_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -38,8 +38,8 @@ module "comprehend_lambda_role" {
   )
 }
 module "transcribe_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -55,8 +55,8 @@ module "transcribe_lambda_role" {
   )
 }
 module "informational_macie_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -72,8 +72,8 @@ module "informational_macie_lambda_role" {
   )
 }
 module "macie_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -90,8 +90,8 @@ module "macie_lambda_role" {
 }
 
 module "trigger_macie_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -108,8 +108,8 @@ module "trigger_macie_lambda_role" {
 }
 
 module "sns_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -125,8 +125,8 @@ module "sns_lambda_role" {
   )
 }
 module "athena_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -142,8 +142,8 @@ module "athena_lambda_role" {
   )
 }
 module "audit_call_lambda_role" {
-  source = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -160,9 +160,8 @@ module "audit_call_lambda_role" {
 }
 
 module "autoscaler_iam_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -174,6 +173,25 @@ module "autoscaler_iam_role" {
     local.tags,
     {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-autoscale"
+    },
+  )
+}
+
+module "custom_transcribe_lambda_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-custom-transcribe"
+  service_resources = ["transcribe.amazonaws.com", "lambda.amazonaws.com"]
+
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-custom-transcribe"
     },
   )
 }
@@ -226,6 +244,59 @@ resource "aws_iam_policy" "s3_put_read" {
             "s3-object-lambda:Put*"
           ],
           "Resource" = "*"
+        }
+      ]
+  })
+}
+
+resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-custom-transcribe-policy"
+  policy = jsonencode(
+    {
+      "Version" : "2012-10-17",
+      "Statement" : [
+        {
+          "Action" : [
+            "s3:GetObject"
+          ],
+          "Resource" : [
+            "${var.ccc_unrefined_call_data_bucket_arn}/*"
+          ],
+          "Effect" : "Allow"
+        },
+        {
+          "Action" : [
+            "s3:ListBucket"
+          ],
+          "Resource" : [
+            "${var.ccc_unrefined_call_data_bucket_arn}"
+          ],
+          "Effect" : "Allow"
+        },
+        {
+          "Action" : [
+            "kms:Decrypt"
+          ],
+          "Resource" : [
+            "arn:aws:kms:us-west-2:183095018968:key/*"
+          ],
+          "Condition" : {
+            "StringLike" : {
+              "kms:ViaService" : [
+                "s3.*.amazonaws.com"
+              ]
+            }
+          },
+          "Effect" : "Allow"
+        },
+        {
+          "Effect" : "Allow",
+          "Action" : [
+            "ssm:GetParameters",
+            "ssm:GetParameter",
+            "ssm:GetParametersByPath"
+          ],
+          "Resource" : "arn:aws:ssm:us-west-2::parameter/*"
         }
       ]
   })
@@ -378,4 +449,18 @@ resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole7" {
   role       = module.athena_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# transcribe_bucket_access_role
+resource "aws_iam_role_policy_attachment" "CustomTranscribeAmazonS3FullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = module.custom_transcribe_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "CustomAmazonTranscribeFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
+  role       = module.custom_transcribe_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
+  policy_arn = aws_iam_policy.custom_transcribe_lambda_policy.arn
+  role       = module.custom_transcribe_lambda_role.name
 }
