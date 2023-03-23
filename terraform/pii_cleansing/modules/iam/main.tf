@@ -186,7 +186,7 @@ module "custom_transcribe_lambda_role" {
   environment_code  = local.environment_code
   region_code       = local.region_code
   application_use   = "${local.application_use}-custom-transcribe"
-  service_resources = ["transcribe.amazonaws.com", "lambda.amazonaws.com"]
+  service_resources = ["transcribe.amazonaws.com"]
 
   tags = merge(
     local.tags,
