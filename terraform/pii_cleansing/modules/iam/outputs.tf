@@ -33,3 +33,10 @@ output "audit_call_lambda_role_arn" {
 output "autoscaler_iam_role_id" {
   value = module.autoscaler_iam_role.id
 }
+
+output "custom_transcribe_lambda_role_arn" {
+  value = module.transcribe_bucket_access_role.arn
+}
+output "custom_transcribe_lambda_rolerole_id" {
+  value = module.transcribe_bucket_access_role.id
+}
