@@ -24,7 +24,7 @@ module "layers" {
 
 # CustomerCallCenter-Lambda-Transcribe
 module "ccc_transcribe_lambda" {
-  depends_on       = [var.transcribe_lambda_role_arn, module.layers.ccc_transcribe_lambda_archive_id]
+  depends_on       = [var.custom_transcribe_lambda_role_arn, module.layers.ccc_transcribe_lambda_archive_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -46,7 +46,7 @@ module "ccc_transcribe_lambda" {
   memory_size                       = 128
   timeout                           = 3
   tracing_mode                      = "PassThrough"
-  lambda_role                       = var.transcribe_lambda_role_arn
+  lambda_role                       = var.custom_transcribe_lambda_role_arn
   update_role                       = false
 
   s3_existing_package = {

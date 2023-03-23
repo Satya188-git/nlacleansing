@@ -44,71 +44,72 @@ module "dynamodb" {
 }
 
 module "iam" {
-  source              = "./modules/iam"
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  owner               = var.owner
-  namespace           = var.namespace
-  region_code         = var.region_code
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
-  account_id          = local.account_id
+  source                             = "./modules/iam"
+  region                             = var.region
+  environment                        = var.environment
+  application_use                    = var.application_use
+  company_code                       = var.company_code
+  application_code                   = var.application_code
+  environment_code                   = var.environment_code
+  owner                              = var.owner
+  namespace                          = var.namespace
+  region_code                        = var.region_code
+  tag-version                        = var.tag-version
+  billing-guid                       = var.billing-guid
+  unit                               = var.unit
+  portfolio                          = var.portfolio
+  support-group                      = var.support-group
+  cmdb-ci-id                         = var.cmdb-ci-id
+  data-classification                = var.data-classification
+  account_id                         = local.account_id
+  ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
 
 }
 
 module "kms" {
-  source = "./modules/kms"
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  owner               = var.owner
-  namespace           = var.namespace
-  region_code         = var.region_code
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
-  transcribe_lambda_role_arn             = module.iam.transcribe_lambda_role_arn
-  comprehend_lambda_role_arn             = module.iam.comprehend_lambda_role_arn
-  informational_macie_lambda_role_arn    = module.iam.informational_macie_lambda_role_arn
-  macie_lambda_role_arn                  = module.iam.macie_lambda_role_arn
-  trigger_macie_lambda_role_arn          = module.iam.trigger_macie_lambda_role_arn
+  source                              = "./modules/kms"
+  region                              = var.region
+  environment                         = var.environment
+  application_use                     = var.application_use
+  company_code                        = var.company_code
+  application_code                    = var.application_code
+  environment_code                    = var.environment_code
+  owner                               = var.owner
+  namespace                           = var.namespace
+  region_code                         = var.region_code
+  tag-version                         = var.tag-version
+  billing-guid                        = var.billing-guid
+  unit                                = var.unit
+  portfolio                           = var.portfolio
+  support-group                       = var.support-group
+  cmdb-ci-id                          = var.cmdb-ci-id
+  data-classification                 = var.data-classification
+  transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
+  comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
+  informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
+  macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
+  trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
 }
 
 module "lambda" {
-  source  = "./modules/lambda"
-  tf_artifact_s3      = var.tf_artifact_s3
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  owner               = var.owner
-  namespace           = var.namespace
-  region_code         = var.region_code
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
+  source                              = "./modules/lambda"
+  tf_artifact_s3                      = var.tf_artifact_s3
+  region                              = var.region
+  environment                         = var.environment
+  application_use                     = var.application_use
+  company_code                        = var.company_code
+  application_code                    = var.application_code
+  environment_code                    = var.environment_code
+  owner                               = var.owner
+  namespace                           = var.namespace
+  region_code                         = var.region_code
+  tag-version                         = var.tag-version
+  billing-guid                        = var.billing-guid
+  unit                                = var.unit
+  portfolio                           = var.portfolio
+  support-group                       = var.support-group
+  cmdb-ci-id                          = var.cmdb-ci-id
+  data-classification                 = var.data-classification
   transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
@@ -127,27 +128,27 @@ module "lambda" {
   ccc_verified_clean_bucket_id        = module.s3.ccc_verified_clean_bucket_id
   ccc_dirty_bucket_id                 = module.s3.ccc_dirty_bucket_id
   kms_key_ccc_sns_lambda_arn          = module.kms.kms_key_ccc_sns_lambda_arn
-  
+
 }
 
 module "s3" {
   source                         = "./modules/s3"
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  owner               = var.owner
-  namespace           = var.namespace
-  region_code         = var.region_code
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
+  region                         = var.region
+  environment                    = var.environment
+  application_use                = var.application_use
+  company_code                   = var.company_code
+  application_code               = var.application_code
+  environment_code               = var.environment_code
+  owner                          = var.owner
+  namespace                      = var.namespace
+  region_code                    = var.region_code
+  tag-version                    = var.tag-version
+  billing-guid                   = var.billing-guid
+  unit                           = var.unit
+  portfolio                      = var.portfolio
+  support-group                  = var.support-group
+  cmdb-ci-id                     = var.cmdb-ci-id
+  data-classification            = var.data-classification
   kms_key_ccc_unrefined_arn      = module.kms.kms_key_ccc_unrefined_arn
   kms_key_ccc_initial_arn        = module.kms.kms_key_ccc_initial_arn
   kms_key_ccc_clean_arn          = module.kms.kms_key_ccc_clean_arn

@@ -1,9 +1,9 @@
 variable "region" {
-  type=string
-  description="The AWS region where to deploy Terraform resources"
+  type        = string
+  description = "The AWS region where to deploy Terraform resources"
 }
 variable "environment" {
-  type=string
+  type = string
 }
 variable "application_use" {
   type        = string
@@ -74,42 +74,42 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
-variable "transcribe_lambda_role_arn" {
-  type=string
+variable "custom_transcribe_lambda_role_arn" {
+  type = string
 }
 variable "comprehend_lambda_role_arn" {
-  type=string
+  type = string
 }
 variable "informational_macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 variable "macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 variable "trigger_macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 variable "sns_lambda_role_arn" {
-  type=string
+  type = string
 }
 variable "audit_call_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "ccc_unrefined_call_data_bucket_arn" {
-  type=string
+  type = string
 }
 variable "ccc_verified_clean_bucket_arn" {
-  type=string
+  type = string
 }
 variable "ccc_maciefindings_bucket_arn" {
-  type=string
+  type = string
 }
 variable "ccc_cleaned_bucket_arn" {
-  type=string
+  type = string
 }
 variable "ccc_initial_bucket_arn" {
-  type=string
+  type = string
 }
 variable "ccc_initial_bucket_id" {
   type        = string
@@ -135,10 +135,10 @@ variable "ccc_dirty_bucket_id" {
 }
 
 variable "tf_artifact_s3" {
-  type        = string
+  type = string
 }
 
 variable "kms_key_ccc_sns_lambda_arn" {
   type        = string
-   description = "kms_key_ccc_sns_lambda_arn"
+  description = "kms_key_ccc_sns_lambda_arn"
 }
