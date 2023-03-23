@@ -51,8 +51,6 @@ variables:
     value: "SEU RHEL8 VX Shared"
   - name: canaryPool
     value: "SEU RHEL8 VX Dev"
-  - name: CheckmarxTeam
-    value: "NLA"
   #Add variables here when they are the same per environment and referenced in Jobs and/or Steps added to the pipeline by the `LocalBuildYAML`, `LocalPreTFYAML` and/or `LocalReleaseYAML` pipeline parameters
   #More information:
   #https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
