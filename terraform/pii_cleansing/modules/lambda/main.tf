@@ -44,7 +44,7 @@ module "ccc_transcribe_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.transcribe_lambda_role_arn
   update_role                       = false
@@ -95,7 +95,7 @@ module "ccc_comprehend_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.comprehend_lambda_role_arn
   update_role                       = false
@@ -138,7 +138,7 @@ module "ccc_informational_macie_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.comprehend_lambda_role_arn
   update_role                       = false
@@ -182,7 +182,7 @@ module "ccc_notification_forwarder_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.sns_lambda_role_arn
   update_role                       = false
@@ -221,7 +221,7 @@ module "ccc_macie_scan_trigger_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.trigger_macie_lambda_role_arn
   update_role                       = false
@@ -264,7 +264,7 @@ module "ccc_macie_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.macie_lambda_role_arn
   update_role                       = false
@@ -304,7 +304,7 @@ module "ccc_audit_call_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 3
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.audit_call_lambda_role_arn
   update_role                       = false
