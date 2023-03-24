@@ -1,0 +1,89 @@
+{
+   "callInsights": [
+      {
+         "callID": "7064723398606267233",
+         "segmentStartTime": "2022-02-15T00:14:56.9570000",
+         "segmentStopTime": "2022-02-15T00:24:10.1230000",
+         "callLength": "0:09:14",
+         "customerType": "Residential",
+         "ivrCallCategory": "High Bill",
+         "agent": "Guitterez Stephanie",
+         "participantAgentId": "6367533",
+         "callSummary": "CUSTOMER's dryer and water heater are gas. The water heater is also gas, but the water is included in the way if you don't pay for it. The gas to make the water hot is still us. The income for QUANTITY is not enough for the DATE.",
+         "endingSentiment": {
+            "label": "POSITIVE",
+            "confidence": 0.8831731081008911
+         },
+         "tags": [
+            {
+               "tagLabel": "winter",
+               "tagType": "Call Intent",
+               "appearsInLineID": [
+                  "e71c96d1-c331-4098-9659-e08c0452e779"
+               ]
+            },
+            {
+               "tagLabel": "billing period",
+               "tagType": "Call Intent",
+               "appearsInLineID": [
+                  "e71c96d1-c331-4098-9659-e08c0452e779",
+                  "e731f80e-47e3-4f1a-b819-bbee51b0da95"
+               ]
+            },
+            {
+               "tagLabel": "billing",
+               "tagType": "Call Intent",
+               "appearsInLineID": [
+                  "e71c96d1-c331-4098-9659-e08c0452e779",
+                  "e731f80e-47e3-4f1a-b819-bbee51b0da95"
+               ]
+            },
+            {
+               "tagLabel": "water heater",
+               "tagType": "Call Intent",
+               "appearsInLineID": [
+                  "b1398af6-52a7-4486-915a-41bb2b141113"
+               ]
+            }
+         ],
+         "callSegments": [
+            {
+               "segmentName": "greeting",
+               "startLineId": "Segment Not Found",
+               "endLineId": "Segment Not Found",
+               "beginOffsetMillis": "Segment Not Found",
+               "endOffsetMillis": "Segment Not Found",
+               "duration": "",
+               "durationSeconds": 0
+            },
+            {
+               "segmentName": "AUTHENTICATION",
+               "startLineId": "718c718d-71fb-4ab2-8f10-23e0547a09fd",
+               "endLineId": "ea7c9238-2034-451e-947d-f2da322dc2d3",
+               "beginOffsetMillis": 1730,
+               "endOffsetMillis": 10730,
+               "duration": "0:00:09",
+               "durationSeconds": 9.0
+            },
+            {
+               "segmentName": "wrap",
+               "startLineId": "880cc5d2-8750-48ef-a5af-f5a9395800c5",
+               "endLineId": "b7a5e1a5-b3b4-4bc0-9eb4-53243a2995fc",
+               "beginOffsetMillis": 521710,
+               "endOffsetMillis": 550160,
+               "duration": "0:00:28.450000",
+               "durationSeconds": 28.45
+            },
+            {
+               "segmentName": "solutioning",
+               "startLineId": "48e25b02-8317-4835-a5d7-6925cb5427e0",
+               "endLineId": "be6d0b70-66f4-4bb3-8ee8-a2f322ef0e43",
+               "beginOffsetMillis": 11910,
+               "endOffsetMillis": 517159,
+               "duration": "0:08:25.249000",
+               "durationSeconds": 505.249
+            }
+         ]
+      }
+   ]
+}
