@@ -217,7 +217,7 @@ module "ccc_maciefindings_bucket" {
       expose_headers  = []
     }
   ]
-  additional_policy_statements = jsonencode({
+  additional_policy_statements = jsonencode([{
     "Version" : "2012-10-17",
     "Id" : "DenyHttpAccess",
     "Statement" : [
@@ -277,7 +277,7 @@ module "ccc_maciefindings_bucket" {
         }
       }
     ]
-  })
+  }])
 }
 
 module "ccc_piimetadata_bucket" {
