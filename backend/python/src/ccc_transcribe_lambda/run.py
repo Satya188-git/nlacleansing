@@ -12,8 +12,8 @@ CONF_FILTER_NAME = 'TestVocabFilter1'
 CONF_MAX_SPEAKERS = 2
 CONF_PREFIX_TRANSCRIBE_RESULTS = ''
 CONF_REDACTION_LANGS = 'en-US'
-# CONF_S3BUCKET_OUTPUT = 'sdge-dtdes-'+os.environ['env']+'-wus2-s3-nla-unrefined-s3'
-CONF_S3BUCKET_OUTPUT = 'sdge-dtdes-dev-wus2-s3-nla-unrefined-s3'
+CONF_S3BUCKET_OUTPUT = os.environ["CONF_S3BUCKET_OUTPUT"]
+# CONF_S3BUCKET_OUTPUT = 'sdge-dtdes-dev-wus2-s3-nla-unrefined-s3'
 CONF_SPEAKER_MODE = 'channel'
 CONF_TRANSCRIBE_API = 'analytics'
 CONF_TRANSCRIBE_LANG = 'en-US'
@@ -23,8 +23,11 @@ CONF_REDACTION_TRANSCRIPT = 'true'
 # CONF_DESTINATION_BUCKET_URI = 's3://customercallcenterpiicleaned'
 # CONF_DESTINATION_BUCKET_NAME = 'customercallcenterpiicleaned'
 
-CONF_DESTINATION_BUCKET_URI = 's3://sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
-CONF_DESTINATION_BUCKET_NAME = 'sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
+# CONF_DESTINATION_BUCKET_URI = 's3://sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
+# CONF_DESTINATION_BUCKET_NAME = 'sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
+
+# CONF_DESTINATION_BUCKET_URI = os.environ["s3://sdge-dtdes-dev-wus2-s3-nla-pii-transcription"]
+CONF_DESTINATION_BUCKET_NAME = os.environ["CONF_DESTINATION_BUCKET_NAME"]
 
 
 # CONF_DESTINATION_BUCKET_URI = 's3://nla-file-upload'

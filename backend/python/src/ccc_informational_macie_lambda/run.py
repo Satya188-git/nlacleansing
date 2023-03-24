@@ -2,6 +2,7 @@
 import time
 import boto3
 import json
+import os
 import gzip
 import io
 from botocore.exceptions import ClientError
@@ -14,9 +15,10 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-destination_bucket_name_verified = 'customercallcenterpiicleanedverified'
-destination_bucket_name_dirty = 'customercallcenterpiidirty'
-
+# destination_bucket_name_verified = 'customercallcenterpiicleanedverified'
+# destination_bucket_name_dirty = 'customercallcenterpiidirty'
+destination_bucket_name_verified = os.environ["DESTINATION_BUCKET_NAME_VERIFIED"]
+destination_bucket_name_dirty = os.environ["DESTINATION_BUCKET_NAME_DIRTY"]
 
 def lambda_handler(event, context):
 

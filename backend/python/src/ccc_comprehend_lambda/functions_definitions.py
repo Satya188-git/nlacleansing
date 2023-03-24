@@ -6,6 +6,7 @@ import uuid
 
 import time
 import boto3
+import os
 
 
 from datetime import datetime
@@ -326,7 +327,7 @@ def capture_file_metdadata(s3filename):
 			    \"segment vector number\" as \"segmentVectorNumber\",
 			    \"internal segment client start time\" as \"internalSegmentClientStartTime\",
 			    \"internal segment client stop time\" as \"internalSegmentClientStopTime\"
-			FROM \"default\".\"ccc-metadata-3\"
+			FROM \"default\".\"ccc_sdge_dtdes_dev_wus2_s3_nla_pii_metadata\"
 			where \"file Name\" = '""" + s3filename + "';"
 
     print("query:", query)
@@ -334,7 +335,10 @@ def capture_file_metdadata(s3filename):
     # query = "SELECT * FROM default.ccc-metadata-3 limit 10";
 
     DATABASE = 'default'
-    output = 's3://customercallcenterathenaresults/'
+
+    output = os.environ["OUTPUT"]
+    print("output folder location", output)
+    # output = 's3://customercallcenterathenaresults/'
 
     client = boto3.client('athena')
 
@@ -362,6 +366,7 @@ def capture_file_metdadata(s3filename):
         # get query execution
         query_status = client.get_query_execution(
             QueryExecutionId=query_execution_id)
+        print("query_status : ", query_status)
         query_execution_status = query_status['QueryExecution']['Status']['State']
 
         if query_execution_status == 'SUCCEEDED':
@@ -489,8 +494,12 @@ def capture_file_metdadata(s3filename):
         call_type = 'ERBilling'
     elif call_pattern == '1245616':
         call_type = 'ERCredit'
+    elif call_pattern == '1245654':
+        call_type = 'EBBilling'
     elif call_pattern == '1245668':
         call_type = 'ERMove'
+    elif call_pattern == '1245655':
+        call_type = 'EBMove'
     else:
         print("Invalid code/ Business Number")
 
@@ -743,11 +752,11 @@ def construct_final_output(comprehend, s3client, cleaned_bucket_name, s3filename
     print("s3_path" + s3_path)
     response = s3client.Bucket(cleaned_bucket_name).put_object(
         Key=s3_path, Body=str(json.dumps(results, indent=4)), ContentType='text/plain')
-    s3_path = "final_outputs2/" + s3filename + "_final_output_cleaned.json"
-    # response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=str(results), ContentType='text/plain')
-    Body = str(json.dumps(results))
-    print("************************Body Not Indented*************************************")
-    print(Body)
-    response = s3client.Bucket(cleaned_bucket_name).put_object(
-        Key=s3_path, Body=str(json.dumps(results)), ContentType='text/plain')
+    # s3_path = "final_outputs2/" + s3filename + "_final_output_cleaned.json"
+    # # response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=str(results), ContentType='text/plain')
+    # Body = str(json.dumps(results))
+    # print("************************Body Not Indented*************************************")
+    # print(Body)
+    # response = s3client.Bucket(cleaned_bucket_name).put_object(
+    #     Key=s3_path, Body=str(json.dumps(results)), ContentType='text/plain')
     return results
