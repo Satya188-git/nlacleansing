@@ -172,7 +172,6 @@ module "ccc_dirty_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_dirty_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -205,7 +204,6 @@ module "ccc_maciefindings_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_maciefindings_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -217,67 +215,63 @@ module "ccc_maciefindings_bucket" {
       expose_headers  = []
     }
   ]
-  additional_policy_statements = [{
-    "Version" = "2012-10-17",
-    "Id"      = "DenyHttpAccess",
-    "Statement" = [
-      {
-        "Sid"       = "AllowSSLRequestsOnly",
-        "Effect"    = "Deny",
-        "Principal" = "*",
-        "Action"    = "s3:*",
-        "Resource" = [
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*"
-        ],
-        "Condition" = {
-          "Bool" = {
-            "aws:SecureTransport" = "false"
-          }
-        }
-      },
-      {
-        "Sid"    = "Allow Macie to upload objects to the bucket",
-        "Effect" = "Allow",
-        "Principal" = {
-          "Service" = "macie.amazonaws.com"
-        },
-        "Action"   = "s3:PutObject",
-        "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
-        "Condition" = {
-          "StringEquals" = {
-            "aws:SourceAccount" : "183095018968"
-          },
-          "ArnLike" = {
-            "aws:SourceArn" = [
-              "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-              "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-            ]
-          }
-        }
-      },
-      {
-        "Sid"    = "Allow Macie to use the getBucketLocation operation",
-        "Effect" = "Allow",
-        "Principal" = {
-          "Service" = "macie.amazonaws.com"
-        },
-        "Action"   = "s3:GetBucketLocation",
-        "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
-        "Condition" = {
-          "StringEquals" = {
-            "aws:SourceAccount" = "183095018968"
-          },
-          "ArnLike" = {
-            "aws:SourceArn" = [
-              "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-              "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-            ]
-          }
+  additional_policy_statements = [
+    {
+      "Sid"       = "AllowSSLRequestsOnly",
+      "Effect"    = "Deny",
+      "Principal" = "*",
+      "Action"    = "s3:*",
+      "Resource" = [
+        "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
+        "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*"
+      ],
+      "Condition" = {
+        "Bool" = {
+          "aws:SecureTransport" = "false"
         }
       }
-    ]
-  }]
+    },
+    {
+      "Sid"    = "Allow Macie to upload objects to the bucket",
+      "Effect" = "Allow",
+      "Principal" = {
+        "Service" = "macie.amazonaws.com"
+      },
+      "Action"   = "s3:PutObject",
+      "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
+      "Condition" = {
+        "StringEquals" = {
+          "aws:SourceAccount" : "183095018968"
+        },
+        "ArnLike" = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
+            "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid"    = "Allow Macie to use the getBucketLocation operation",
+      "Effect" = "Allow",
+      "Principal" = {
+        "Service" = "macie.amazonaws.com"
+      },
+      "Action"   = "s3:GetBucketLocation",
+      "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
+      "Condition" = {
+        "StringEquals" = {
+          "aws:SourceAccount" = "183095018968"
+        },
+        "ArnLike" = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
+            "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
+          ]
+        }
+      }
+    }
+  ]
 }
 
 module "ccc_piimetadata_bucket" {
@@ -300,7 +294,6 @@ module "ccc_piimetadata_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_piimetadata_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -333,7 +326,6 @@ module "ccc_athenaresults_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_athenaresults_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
