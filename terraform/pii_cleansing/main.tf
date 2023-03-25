@@ -128,6 +128,7 @@ module "lambda" {
   ccc_cleaned_bucket_id               = module.s3.ccc_cleaned_bucket_id
   ccc_verified_clean_bucket_id        = module.s3.ccc_verified_clean_bucket_id
   ccc_dirty_bucket_id                 = module.s3.ccc_dirty_bucket_id
+  ccc_athenaresults_bucket_id         = module.s3.ccc_athenaresults_bucket_id
   kms_key_ccc_sns_lambda_arn          = module.kms.kms_key_ccc_sns_lambda_arn
 
 }

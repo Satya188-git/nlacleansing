@@ -102,6 +102,7 @@ module "ccc_comprehend_lambda" {
 
   environment_variables = {
     CLEANED_BUCKET_NAME = var.ccc_cleaned_bucket_id
+    OUTPUT              = "s3://${var.ccc_athenaresults_bucket_id}/"
   }
 
   s3_existing_package = {
@@ -158,6 +159,15 @@ module "ccc_informational_macie_lambda" {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie"
     },
   )
+}
+
+resource "aws_lambda_permission" "info_macie_trigger" {
+  depends_on    = [module.ccc_informational_macie_lambda.lambda_function_name]
+  statement_id  = "AllowExecutionFromS3BucketProcess"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_informational_macie_lambda.lambda_function_name
+  principal     = "s3.amazonaws.com"
+  source_arn    = var.ccc_maciefindings_bucket_arn
 }
 
 # aws-controltower-NotificationForwarder

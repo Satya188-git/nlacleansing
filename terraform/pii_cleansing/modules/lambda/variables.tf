@@ -137,6 +137,13 @@ variable "ccc_dirty_bucket_id" {
   description = "ccc_dirty_bucket_id"
 }
 
+variable "ccc_athenaresults_bucket_id" {
+  type        = string
+  description = "ccc_athenaresults_bucket_id"
+}
+
+
+
 variable "tf_artifact_s3" {
   type = string
 }
