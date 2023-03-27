@@ -21,10 +21,8 @@ const Logo: React.FC = () => {
 			: '/sdge-logo.png' || `${AWS_URL.S3}sdge-logo.png`;
 	return (
 		<LogoContainer>
-			<Link href={Route.HOME}>
-				<a>
-					<Image src={logo} height={50} width={65} />
-				</a>
+			<Link href={Route.DASHBOARD}>
+				<Image src={logo} height={50} width={65} />
 			</Link>
 		</LogoContainer>
 	);

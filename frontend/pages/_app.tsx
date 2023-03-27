@@ -22,6 +22,9 @@ import { PartnerProvider } from '../context/PartnerContext';
 import { SocialChannelProvider } from '../context/SocialChannelContext';
 import '../styles/globals.css';
 import '../styles/custom-antd.css';
+import '../styles/dashboard.css';
+import { Provider } from 'react-redux';
+import store from '../app/store';
 
 configureAxios();
 
@@ -55,46 +58,48 @@ const App = ({ Component, pageProps }) => {
 		// <Authenticator>
 		// 	{({ user, signOut }) => (
 		// <AuthenticatorProvider value={{ user: currentUser }}>
-		<PartnerProvider>
-			<SLDataProvider>
-				<CCCDataProvider>
-					<Layout style={{ minHeight: '100vh' }}>
-						<Head>
-							<title>Social Listening Dashboard</title>
-							<meta
-								name='description'
-								content='Social Insights on Emergency Outreach and Operations'
-							/>
-							<link rel='icon' href='/favicon.ico' />
-						</Head>
-						{currentUser && <Navbar />}
-						<Content
-							className='site-layout'
-							style={{
-								padding: '0 1.5rem',
-								marginTop: '1.5rem',
-							}}
-						>
-							<DateProvider>
-								<SocialChannelProvider>
-									<EventKeywordProvider>
-										<EventTypeProvider>
-											<CallFilterProvider>
-												<CallSelectDataProvider>
-													<CallTimelineSelectDataProvider>
-														<Component {...pageProps} />
-													</CallTimelineSelectDataProvider>
-												</CallSelectDataProvider>
-											</CallFilterProvider>
-										</EventTypeProvider>
-									</EventKeywordProvider>
-								</SocialChannelProvider>
-							</DateProvider>
-						</Content>
-					</Layout>
-				</CCCDataProvider>
-			</SLDataProvider>
-		</PartnerProvider>
+		<Provider store={store}>
+			<PartnerProvider>
+				<SLDataProvider>
+					<CCCDataProvider>
+						<Layout style={{ minHeight: '100vh' }}>
+							<Head>
+								<title>Social Listening Dashboard</title>
+								<meta
+									name='description'
+									content='Social Insights on Emergency Outreach and Operations'
+								/>
+								<link rel='icon' href='/favicon.ico' />
+							</Head>
+							<Navbar />
+							<Content
+								className='site-layout'
+								style={{
+									padding: '0 1.5rem',
+									marginTop: '1.5rem',
+								}}
+							>
+								<DateProvider>
+									<SocialChannelProvider>
+										<EventKeywordProvider>
+											<EventTypeProvider>
+												<CallFilterProvider>
+													<CallSelectDataProvider>
+														<CallTimelineSelectDataProvider>
+															<Component {...pageProps} />
+														</CallTimelineSelectDataProvider>
+													</CallSelectDataProvider>
+												</CallFilterProvider>
+											</EventTypeProvider>
+										</EventKeywordProvider>
+									</SocialChannelProvider>
+								</DateProvider>
+							</Content>
+						</Layout>
+					</CCCDataProvider>
+				</SLDataProvider>
+			</PartnerProvider>
+		</Provider>
 		// </AuthenticatorProvider>
 		// 	)}
 		// </Authenticator>

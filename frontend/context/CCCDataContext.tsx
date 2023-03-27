@@ -30,7 +30,6 @@ export interface CCCParams {
 const cccDataDefaultValue: CCCDataContextValue = {
 	cccData: {
 		callInsights: [],
-		// callInsights: insightsData,
 		callLevelInfos: [],
 		tags: [],
 		callDuration: '',

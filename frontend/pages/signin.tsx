@@ -11,7 +11,7 @@ const Signin = () => {
 	useEffect(() => {
 		if (currentUser) {
 			console.log('Signin Page - getting currentUser: ');
-			router.push(Route.CCC);
+			router.push(Route.DASHBOARD);
 		}
 	}, [currentUser]);
 
@@ -36,7 +36,7 @@ const Signin = () => {
 			<Button
 				size='large'
 				type='primary'
-				onClick={() => router.push(Route.CCC)}
+				onClick={() => router.push(Route.DASHBOARD)}
 			>
 				Sign In
 			</Button>

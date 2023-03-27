@@ -212,6 +212,23 @@ const customFormat = (value) => {
 	return date;
 }
 
+const customMonthFormat = (value) => {
+	let date: string[] | string = "";
+	if (value) {
+		date = new Date(value).toString().split(" ");
+		date = `${date[1]}, ${date[3]}`;
+	}
+	return date;
+}
+
+const monthDiff = (d1, d2) => {
+	let months;
+	months = (new Date(d2).getFullYear() - new Date(d1).getFullYear()) * 12;
+	months -= new Date(d1).getMonth();
+	months += new Date(d2).getMonth();
+	return months <= 0 ? 0 : months;
+}
+
 export default {
 	srand,
 	rand,
@@ -229,4 +246,6 @@ export default {
 	DATE_FORMAT,
 	getDatesInBetween,
 	customFormat,
+	customMonthFormat,
+	monthDiff,
 };

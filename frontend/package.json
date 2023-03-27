@@ -21,6 +21,7 @@
 		"@aws-amplify/ui-react": "^3.2.1",
 		"@kurkle/color": "^0.2.1",
 		"@react-pdf/renderer": "^2.3.0",
+		"@reduxjs/toolkit": "^1.9.3",
 		"antd": "^4.20.7",
 		"aws-amplify": "^4.3.28",
 		"axios": "^0.27.2",
@@ -41,9 +42,9 @@
 		"react-dom": "^18.2.0",
 		"react-infinite-scroll-component": "^6.1.0",
 		"react-pdf": "^5.7.2",
+		"react-redux": "^8.0.5",
 		"react-to-print": "^2.14.7",
 		"react-wordcloud": "^1.2.7",
-		"redux": "^4.2.0",
 		"styled-components": "^5.3.5"
 	},
 	"devDependencies": {

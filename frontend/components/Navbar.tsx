@@ -53,18 +53,14 @@ const Navbar: React.FC = () => {
 			`${Route.HOME}`,
 			'Emergency Operations & Outreach Dashboard',
 			<Link href={Route.HOME}>
-				<a>
-					<BranchesOutlined />
-				</a>
+				<BranchesOutlined />
 			</Link>
 		),
 		getItem(
 			`${Route.OPERATIONS}`,
 			'Event Categories',
 			<Link href={Route.OPERATIONS}>
-				<a>
-					<HeatMapOutlined />
-				</a>
+				<HeatMapOutlined />
 			</Link>
 		),
 	];
@@ -82,17 +78,15 @@ const Navbar: React.FC = () => {
 				items={
 					partner.name === Partner.SDGE
 						? [
-								getItem(
-									`${Route.CCC}`,
-									'Customer Call Center Analytics Dashboard',
-									<Link href={Route.CCC}>
-										<a>
-											<PhoneOutlined />
-										</a>
-									</Link>
-								),
-								...items,
-						  ]
+							getItem(
+								`${Route.CCC}`,
+								'Customer Call Center Analytics Dashboard',
+								<Link href={Route.CCC}>
+									<PhoneOutlined />
+								</Link>
+							),
+							...items,
+						]
 						: items
 				}
 			/>

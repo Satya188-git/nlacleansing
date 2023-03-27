@@ -1,0 +1,44 @@
+.chart-warpper {
+    height: auto !important;
+    min-height: 400px;
+    padding: 0 !important;
+}
+
+.dashboard-filter-section {
+    float: right;
+    margin-bottom: 25px;
+}
+
+.chart-header {
+    height: 37px;
+    text-align: center;
+    padding: 9px 10px 9px 0px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
+}
+
+.no-border {
+    border: 0 !important;
+}
+
+.count-card {
+    height: 106.33px;
+    padding: 8px;
+    text-align: center;
+}
+
+.count-val {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 0;
+}

@@ -37,10 +37,6 @@ const TimeSelector: React.FC = () => {
 		setCallFilter((prev) => ({ ...prev, callDuration: time }));
 	};
 
-	const onFocus = (open) => {
-		console.log("active", open)
-	}
-
 	return (
 		<>
 			<Title level={5}>Call Duration</Title>

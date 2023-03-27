@@ -7,4 +7,5 @@ export enum Route {
 	SEARCH = '/search',
 	CCC = '/ccc',
 	SIGNIN = '/signin',
+	DASHBOARD = '/dashboard',
 }
