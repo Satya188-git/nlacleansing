@@ -44,6 +44,8 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 		} else {
 			setPageLoaded(true);
 		}
+		setCCCData((prev) => ({ ...prev, isLoading: true }));
+		setCallFilter((prev) => ({ ...prev, callDuration: '', callID: '', tags: [], filteredCallInsightData: [] }));
 	}, []);
 
 	useEffect(() => {
@@ -133,14 +135,14 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 						placeholder='Search by NICE Call ID'
 						value={callID}
 						onChange={(evt) => setCCCData((prev) => ({ ...prev, callID: evt.target.value, }))}
-						// prefix={<UserOutlined />}
-						// onSearch={onSearch}
-						// loading={isFiltering}
+					// prefix={<UserOutlined />}
+					// onSearch={onSearch}
+					// loading={isFiltering}
 					/>
 					<Space>
 						<DateSelector />
-						<CallIntentSelector />
 						<TimeSelector />
+						<CallIntentSelector />
 						<Button
 							title='Search Filters'
 							onClick={onFilter}
@@ -153,7 +155,7 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 			</Row>
 			<Divider />
 			<Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-				{isFiltering ? (
+				{isLoading ? (
 					<CenterContainer>
 						<Spin tip='Loading' />
 					</CenterContainer>

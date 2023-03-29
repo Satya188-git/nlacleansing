@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import DateUtil from "helpers/DateUtil";
 import moment from "moment";
 
-export const currentYear = new Date().getFullYear();
+export const currentYear = new Date("2022-05-20").getFullYear();
 
 export const dashboardSlice = createSlice({
     name: 'dashboard',
@@ -12,6 +12,7 @@ export const dashboardSlice = createSlice({
             endDate: moment(new Date(currentYear, 11, 31)).format(DateUtil.DATE_FORMAT),
         },
         ivrType: "",
+        tag: "",
     },
     reducers: {
         setDate: (state, action) => {
@@ -20,9 +21,12 @@ export const dashboardSlice = createSlice({
         setIvrType: (state, action) => {
             state.ivrType = action.payload;
         },
+        setTag: (state, action) => {
+            state.tag = action.payload;
+        },
     }
 })
 
-export const { setDate, setIvrType } = dashboardSlice.actions;
+export const { setDate, setIvrType, setTag } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

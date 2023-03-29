@@ -1,4 +1,4 @@
-import { BranchesOutlined, HeatMapOutlined, PhoneOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, BranchesOutlined, HeatMapOutlined, PhoneOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import { Partner } from 'constants/partner';
@@ -65,6 +65,23 @@ const Navbar: React.FC = () => {
 		),
 	];
 
+	const navItems: MenuProps['items'] = [
+		getItem(
+			`${Route.DASHBOARD}`,
+			'Aggregated Dashboard',
+			<Link href={Route.DASHBOARD}>
+				<AppstoreOutlined />
+			</Link>
+		),
+		getItem(
+			`${Route.CCC}`,
+			'Customer Call Center Analytics Dashboard',
+			<Link href={Route.CCC}>
+				<PhoneOutlined />
+			</Link>
+		),
+	];
+
 	return (
 		<StyledSider collapsed={true}>
 			<LogoContainer>
@@ -75,20 +92,21 @@ const Navbar: React.FC = () => {
 				mode='inline'
 				defaultSelectedKeys={['/']}
 				selectedKeys={[router.basePath, router.pathname]}
-				items={
-					partner.name === Partner.SDGE
-						? [
-							getItem(
-								`${Route.CCC}`,
-								'Customer Call Center Analytics Dashboard',
-								<Link href={Route.CCC}>
-									<PhoneOutlined />
-								</Link>
-							),
-							...items,
-						]
-						: items
-				}
+				items={navItems}
+			// items={
+			// 	partner.name === Partner.SDGE
+			// 		? [
+			// 			getItem(
+			// 				`${Route.CCC}`,
+			// 				'Customer Call Center Analytics Dashboard',
+			// 				<Link href={Route.CCC}>
+			// 					<PhoneOutlined />
+			// 				</Link>
+			// 			),
+			// 			...items,
+			// 		]
+			// 		: items
+			// }
 			/>
 		</StyledSider>
 	);

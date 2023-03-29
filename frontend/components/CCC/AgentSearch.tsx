@@ -3,7 +3,7 @@ import { useCallFilterContext } from 'context/CallFilterContext';
 import { useCCCDataContext } from 'context/CCCDataContext';
 import React, { useEffect, useState } from 'react';
 
-const CallTagSelector: React.FC = () => {
+const AgentSearch = () => {
 	const {
 		cccData: { callInsights },
 	} = useCCCDataContext();
@@ -42,7 +42,7 @@ const CallTagSelector: React.FC = () => {
 		<>
 			<Title level={5}>Call Tags</Title>
 			<Select
-				className='tags-select text-uppercase'
+				className='tags-select'
 				showSearch
 				mode='multiple'
 				allowClear
@@ -62,4 +62,4 @@ const CallTagSelector: React.FC = () => {
 	);
 };
 
-export default CallTagSelector;
+export default AgentSearch;

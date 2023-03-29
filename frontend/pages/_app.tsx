@@ -77,6 +77,8 @@ const App = ({ Component, pageProps }) => {
 								style={{
 									padding: '0 1.5rem',
 									marginTop: '1.5rem',
+									height: '95vh',
+									overflowY: "auto",
 								}}
 							>
 								<DateProvider>

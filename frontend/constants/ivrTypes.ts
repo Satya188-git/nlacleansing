@@ -1,3 +1,3 @@
 export const Types = [
-    "High Bill", "ERMove", "EBMove", "ERBilling", "EBBilling", "ERCSR", "ERCredit"
-] 
+    "High Bill", "Move", "Billing", "CSR", "Credit"
+];

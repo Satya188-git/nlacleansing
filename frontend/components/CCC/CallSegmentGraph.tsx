@@ -2,7 +2,7 @@ import { useCallSelectDataContext } from 'context/CallSelectContext';
 import { capitalize } from 'helpers/StringUtil';
 import moment from 'moment';
 import React from 'react';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut, Pie } from 'react-chartjs-2';
 import styled from 'styled-components';
 import { ICallInsight, ICallSegment } from 'types/callInsight';
 import DateUtil from '../../helpers/DateUtil';
@@ -30,12 +30,13 @@ const CallSegmentGraph: React.FC = () => {
 				backgroundColor: selectedCallLevelData.callsegments?.map((_, i) =>
 					DateUtil.namedColor(i)
 				),
+				borderWidth: 0,
 			},
 		],
 	};
 
 	const config = {
-		type: 'pie',
+		type: 'Doughnut',
 		data: graphData,
 		options: {
 			responsive: true,
@@ -45,8 +46,11 @@ const CallSegmentGraph: React.FC = () => {
 					display: false,
 				},
 				legend: {
+					position: 'bottom' as const,
 					labels: {
 						color: 'white',
+						usePointStyle: true,
+						boxWidth: 10,
 					},
 				},
 			},
@@ -56,7 +60,7 @@ const CallSegmentGraph: React.FC = () => {
 	return (
 		<>
 			<GraphContainer>
-				<Pie data={config.data} options={config.options} height={300} />
+				<Doughnut data={config.data} options={config.options} height={300} />
 			</GraphContainer>
 		</>
 	);

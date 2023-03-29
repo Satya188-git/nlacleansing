@@ -199,8 +199,10 @@ const NAMED_COLORS = [
 	CHART_COLORS.grey,
 ];
 
+const _CHART_COLORS = ["#40A9FF", "#0C75DF", "#4ACCD4", "#AADD6D", "#088856"];
+
 function namedColor(index) {
-	return NAMED_COLORS[index % NAMED_COLORS.length];
+	return _CHART_COLORS[index % _CHART_COLORS.length];
 }
 
 const customFormat = (value) => {

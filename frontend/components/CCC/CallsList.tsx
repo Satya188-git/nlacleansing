@@ -130,17 +130,17 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											style={{ borderRight: '1px solid #0E263B' }}
+											// style={{ borderRight: '1px solid #0E263B' }}
 										>
-											<Title level={5}>{item.segmentStartTime}</Title>
+											<Title level={5} className="f-16">{item.segmentStartTime?.split(".")?.[0]}</Title>
 											<Row>
 												<Title level={5}>
-													<u>Duration</u>: {toHoursAndMinutes(item.callLengthSeconds)}
+													Duration: <span className='fw-100'>{toHoursAndMinutes(item.callLengthSeconds)}</span>
 												</Title>
 											</Row>
 											<Row>
 												<Title level={5}>
-													<u>Agent</u>: {item.agentFullName}
+													Agent: <span className='fw-100'>{item.agentFullName}</span>
 												</Title>
 											</Row>
 										</Col>
@@ -148,21 +148,21 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											style={{ borderRight: '1px solid #0E263B' }}
+											// style={{ borderRight: '1px solid #0E263B' }}
 										>
 											<Row>
 												<Title level={5}>
-													<u>NICE Call ID</u>: {item.callID}
+													NICE Call ID: <span className='fw-100'>{item.callID}</span>
 												</Title>
 											</Row>
 											<Row>
 												<Title level={5}>
-													<u>Customer Type</u>: {item.customerType}
+													Customer Type: <span className='fw-100'>{item.customerType}</span>
 												</Title>
 											</Row>
 											<Row>
 												<Title level={5}>
-													<u>IVR Category</u>: {item.ivrCallCategory}
+													IVR Category: <span className='fw-100'>{item.ivrCallCategory}</span>
 												</Title>
 											</Row>
 										</Col>
@@ -170,16 +170,16 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											style={{ borderRight: '1px solid #0E263B' }}
+											// style={{ borderRight: '1px solid #0E263B' }}
 										>
 											<Title level={5}>
-												<u>Summary</u>:{' '}
+												Summary:{' '}
 											</Title>
 											<CallSummary {...item} />
 										</Col>
 										<Col xs={24} sm={12} md={6}>
-											<Title level={5}>
-												<u>Tags</u>:
+											<Title level={5} className="mb-0">
+												Tags:
 											</Title>
 											<CallTags {...item} />
 										</Col>
@@ -191,13 +191,9 @@ const CallsList: React.FC = () => {
 				})
 			) : (
 				<>
-					{noResult ? (
+					{noResult && (
 						<CenterContainer>
 							<Result icon={<SmileOutlined />} title='No results, please try again' />
-						</CenterContainer>
-					) : (
-						<CenterContainer>
-							<Spin tip='Loading' />
 						</CenterContainer>
 					)}
 				</>

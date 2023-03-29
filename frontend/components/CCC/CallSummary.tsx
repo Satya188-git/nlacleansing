@@ -20,7 +20,7 @@ const CallSummary: React.FC<ICallInsight> = ({ callEndingSentimentLabel, callSum
 				<Row style={{ marginTop: '10px' }} className="end-sentiment">
 					<Space align='baseline'>
 						<Title level={5}>
-							<u>Ending Sentiment</u>:{' '}
+							Ending Sentiment:{' '}
 						</Title>
 						{callEndingSentimentLabel === 'POSITIVE' && (
 							<Tag color='green'>{callEndingSentimentLabel}</Tag>

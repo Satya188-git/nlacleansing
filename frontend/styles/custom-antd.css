@@ -1,7 +1,7 @@
 .ant-select {
     width: 224px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgb(255, 255, 255);
     border-radius: 4px;
 }
@@ -107,7 +107,7 @@
 
 .ant-picker {
     height: 40px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid #FFFFFF;
     border-radius: 4px;
     font-family: 'Interstate';
@@ -257,24 +257,27 @@
 }
 
 .call-tags .ant-tag {
-    height: 33px;
+    height: 28px;
     padding: 6px 12px;
     background: #178FFE;
     border-radius: 100px;
     font-family: 'Interstate';
+    font-size: 10px;
     font-style: normal;
     font-weight: 400;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    line-height: 15px;
 }
 
 .end-sentiment .ant-tag {
-    height: 33px;
-    padding: 6px 10px;
+    height: 22px;
     font-family: 'Interstate';
     font-style: normal;
     font-weight: 400;
     border-width: 2px;
+    font-size: 10px;
+    border-radius: 5px;
 }
 
 .ant-tag-green {
