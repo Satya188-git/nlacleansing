@@ -20,6 +20,7 @@ logger.setLevel(logging.INFO)
 destination_bucket_name_verified = os.environ["DESTINATION_BUCKET_NAME_VERIFIED"]
 destination_bucket_name_dirty = os.environ["DESTINATION_BUCKET_NAME_DIRTY"]
 
+
 def lambda_handler(event, context):
 
     print(event)

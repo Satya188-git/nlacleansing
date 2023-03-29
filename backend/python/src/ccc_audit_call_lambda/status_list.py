@@ -1,5 +1,5 @@
 AUDIO_FILE_RECEIVED = 'Audio_File_Received'
-AUDIO_TRANSCRIPT_WITHSPEAKERLABEL_GENERATED= 'Audio_Transcript_WithSpeakerLabel_Generated'
+AUDIO_TRANSCRIPT_WITHSPEAKERLABEL_GENERATED = 'Audio_Transcript_WithSpeakerLabel_Generated'
 TRANSCRIPT_SIMPLETEXT_WITHPII_GENERATED = 'Transcript_SimpleText_WithPII_Generated'
 TRANSCRIPT_SIMPLETEXT_NOPII_GENERATED = 'Transcript_SimpleText_NoPII_Generated'
 FINAL_INDENTED_OUTPUT_GENERATED = 'Final_Indented_Output_Generated'

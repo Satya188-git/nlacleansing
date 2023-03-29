@@ -26,7 +26,7 @@ def lambda_handler(event, context):
     # s3object = unquote_plus(s3object)
     # print("s3bucket is ", s3bucket)
     # print("s3object is ", s3object)
-    
+
     print("Event Name ", event)
     record = event["detail"]
     print("Record Name", record)
@@ -40,7 +40,7 @@ def lambda_handler(event, context):
     # removing the file extension
     s3filename = "".join(s3filename.split('.')[:-1])
     print("The actual file name is:", s3filename)
-    
+
     print(re.findall("(^.*_Summed)_.*$", s3filename))
 
     system_filename = re.findall("(^.*_Summed)_.*$", s3filename)[0] + ".wav"

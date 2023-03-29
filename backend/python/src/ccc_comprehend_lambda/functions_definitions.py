@@ -336,9 +336,10 @@ def capture_file_metdadata(s3filename):
 
     DATABASE = 'default'
 
-    output = os.environ["OUTPUT"]
-    print("output folder location", output)
+    # output = os.environ["OUTPUT"]
+    # print("output folder location", output)
     # output = 's3://customercallcenterathenaresults/'
+    output = 's3://sdge-dtdes-dev-wus2-s3-nla-athena-results/'
 
     client = boto3.client('athena')
 
