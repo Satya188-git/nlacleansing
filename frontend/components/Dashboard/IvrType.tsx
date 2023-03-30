@@ -3,7 +3,7 @@ import { Select } from "antd";
 import { Types } from "constants/ivrTypes";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setIvrType } from "reducers/dashboard-reducer";
+import { setIvrType, setTag } from "reducers/dashboard-reducer";
 
 const IvrTypes = () => {
     const { Option } = Select;
@@ -15,7 +15,7 @@ const IvrTypes = () => {
             placeholder="Filter By IVR Type"
             bordered={false}
             suffixIcon={open ? <CaretUpOutlined /> : <CaretDownOutlined />}
-            onChange={(val) => dispatch(setIvrType(val))}
+            onChange={(val) => { dispatch(setIvrType(val)); dispatch(setTag("")); }}
             onDropdownVisibleChange={(open) => setOpen(open)}
         >
             <Option value=""> </Option>

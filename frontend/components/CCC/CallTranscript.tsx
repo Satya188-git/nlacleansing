@@ -1,25 +1,22 @@
 import { List, Row, Space, Tag, Typography } from 'antd';
 import CardTitle from 'components/atoms/CardTitle';
 import ListCard from 'components/atoms/ListCard';
-import { Theme } from 'constants/theme';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
-import { useCallTimelineSelectDataContext } from 'context/CallTimelineSelectContext';
 import moment from 'moment';
 import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { ICallLevel } from 'types/callLevelInfo';
 
 const CallTranscript: React.FC = () => {
-	const {
-		callSelectData: { selectedCallLevelData },
-	} = useCallSelectDataContext();
-	const { callTimelineSelectData } = useCallTimelineSelectDataContext();
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData) as ICallLevel;
+	const callTimelineSelectData = useSelector((state: any) => state.ccc.callTimelineSelectData);
 	const scrollRef = useRef();
 	const { Title, Text } = Typography;
 
 	useEffect(() => {
 		if (!!callTimelineSelectData && callTimelineSelectData.length > 0) {
 			scrollRef[
-				selectedCallLevelData.transcripts?.[callTimelineSelectData[0].index]?.lineId
-			].scrollIntoView({
+				selectedCallLevelData?.transcripts?.[callTimelineSelectData[0].index]?.lineId
+			]?.scrollIntoView({
 				behavior: 'smooth',
 				block: 'start',
 			});
@@ -27,12 +24,12 @@ const CallTranscript: React.FC = () => {
 	}, [callTimelineSelectData]);
 
 	return (
-		(!selectedCallLevelData.transcripts || selectedCallLevelData.transcripts.length === 0) ? <></>
+		(!selectedCallLevelData?.transcripts || selectedCallLevelData?.transcripts?.length === 0) ? <></>
 			: <>
 				<CardTitle title='Call Transcript' />
 				<ListCard hoverable bordered={false} id='CallTranscriptScrollableDiv'>
 					<List
-						dataSource={selectedCallLevelData.transcripts}
+						dataSource={selectedCallLevelData?.transcripts}
 						renderItem={(item, i) => {
 							if (!item.participantRole) return;
 							// const foundTagInLineID = selectedCallInsightData.callTagLabels.find((tag) => {

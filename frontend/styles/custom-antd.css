@@ -1,6 +1,6 @@
 .ant-select {
-    width: 224px;
-    height: 40px;
+    width: 100%;
+    height: 40px !important;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgb(255, 255, 255);
     border-radius: 4px;
@@ -69,14 +69,24 @@
     pointer-events: none;
 }
 
-.tags-select {
+.tags-select,
+.agent-select {
     min-height: 40px;
     height: unset !important;
 }
 
-.tags-select .ant-select-selector {
+.tags-select .ant-select-selector,
+.agent-select .ant-select-selector {
     min-height: 40px;
     height: unset !important;
+}
+
+.agent-select .ant-select-selection-item {
+    height: 38px;
+}
+
+.agent-select .ant-select-selection-search-input {
+    height: 40px;
 }
 
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
@@ -203,19 +213,12 @@
     right: 2px;
 }
 
-.ant-picker-range {
-    padding: 0 15px;
+.month-picker .ant-picker-range-separator {
+    right: 11px !important;
 }
 
-.ant-input-search {
-    width: 590px !important;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid #FFFFFF;
-    border-radius: 4px;
-    font-family: 'Interstate';
-    font-style: normal;
-    font-weight: 400;
+.ant-picker-range {
+    padding: 0 15px;
 }
 
 .ant-input-affix-wrapper,
@@ -252,7 +255,7 @@
     border-radius: 8px !important;
 }
 
-.ant-card-body {
+.call-analysis-right-sec .ant-card-body {
     padding: 20px;
 }
 

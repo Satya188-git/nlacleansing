@@ -1,19 +1,16 @@
-import { SearchOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Col, Divider, Input, Row, Space, Spin, Typography } from 'antd';
+import { Button, Col, Divider, Input, Row, Spin, Typography } from 'antd';
 import { Partner } from 'constants/partner';
-import AuthenticatorContext from 'context/AuthenticatorContext';
-import { useCallFilterContext } from 'context/CallFilterContext';
-import { useCCCDataContext } from 'context/CCCDataContext';
-import { useDateContext } from 'context/DateContext';
 import { usePartnerContext } from 'context/PartnerContext';
 import DateUtil from 'helpers/DateUtil';
 import moment from 'moment';
-import Router from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import Router, { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ICallInsight } from 'types/callInsight';
 import { CallIntentSelector, CallsList, DateSelector, TimeSelector } from '../components';
 import axios from 'axios';
+import AgentSearch from 'components/CCC/AgentSearch';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetAll, resetData, setCallID, setCallInsights } from 'reducers/ccc-reducer';
 
 const CenterContainer = styled.div`
 	display: flex;
@@ -23,20 +20,21 @@ const CenterContainer = styled.div`
 `;
 
 const CustomerCallCenterAnalytics: React.FC = () => {
-	const { date } = useDateContext();
 	const { partner } = usePartnerContext();
-	const {
-		setCCCData,
-		cccData: { callInsights, isLoading, callID },
-	} = useCCCDataContext();
-	const {
-		setCallFilter,
-		callFilter: { filteredCallInsightData, callDuration, tags },
-	} = useCallFilterContext();
 	const [pageLoaded, setPageLoaded] = useState(false);
-	const [isFiltering, setIsFiltering] = useState(false);
-	const [saveFilteredResults, setSaveFilteredResults] = useState(filteredCallInsightData);
-	const callIDRef = useRef(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [callIdSearchLoading, setCallIdSearchLoading] = useState(false);
+	const date = useSelector((state: any) => state.ccc.date);
+	const tags = useSelector((state: any) => state.ccc.tags);
+	const agents = useSelector((state: any) => state.ccc.agents);
+	const callDuration = useSelector((state: any) => state.ccc.callDuration);
+	const callID = useSelector((state: any) => state.ccc.callID);
+	const dispatch = useDispatch();
+
+	const { Title } = Typography;
+	const format = DateUtil.DATE_FORMAT;
+	const { Search } = Input;
+    const router = useRouter();
 
 	useEffect(() => {
 		if (partner.name === Partner.SCG) {
@@ -44,118 +42,88 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 		} else {
 			setPageLoaded(true);
 		}
-		setCCCData((prev) => ({ ...prev, isLoading: true }));
-		setCallFilter((prev) => ({ ...prev, callDuration: '', callID: '', tags: [], filteredCallInsightData: [] }));
 	}, []);
+	
+    useEffect(() => {
+        router.events.on('routeChangeStart', (url) => {
+            if (!url.includes("ccc")) {
+                dispatch(resetAll());
+            }
+        });
+    }, []);
 
 	useEffect(() => {
-		if (callIDRef.current && callIDRef.current.input.value === '') {
-			setCallFilter((prev) => ({
-				...prev,
-				justNewlyFiltered: true,
-				isCallIDSearch: true,
-				filteredCallInsightData: saveFilteredResults,
-			}));
-		}
-	}, [callIDRef]);
-
-	useEffect(() => {
-		if (isLoading) {
+		if (isLoading || callIdSearchLoading) {
 			var params: any = {
-				callstartdate: `${moment(date.start).format(format)} 00:00:00.000`,
-				callenddate: `${moment(date.end).format(format)} 00:00:00.000`,
+				callstartdate: `${date.startDate} 00:00:00.000`,
+				callenddate: `${date.endDate} 00:00:00.000`,
 			}
 			if (callDuration) params = { ...params, callduration: callDuration };
 			if (tags.length > 0) params = { ...params, calltags: tags.toString() };
 			if (callID) params = { ...params, callid: callID };
 			axios.get(`${process.env.NEXT_PUBLIC_CCC_API_GATEWAY}/call-list`, { params })
 				.then(res => {
-					setCCCData((prev) => ({ ...prev, callInsights: res.data as Array<ICallInsight> }));
+					dispatch(setCallInsights(res.data));
 				}).catch((error) => {
 					console.log(error);
 				}).finally(() => {
-					setCCCData((prev) => ({ ...prev, isLoading: false }));
+					setIsLoading(false);
+					setCallIdSearchLoading(false);
 				})
 		}
-	}, [isLoading]);
+	}, [isLoading, callIdSearchLoading]);
 
 	if (!pageLoaded) {
 		return <div></div>;
 	}
 
-	const { Title } = Typography;
-	const format = DateUtil.DATE_FORMAT;
-	const { Search } = Input;
-
-	const onFilter = () => {
-		setIsFiltering(true);
-		setCCCData((prev) => ({
-			...prev,
-			isLoading: true,
-		}));
-		setCallFilter((prev) => ({
-			...prev,
-			justNewlyFiltered: true,
-			isCallIDSearch: false,
-		}));
-		if (date.start === '' && date.end === '' && callDuration === '' && tags.length === 0) {
-			setCallFilter((prev) => ({
-				...prev,
-				justNewlyFiltered: true,
-				isCallIDSearch: false,
-				filteredCallInsightData: callInsights,
-			}));
-		} else {
-			console.log('*******UNKNOWN FILTERING CONDITION!!');
-		}
-		setIsFiltering(false);
-	};
-
-	const onSearch = (id: string) => {
-		setIsFiltering(true);
-		setCCCData((prev) => ({
-			...prev,
-			callID: id,
-		}));
-		setIsFiltering(false);
-		onFilter();
-	};
+	const onSearch = () => {
+		dispatch(resetData());
+		setCallIdSearchLoading(true);
+	}
 
 	return (
 		<>
-			<Title>Customer Call Center Analytics Dashboard</Title>
-			<Row gutter={[24, 24]} className="filter-section">
-				<Col xs={24} md={24}>
-					<Title level={5}>NICE Call ID</Title>
-					<Search
-						ref={callIDRef}
-						size='middle'
-						style={{ width: 250, marginBottom: "2rem" }}
-						allowClear
-						placeholder='Search by NICE Call ID'
-						value={callID}
-						onChange={(evt) => setCCCData((prev) => ({ ...prev, callID: evt.target.value, }))}
-					// prefix={<UserOutlined />}
-					// onSearch={onSearch}
-					// loading={isFiltering}
-					/>
-					<Space>
-						<DateSelector />
-						<TimeSelector />
-						<CallIntentSelector />
-						<Button
-							title='Search Filters'
-							onClick={onFilter}
-							className="search-btn mt-27"
-							// icon={<SearchOutlined />}
-							loading={isFiltering}
-						>Search</Button>
-					</Space>
-				</Col>
+			<Row gutter={[24, 24]} className="call-list-header">
+				<Title level={3} className="call-list-title">Customer Call List</Title>
+				<Search
+					size='middle'
+					style={{ width: 250, marginBottom: "2rem" }}
+					allowClear
+					placeholder='Search by NICE Call ID'
+					value={callID}
+					onChange={(evt) => dispatch(setCallID(evt.target.value))}
+					onSearch={onSearch}
+					loading={callIdSearchLoading}
+				/>
 			</Row>
 			<Divider />
-			<Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
-				{isLoading ? (
+			<Row gutter={[24, 24]} className="filter-section">
+				<Col xs={7} md={7}>
+					<DateSelector />
+				</Col>
+				<Col xs={5} md={5}>
+					<CallIntentSelector />
+				</Col>
+				<Col xs={5} md={5}>
+					<AgentSearch />
+				</Col>
+				<Col xs={4} md={4}>
+					<TimeSelector />
+				</Col>
+				<Col xs={3} md={3}>
+					<Button
+						title='Search Filters'
+						onClick={() => {setIsLoading(true); dispatch(setCallID(""))}}
+						className="search-btn mt-27"
+						// icon={<SearchOutlined />}
+						loading={isLoading}
+					>Filter</Button>
+				</Col>
+			</Row>
+			{/* <Divider /> */}
+			<Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} className="call-list-section">
+				{(isLoading || callIdSearchLoading) ? (
 					<CenterContainer>
 						<Spin tip='Loading' />
 					</CenterContainer>

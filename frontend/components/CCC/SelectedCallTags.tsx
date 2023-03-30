@@ -1,29 +1,24 @@
 import { Row, Tag } from 'antd';
 import { Theme } from 'constants/theme';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ICallInsight } from 'types/callInsight';
 
 const TagContainer = styled.div`
 	margin-top: 10px;
 `;
 
 const SelectedCallTags: React.FC = () => {
-	const {
-		callSelectData: {
-			selectedCallLevelData: { callTagLabels },
-		},
-	} = useCallSelectDataContext();
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData);
 
 	return (
 		<>
 			<Row className='call-tags'>
-				{callTagLabels?.split(",")?.map((item, i) => {
+				{selectedCallLevelData?.callTagLabels?.split(",")?.map((item, i) => {
 					return (
 						<TagContainer key={`${i}${item}`}>
 							{!!item ? (
-								i < callTagLabels?.split(",")?.length - 1 ? (
+								i < selectedCallLevelData?.callTagLabels?.split(",")?.length - 1 ? (
 									<>
 										<Tag color={Theme.TAG}>{item}</Tag>
 									</>

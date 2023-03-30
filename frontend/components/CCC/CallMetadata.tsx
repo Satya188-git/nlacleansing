@@ -1,34 +1,27 @@
 import { Typography } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { ICallLevel } from 'types/callLevelInfo';
+import { useSelector } from 'react-redux';
 
-const CallMetadata: React.FC<ICallLevel> = ({
-	callID,
-	segmentStartTime,
-	segmentStopTime,
-	participantPhoneNumber,
-	callLengthSeconds,
-	customerType,
-	agentFullName,
-}) => {
+const CallMetadata = () => {
 	const { Title, Text } = Typography;
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData);
 	return (
 		<>
 			<Title level={5}>NICE Call ID: </Title>
-			<Text>{callID}</Text>
+			<Text>{selectedCallLevelData?.callID}</Text>
 			<Title level={5}>Call Start Timestamp: </Title>
-			<Text>{segmentStartTime}</Text>
+			<Text>{selectedCallLevelData?.segmentStartTime}</Text>
 			<Title level={5}>Call End Timestamp: </Title>
-			<Text>{segmentStopTime}</Text>
+			<Text>{selectedCallLevelData?.segmentStopTime}</Text>
 			<Title level={5}>Customer Phone Number (hidden): </Title>
-			<Text>{participantPhoneNumber}</Text>
+			<Text>{selectedCallLevelData?.participantPhoneNumber}</Text>
 			<Title level={5}>Handle Time: </Title>
-			<Text>{moment.utc(callLengthSeconds * 1000).format('HH:mm:ss')}</Text>
+			<Text>{moment.utc(selectedCallLevelData?.callLengthSeconds * 1000).format('HH:mm:ss')}</Text>
 			<Title level={5}>Customer Type: </Title>
-			<Text>{customerType}</Text>
+			<Text>{selectedCallLevelData?.customerType}</Text>
 			<Title level={5}>Agent Name: </Title>
-			<Text>{agentFullName}</Text>
+			<Text>{selectedCallLevelData?.agentFullName}</Text>
 		</>
 	);
 };

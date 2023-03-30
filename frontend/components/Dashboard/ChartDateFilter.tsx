@@ -1,6 +1,7 @@
 import { DatePicker } from 'antd';
 import DateUtil from 'helpers/DateUtil';
 import moment from 'moment';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDate } from 'reducers/dashboard-reducer';
 
@@ -11,20 +12,39 @@ const ChartDateFilter = () => {
     const dispatch = useDispatch();
     const customMonthFormat = DateUtil.customMonthFormat;
     const date = useSelector((state: any) => state.dashboard.date);
+    const [start, setStart] = useState(date.startDate);
+    const [end, setEnd] = useState(date.endDate);
+
+    const checkDates = (dateString) => {
+        const __start = moment(dateString[0]).format(format);
+        const __end = moment(dateString[1]).format(format);
+        if (__end !== date.endDate) {
+            const _start = new Date(new Date(dateString[1]).setFullYear(new Date(dateString[1]).getFullYear() - 1));
+            setStart(moment(_start).format(format));
+            setEnd(__end);
+        } else if (__start !== date.startDate) {
+            const _end = new Date(new Date(dateString[0]).setFullYear(new Date(dateString[0]).getFullYear() + 1));
+            setEnd(moment(_end).format(format));
+            setStart(__start);
+        }
+    }
 
     return (
         <RangePicker
+            className='month-picker'
             format={customMonthFormat}
             defaultValue={[moment(date.startDate, format), moment(date.endDate, format)]}
             onChange={(_, dateString) => {
                 const startDate = moment(new Date(new Date(dateString[0]).getFullYear(), new Date(dateString[0]).getMonth(), 1).toLocaleDateString()).format(format);
                 const endDate = moment(new Date(new Date(dateString[1]).getFullYear(), new Date(dateString[1]).getMonth() + 1, 0).toLocaleDateString()).format(format);
-                dispatch(setDate({ startDate, endDate }))
+                dispatch(setDate({ startDate, endDate }));
+                checkDates(dateString);
             }}
-            style={{ width: '291px' }}
+            style={{ width: '100%' }}
             allowClear={false}
             separator={"-"}
             picker={"month"}
+            disabledDate={(current) => (current.isAfter(moment(end)) || current.isBefore(moment(start)))}
         />
     )
 }

@@ -1,8 +1,6 @@
-import { AppstoreOutlined, BranchesOutlined, HeatMapOutlined, PhoneOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, PhoneOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
-import { Partner } from 'constants/partner';
-import { usePartnerContext } from 'context/PartnerContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -46,24 +44,6 @@ function getItem(
 
 const Navbar: React.FC = () => {
 	const router = useRouter();
-	const { partner } = usePartnerContext();
-
-	const items: MenuProps['items'] = [
-		getItem(
-			`${Route.HOME}`,
-			'Emergency Operations & Outreach Dashboard',
-			<Link href={Route.HOME}>
-				<BranchesOutlined />
-			</Link>
-		),
-		getItem(
-			`${Route.OPERATIONS}`,
-			'Event Categories',
-			<Link href={Route.OPERATIONS}>
-				<HeatMapOutlined />
-			</Link>
-		),
-	];
 
 	const navItems: MenuProps['items'] = [
 		getItem(

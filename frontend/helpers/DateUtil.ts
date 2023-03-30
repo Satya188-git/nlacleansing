@@ -201,6 +201,24 @@ const NAMED_COLORS = [
 
 const _CHART_COLORS = ["#40A9FF", "#0C75DF", "#4ACCD4", "#AADD6D", "#088856"];
 
+const SENTIMENT_CHART_COLORS = ["#32BF8A", "#F73B2A", "#F5C846"];
+
+const SENTIMENT_CHART_LABELS = ["Positive", "Negative", "Neutral"];
+
+const CALL_VOLUME_CHART_COLOR = ["#40A9FF"];
+
+const CHART_MULTI_COLORS = ["#F5C846", "#A2AAAD", "#58B947", "#000000", "#58B947", "#F5C846", "#178FFE", "#CA003D", "#32BF8A", "#004693"];
+
+const TAGS_CHART_BORDER_COLOR = "#031627";
+
+const TAGS_CHART_BG_COLOR = "#273C4F";
+
+const CALL_HANDLE_TIME_COLOR = "#56C7DA";
+
+const COLOR_WHITE = "#FFFFFF";
+
+const CHART_GRID_COLOR = "#747B84";
+
 function namedColor(index) {
 	return _CHART_COLORS[index % _CHART_COLORS.length];
 }
@@ -250,4 +268,13 @@ export default {
 	customFormat,
 	customMonthFormat,
 	monthDiff,
+	SENTIMENT_CHART_COLORS,
+	SENTIMENT_CHART_LABELS,
+	CALL_VOLUME_CHART_COLOR,
+	CHART_MULTI_COLORS,
+	TAGS_CHART_BORDER_COLOR,
+	TAGS_CHART_BG_COLOR,
+	COLOR_WHITE,
+	CALL_HANDLE_TIME_COLOR,
+	CHART_GRID_COLOR,
 };

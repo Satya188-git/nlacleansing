@@ -1,10 +1,9 @@
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import { capitalize } from 'helpers/StringUtil';
 import moment from 'moment';
 import React from 'react';
-import { Doughnut, Pie } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ICallInsight, ICallSegment } from 'types/callInsight';
 import DateUtil from '../../helpers/DateUtil';
 
 const GraphContainer = styled.div`
@@ -13,11 +12,9 @@ const GraphContainer = styled.div`
 `;
 
 const CallSegmentGraph: React.FC = () => {
-	const {
-		callSelectData: { selectedCallLevelData },
-	} = useCallSelectDataContext();
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData);
 	const graphData = {
-		labels: selectedCallLevelData.callsegments?.map(
+		labels: selectedCallLevelData?.callsegments?.map(
 			(item) =>
 				capitalize(item.segmentName) +
 				' (' +
@@ -26,8 +23,8 @@ const CallSegmentGraph: React.FC = () => {
 		),
 		datasets: [
 			{
-				data: selectedCallLevelData.callsegments?.map((item) => item.durationSeconds),
-				backgroundColor: selectedCallLevelData.callsegments?.map((_, i) =>
+				data: selectedCallLevelData?.callsegments?.map((item) => item.durationSeconds),
+				backgroundColor: selectedCallLevelData?.callsegments?.map((_, i) =>
 					DateUtil.namedColor(i)
 				),
 				borderWidth: 0,

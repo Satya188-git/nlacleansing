@@ -1,5 +1,4 @@
 import { Row, Space, Tag, Typography } from 'antd';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import React from 'react';
 import styled from 'styled-components';
 import { ICallInsight } from 'types/callInsight';

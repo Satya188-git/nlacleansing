@@ -1,8 +1,8 @@
 import { SmileOutlined } from '@ant-design/icons';
-import { Card, Col, Result, Row, Spin, Typography } from 'antd';
-import { useCallFilterContext } from 'context/CallFilterContext';
+import { Card, Col, Result, Row, Typography } from 'antd';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 // import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import styled from 'styled-components';
 import { ICallInsight } from 'types/callInsight';
@@ -34,48 +34,9 @@ const UnstyledButton = styled.button`
 `;
 
 const CallsList: React.FC = () => {
-	const {
-		setCallFilter,
-		callFilter: { filteredCallInsightData, justNewlyFiltered, isCallIDSearch, isLoading },
-	} = useCallFilterContext();
-	const [data, setData] = useState<ICallInsight[]>([]);
-	const [pageLoading, setPageLoading] = useState(false);
-	const [count, setCount] = useState(0);
-	const [hasMoreData, setHasMoreData] = useState(true);
-	const [noResult, setNoResult] = useState(false);
+	const callInsights = useSelector((state: any) => state.ccc.callInsights);
 	const router = useRouter();
-	const [moreDataLoading, setMoreDataLoading] = useState(false);
 	const { Title } = Typography;
-
-	const checkFilteredDataExisting =
-		Array.isArray(filteredCallInsightData) &&
-		filteredCallInsightData !== undefined &&
-		filteredCallInsightData.length > 0;
-
-	const resetData = () => {
-		// setCount(20);
-		setData([]);
-		setCallFilter((prev) => ({ ...prev, justNewlyFiltered: false, isCallIDSearch: false }));
-	};
-
-	const loadMoreData = () => {
-		if (pageLoading) return;
-
-		setMoreDataLoading(true);
-
-		if (justNewlyFiltered) {
-			resetData();
-			// } else if (count >= filteredCallInsightData.length) {
-			// 	setHasMoreData(false);
-			// 	setMoreDataLoading(false);
-			// 	return;
-		} else {
-			// if (isCallIDSearch || filteredCallInsightData.length < 20) return;
-			setData([...data, ...filteredCallInsightData]);
-			// setCount((prev) => prev + 20);
-		}
-		setMoreDataLoading(false);
-	};
 
 	const handleClick = (selectedCallInsightData: ICallInsight) => {
 		router.push(`/ccc/${selectedCallInsightData.callID}`);
@@ -91,22 +52,6 @@ const CallsList: React.FC = () => {
 		return `${hours}:${minutes}:${seconds}`;
 	}
 
-	useEffect(() => {
-		setData(filteredCallInsightData);
-		setPageLoading(false);
-		// loadMoreData();
-		if (filteredCallInsightData.length === 0) {
-			if (!isLoading) setNoResult(true);
-			else setNoResult(false);
-		} else {
-			setPageLoading(true);
-		}
-	}, [filteredCallInsightData, isLoading]);
-
-	useEffect(() => {
-		if (isLoading) setData([]);
-	}, [isLoading])
-
 
 	// useBottomScrollListener(loadMoreData, {
 	// 	offset: 100,
@@ -116,8 +61,8 @@ const CallsList: React.FC = () => {
 
 	return (
 		<>
-			{(data.length > 0 && !isLoading) ? (
-				data.map((item: ICallInsight) => {
+			{(callInsights?.length > 0) ? (
+				callInsights.map((item: ICallInsight) => {
 					return (
 						<Col key={`${item.callID}`} span={24}>
 							<CallCardContainer hoverable bordered={false}>
@@ -130,7 +75,7 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											// style={{ borderRight: '1px solid #0E263B' }}
+										// style={{ borderRight: '1px solid #0E263B' }}
 										>
 											<Title level={5} className="f-16">{item.segmentStartTime?.split(".")?.[0]}</Title>
 											<Row>
@@ -148,7 +93,7 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											// style={{ borderRight: '1px solid #0E263B' }}
+										// style={{ borderRight: '1px solid #0E263B' }}
 										>
 											<Row>
 												<Title level={5}>
@@ -170,7 +115,7 @@ const CallsList: React.FC = () => {
 											xs={24}
 											sm={12}
 											md={6}
-											// style={{ borderRight: '1px solid #0E263B' }}
+										// style={{ borderRight: '1px solid #0E263B' }}
 										>
 											<Title level={5}>
 												Summary:{' '}
@@ -191,11 +136,9 @@ const CallsList: React.FC = () => {
 				})
 			) : (
 				<>
-					{noResult && (
-						<CenterContainer>
-							<Result icon={<SmileOutlined />} title='No results, please try again' />
-						</CenterContainer>
-					)}
+					<CenterContainer>
+						<Result icon={<SmileOutlined />} title='No results, please try again' />
+					</CenterContainer>
 				</>
 			)}
 			{/* {moreDataLoading && (

@@ -1,6 +1,5 @@
 import { Row, Tag } from 'antd';
 import { Theme } from 'constants/theme';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import React from 'react';
 import styled from 'styled-components';
 import { ICallInsight } from 'types/callInsight';

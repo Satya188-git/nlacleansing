@@ -1,28 +1,20 @@
 import { Select, Typography } from 'antd';
-import { useCallFilterContext } from 'context/CallFilterContext';
-import { useCCCDataContext } from 'context/CCCDataContext';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTags } from 'reducers/ccc-reducer';
 
 const CallTagSelector: React.FC = () => {
-	const {
-		cccData: { callInsights },
-	} = useCCCDataContext();
-	const {
-		setCallFilter,
-		callFilter: { tags },
-	} = useCallFilterContext();
-	const [tagArr, setTagArr] = useState([]);
 
+	const [tagArr, setTagArr] = useState([]);
 	const { Option } = Select;
 	const uniqueTags = new Set<string>();
 	const { Title } = Typography;
+	const callInsights = useSelector((state: any) => state.ccc.callInsights);
+	const tags = useSelector((state: any) => state.ccc.tags);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (
-			Array.isArray(callInsights) &&
-			callInsights !== undefined &&
-			callInsights.length > 0
-		) {
+		if (callInsights && callInsights?.length > 0) {
 			callInsights.forEach((item) =>
 				item.callTagLabels?.split(",")?.forEach((tag) => {
 					if (tag) {
@@ -35,7 +27,7 @@ const CallTagSelector: React.FC = () => {
 	}, [callInsights]);
 
 	const handleChange = (value: string[]) => {
-		setCallFilter((prev) => ({ ...prev, tags: value }));
+		dispatch(setTags(value));
 	};
 
 	return (
@@ -46,7 +38,8 @@ const CallTagSelector: React.FC = () => {
 				showSearch
 				mode='multiple'
 				allowClear
-				style={{ width: '291px' }}
+				style={{ width: '100%' }}
+				value={tags}
 				onChange={handleChange}
 				placeholder='Search and Select from List'
 			>

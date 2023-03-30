@@ -1,3 +1,5 @@
+import DateUtil from "./DateUtil";
+
 export const LineChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -6,33 +8,33 @@ export const LineChartOptions = {
             title: {
                 display: true,
                 text: 'MONTHS',
-                color: '#FFFFFF',
+                color: DateUtil.COLOR_WHITE,
             },
             ticks: {
                 precision: 0,
-                color: '#FFFFFF',
+                color: DateUtil.COLOR_WHITE,
             },
             grid: {
                 display: false,
-                borderColor: '#FFFFFF',
+                borderColor: DateUtil.COLOR_WHITE,
             },
         },
         y: {
             title: {
                 display: true,
                 text: 'CALL COUNT',
-                color: '#FFFFFF',
+                color: DateUtil.COLOR_WHITE,
             },
             min: 0,
             ticks: {
                 precision: 0,
-                color: '#FFFFFF',
+                color: DateUtil.COLOR_WHITE,
             },
             grid: {
                 // display: false,
-                color: '#747B84',
+                color: DateUtil.CHART_GRID_COLOR,
                 borderDash: [1, 1],
-                borderColor: '#FFFFFF',
+                borderColor: DateUtil.COLOR_WHITE,
             }
         }
     },
@@ -41,7 +43,7 @@ export const LineChartOptions = {
             display: false,
         },
         customCanvasBackgroundColor: {
-            color: '#fff',
+            color: DateUtil.COLOR_WHITE,
         },
         legend: {
             position: 'bottom' as const,

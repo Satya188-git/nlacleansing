@@ -31,6 +31,7 @@ module.exports = withPlugins([[pluginAntdLess]], {
     return config
   },
   trailingSlash: true,
+  staticPageGenerationTimeout: 1000,
   experimental: {
     images: {
       unoptimized: true,
@@ -43,7 +44,7 @@ module.exports = withPlugins([[pluginAntdLess]], {
     return [
       {
         source: '/',
-        destination: '/signin',
+        destination: '/dashboard',
         permanent: true,
       },
     ]

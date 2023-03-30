@@ -9,4 +9,3 @@ export { default as SelectedCallTags } from './SelectedCallTags';
 export { default as CallTags } from './CallTags';
 export { default as CallTranscript } from './CallTranscript';
 export { default as TimeSelector } from './TimeSelector';
-export { default as CallIDSearch } from './CallIDSearch';

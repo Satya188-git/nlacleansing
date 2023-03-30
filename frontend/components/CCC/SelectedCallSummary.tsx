@@ -1,40 +1,35 @@
 import { Row, Space, Tag, Typography } from 'antd';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { ICallInsight } from 'types/callInsight';
 
 const CallSummaryContainer = styled.div`
 	word-wrap: break-word;
 `;
 
 const SelectedCallSummary: React.FC = () => {
-	const {
-		callSelectData: {
-			selectedCallLevelData: { callSummary, callEndingSentimentLabel },
-		},
-	} = useCallSelectDataContext();
 	const { Title, Text } = Typography;
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData);
 
 	return (
 		<>
 			<CallSummaryContainer>
-				<Text>{callSummary}</Text>
+				<Text>{selectedCallLevelData?.callSummary}</Text>
 			</CallSummaryContainer>
-			{callEndingSentimentLabel && (
+			{selectedCallLevelData?.callEndingSentimentLabel && (
 				<Row style={{ marginTop: '10px' }} className="end-sentiment">
 					<Space align='baseline'>
 						<Title level={5}>
 							<u>Ending Sentiment</u>:{' '}
 						</Title>
-						{callEndingSentimentLabel === 'POSITIVE' && (
-							<Tag color='green'>{callEndingSentimentLabel}</Tag>
+						{selectedCallLevelData?.callEndingSentimentLabel === 'POSITIVE' && (
+							<Tag color='green'>{selectedCallLevelData?.callEndingSentimentLabel}</Tag>
 						)}
-						{callEndingSentimentLabel === 'NEUTRAL' && (
-							<Tag color='yellow'>{callEndingSentimentLabel}</Tag>
+						{selectedCallLevelData?.callEndingSentimentLabel === 'NEUTRAL' && (
+							<Tag color='yellow'>{selectedCallLevelData?.callEndingSentimentLabel}</Tag>
 						)}
-						{callEndingSentimentLabel === 'NEGATIVE' && (
-							<Tag color='red'>{callEndingSentimentLabel}</Tag>
+						{selectedCallLevelData?.callEndingSentimentLabel === 'NEGATIVE' && (
+							<Tag color='red'>{selectedCallLevelData?.callEndingSentimentLabel}</Tag>
 						)}
 					</Space>
 				</Row>

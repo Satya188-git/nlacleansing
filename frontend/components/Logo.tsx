@@ -22,7 +22,7 @@ const Logo: React.FC = () => {
 	return (
 		<LogoContainer>
 			<Link href={Route.DASHBOARD}>
-				<Image src={logo} height={50} width={65} />
+				<Image src={logo} height={50} width={65} alt="" />
 			</Link>
 		</LogoContainer>
 	);

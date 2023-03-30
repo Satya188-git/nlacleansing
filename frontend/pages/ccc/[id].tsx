@@ -12,12 +12,13 @@ import {
 	SelectedCallSummary,
 	SelectedCallTags,
 } from 'components';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { ICallLevel } from 'types/callLevelInfo';
+import { useDispatch } from 'react-redux';
+import { setSelectedCallLevelData } from 'reducers/ccc-reducer';
 
 const CallSummaryContainer = styled.div`
 	padding: 0 10px;
@@ -37,17 +38,11 @@ const CenterContainer = styled.div`
 `;
 
 const CallID: React.FC = () => {
-	const {
-		query: { id },
-	} = useRouter();
+	const { query: { id } } = useRouter();
 	const router = useRouter();
-	const {
-		setCallSelectData,
-		callSelectData: { selectedCallLevelData },
-	} = useCallSelectDataContext();
-	console.log(id)
 	const { Title } = Typography;
 	const [loading, setLoading] = useState(false);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if (id) {
@@ -59,10 +54,7 @@ const CallID: React.FC = () => {
 					if (!callLevelData) {
 						router.push('/error');
 					} else {
-						setCallSelectData((prev) => ({
-							...prev,
-							selectedCallLevelData: callLevelData,
-						}));
+						dispatch(setSelectedCallLevelData(callLevelData));
 					}
 				})
 				.catch((error) => {
@@ -74,6 +66,12 @@ const CallID: React.FC = () => {
 				})
 		}
 	}, [id]);
+
+	useEffect(() => {
+		return () => {
+			dispatch(setSelectedCallLevelData(null));
+		}
+	}, []);
 
 	return (
 		<>
@@ -112,7 +110,7 @@ const CallID: React.FC = () => {
 						<Col xs={24} sm={12} lg={6}>
 							<CardTitle title='Call Data' />
 							<ListCard hoverable bordered={false}>
-								<CallMetadata {...selectedCallLevelData} />
+								<CallMetadata />
 							</ListCard>
 						</Col>
 					</Row>

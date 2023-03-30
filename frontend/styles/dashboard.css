@@ -5,7 +5,7 @@
 }
 
 .dashboard-filter-section {
-    float: right;
+    justify-content: space-between;
     margin-bottom: 25px;
 }
 
@@ -107,8 +107,9 @@
 .tag-metrics {
     position: absolute;
     bottom: 1rem;
-    width: 82%;
+    width: 90%;
     height: 110px;
+    left: 16px;
 }
 
 .metric-title {
@@ -121,4 +122,10 @@
     padding-bottom: 6px;
     border-bottom: 1px solid #273C4F;
     margin-bottom: 4px;
+}
+
+.call-analytics-title {
+    margin-left: 10px;
+    position: relative;
+    top: 8px;
 }

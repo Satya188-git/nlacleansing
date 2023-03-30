@@ -1,10 +1,10 @@
 import { Typography } from 'antd';
 import { CardTitle, ListCard } from 'components/atoms';
-import { useCallSelectDataContext } from 'context/CallSelectContext';
-import { useCallTimelineSelectDataContext } from 'context/CallTimelineSelectContext';
 import moment from 'moment';
 import React, { useRef } from 'react';
 import { getElementAtEvent, Line } from 'react-chartjs-2';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCallTimelineSelectData } from 'reducers/ccc-reducer';
 import styled from 'styled-components';
 import { ICallLevelTranscript } from 'types/callLevelInfo';
 
@@ -14,27 +14,22 @@ const GraphContainer = styled.div`
 `;
 
 const CallSentimentAnalysisGraph: React.FC = () => {
-	const {
-		callSelectData: { selectedCallLevelData },
-	} = useCallSelectDataContext();
-	const { setCallTimelineSelectData } = useCallTimelineSelectDataContext();
+	const selectedCallLevelData = useSelector((state: any) => state.ccc.selectedCallLevelData);
 	const chartRef = useRef();
 	const { Title } = Typography;
-	if (!selectedCallLevelData.transcripts || selectedCallLevelData.transcripts.length === 0)
+	const dispatch = useDispatch();
+
+	if (!selectedCallLevelData?.transcripts || selectedCallLevelData?.transcripts?.length === 0)
 		return <Title level={5}>No Transcript Data.</Title>;
-	const checkSentiment = (item: ICallLevelTranscript) => {
-		if (item.sentiment === 'POSITIVE') return 1;
-		if (item.sentiment === 'NEUTRAL' || item.sentiment === 'MIXED') return 0;
-		if (item.sentiment === 'NEGATIVE') return -1;
-	};
+	
 	const graphData = {
-		labels: selectedCallLevelData.transcripts.map((item) =>
+		labels: selectedCallLevelData?.transcripts.map((item) =>
 			moment.utc(item.beginOffsetMillis).format('mm:ss')
 		),
 		datasets: [
 			{
 				label: 'AGENT',
-				data: selectedCallLevelData.transcripts.map((item) => {
+				data: selectedCallLevelData?.transcripts.map((item) => {
 					if (item.participantRole != 'AGENT' || !item.sentiment) return;
 					if (item.sentiment === 'POSITIVE') return 1;
 					if (item.sentiment === 'NEUTRAL' || item.sentiment === 'MIXED') return 0;
@@ -47,7 +42,7 @@ const CallSentimentAnalysisGraph: React.FC = () => {
 			},
 			{
 				label: 'CUSTOMER',
-				data: selectedCallLevelData.transcripts.map((item) => {
+				data: selectedCallLevelData?.transcripts.map((item) => {
 					if (item.participantRole != 'CUSTOMER' || !item.sentiment) return;
 					if (item.sentiment === 'POSITIVE') return 1;
 					if (item.sentiment === 'NEUTRAL' || item.sentiment === 'MIXED') return 0;
@@ -60,7 +55,7 @@ const CallSentimentAnalysisGraph: React.FC = () => {
 			},
 			{
 				label: 'BOTH',
-				data: selectedCallLevelData.transcripts.map((item) => {
+				data: selectedCallLevelData?.transcripts.map((item) => {
 					if (item.participantRole != 'BOTH' || !item.sentiment) return;
 					if (item.sentiment === 'POSITIVE') return 1;
 					if (item.sentiment === 'NEUTRAL' || item.sentiment === 'MIXED') return 0;
@@ -183,7 +178,7 @@ console.log(graphData)
 					<Line
 						ref={chartRef}
 						onClick={(event) => {
-							setCallTimelineSelectData(getElementAtEvent(chartRef.current, event));
+							dispatch(setCallTimelineSelectData(getElementAtEvent(chartRef.current, event)));
 						}}
 						data={config.data}
 						options={config.options}

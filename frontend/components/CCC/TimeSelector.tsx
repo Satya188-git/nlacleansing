@@ -1,16 +1,15 @@
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Select, Typography } from 'antd';
-import { useCallFilterContext } from 'context/CallFilterContext';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCallDuration } from 'reducers/ccc-reducer';
 
 const TimeSelector: React.FC = () => {
 	const { Option } = Select;
 	const [open, setOpen] = useState(false);
 	const { Title } = Typography;
-	const {
-		setCallFilter,
-		callFilter: { callDuration },
-	} = useCallFilterContext();
+	const dispatch = useDispatch();
+	const callDuration = useSelector((state: any) => state.ccc.callDuration);
 
 	const handleChange = (value: string) => {
 		let time = '';
@@ -34,7 +33,7 @@ const TimeSelector: React.FC = () => {
 				time = '>45MINS';
 				break;
 		}
-		setCallFilter((prev) => ({ ...prev, callDuration: time }));
+		dispatch(setCallDuration(time));
 	};
 
 	return (
@@ -45,13 +44,14 @@ const TimeSelector: React.FC = () => {
 				bordered={false}
 				placeholder='Call Duration Filter'
 				suffixIcon={open ? <CaretUpOutlined /> : <CaretDownOutlined />}
+				style={{ width: '100%' }}
+				value={callDuration}
 				onChange={handleChange}
 				onDropdownVisibleChange={(open) => setOpen(open)}
-				defaultValue={callDuration ? callDuration : ''}
 			>
-				{/* <Option key='all' value=''>
-				All Call Duration
-			</Option> */}
+				<Option key='all' value=''>
+					All Call Duration
+				</Option>
 				<Option key='5' value='5'>
 					&lt; 5 MINS
 				</Option>

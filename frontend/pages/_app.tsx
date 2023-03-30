@@ -6,23 +6,15 @@ import { Amplify, Auth } from 'aws-amplify';
 import { configureAxios } from 'axiosConfig';
 import { Navbar } from 'components';
 import { AuthenticatorProvider } from 'context/AuthenticatorContext';
-import { CallFilterProvider } from 'context/CallFilterContext';
-import { CallSelectDataProvider } from 'context/CallSelectContext';
-import { CallTimelineSelectDataProvider } from 'context/CallTimelineSelectContext';
-import { CCCDataProvider } from 'context/CCCDataContext';
-import { EventKeywordProvider } from 'context/EventKeywordContext';
-import { EventTypeProvider } from 'context/EventTypeContext';
-import { SLDataProvider } from 'context/SLDataContext';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import awsconfig from '../aws-exports';
-import { DateProvider } from '../context/DateContext';
 import { PartnerProvider } from '../context/PartnerContext';
-import { SocialChannelProvider } from '../context/SocialChannelContext';
 import '../styles/globals.css';
 import '../styles/custom-antd.css';
 import '../styles/dashboard.css';
+import '../styles/ccc.css';
 import { Provider } from 'react-redux';
 import store from '../app/store';
 
@@ -60,46 +52,28 @@ const App = ({ Component, pageProps }) => {
 		// <AuthenticatorProvider value={{ user: currentUser }}>
 		<Provider store={store}>
 			<PartnerProvider>
-				<SLDataProvider>
-					<CCCDataProvider>
-						<Layout style={{ minHeight: '100vh' }}>
-							<Head>
-								<title>Social Listening Dashboard</title>
-								<meta
-									name='description'
-									content='Social Insights on Emergency Outreach and Operations'
-								/>
-								<link rel='icon' href='/favicon.ico' />
-							</Head>
-							<Navbar />
-							<Content
-								className='site-layout'
-								style={{
-									padding: '0 1.5rem',
-									marginTop: '1.5rem',
-									height: '95vh',
-									overflowY: "auto",
-								}}
-							>
-								<DateProvider>
-									<SocialChannelProvider>
-										<EventKeywordProvider>
-											<EventTypeProvider>
-												<CallFilterProvider>
-													<CallSelectDataProvider>
-														<CallTimelineSelectDataProvider>
-															<Component {...pageProps} />
-														</CallTimelineSelectDataProvider>
-													</CallSelectDataProvider>
-												</CallFilterProvider>
-											</EventTypeProvider>
-										</EventKeywordProvider>
-									</SocialChannelProvider>
-								</DateProvider>
-							</Content>
-						</Layout>
-					</CCCDataProvider>
-				</SLDataProvider>
+				<Layout style={{ minHeight: '100vh' }}>
+					<Head>
+						<title>Social Listening Dashboard</title>
+						<meta
+							name='description'
+							content='Social Insights on Emergency Outreach and Operations'
+						/>
+						<link rel='icon' href='/favicon.ico' />
+					</Head>
+					<Navbar />
+					<Content
+						className='site-layout'
+						style={{
+							padding: '0 1.5rem',
+							marginTop: '1.5rem',
+							height: '95vh',
+							overflowY: "auto",
+						}}
+					>
+						<Component {...pageProps} />
+					</Content>
+				</Layout>
 			</PartnerProvider>
 		</Provider>
 		// </AuthenticatorProvider>
