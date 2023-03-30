@@ -59,6 +59,8 @@ Chart.register(
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
+const MONTH_FORMAT = 'YYYY-MM';
+
 function getDatesInBetween(start, end) {
 	var startDate = start.clone(),
 		dates = [];
@@ -277,4 +279,5 @@ export default {
 	COLOR_WHITE,
 	CALL_HANDLE_TIME_COLOR,
 	CHART_GRID_COLOR,
+	MONTH_FORMAT,
 };

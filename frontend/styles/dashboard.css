@@ -46,13 +46,14 @@
 .sentiment-label {
     position: absolute;
     top: 10px;
-    height: 37px;
+    right: 30px;
+    height: 30px;
     text-align: center;
-    padding: 9px 10px 9px 10px;
+    padding: 5px 10px 9px 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     margin-bottom: 15px;
-    width: 85%;
+    width: 55%;
 }
 
 .sentiment-percent {
@@ -128,4 +129,11 @@
     margin-left: 10px;
     position: relative;
     top: 8px;
+}
+
+.calls-label {
+    position: absolute;
+    top: 15px;
+    font-size: 12px;
+    left: 28px;
 }

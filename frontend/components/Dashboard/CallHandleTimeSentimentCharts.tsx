@@ -261,7 +261,7 @@ const CallHandleTimeSentimentChart = () => {
                     <Spin tip='Loading' />
                 </CenterContainer> : <>
                     <Col xs={6} md={6}>
-                        <div className="sentiment-label">Sentiment: {sentiment}</div>
+                        <span className="calls-label">Calls:</span><div className="sentiment-label">{sentiment}</div>
                         {!!sentimentPercent && <span className="sentiment-percent">{sentimentPercent}%</span>}
                         <Doughnut
                             options={halfDoughnutOptions}

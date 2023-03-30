@@ -79,7 +79,7 @@ const Dashboard = () => {
                 <Col xs={17} md={17} className="call-analysis-right-sec">
                     <Title level={5}>{ivrType} Call Analytics</Title>
                     <ListCard hoverable bordered={false} className="chart-warpper mb-15">
-                        <div className="chart-header">Call Handle Time and Sentiment</div>
+                        <div className="chart-header">Ending Sentiment and Call Volume By Handle Time</div>
                         <CallHandleTimeSentimentChart />
                         <div className="chart-header mt-15">Call Volume Over Time</div>
                         <CallVolumeChart />

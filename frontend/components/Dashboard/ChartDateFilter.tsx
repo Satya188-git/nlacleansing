@@ -16,15 +16,17 @@ const ChartDateFilter = () => {
     const [end, setEnd] = useState(date.endDate);
 
     const checkDates = (dateString) => {
-        const __start = moment(dateString[0]).format(format);
-        const __end = moment(dateString[1]).format(format);
-        if (__end !== date.endDate) {
+        const __start = moment(dateString[0]).format(DateUtil.MONTH_FORMAT);
+        const __end = moment(dateString[1]).format(DateUtil.MONTH_FORMAT);
+        const prevStart = moment(date.startDate).format(DateUtil.MONTH_FORMAT);
+        const prevEnd = moment(date.endDate).format(DateUtil.MONTH_FORMAT);
+        if (__end !== prevEnd) {
             const _start = new Date(new Date(dateString[1]).setFullYear(new Date(dateString[1]).getFullYear() - 1));
-            setStart(moment(_start).format(format));
+            setStart(moment(_start).format(DateUtil.MONTH_FORMAT));
             setEnd(__end);
-        } else if (__start !== date.startDate) {
+        } else if (__start !== prevStart) {
             const _end = new Date(new Date(dateString[0]).setFullYear(new Date(dateString[0]).getFullYear() + 1));
-            setEnd(moment(_end).format(format));
+            setEnd(moment(_end).format(DateUtil.MONTH_FORMAT));
             setStart(__start);
         }
     }
