@@ -320,12 +320,12 @@ module "ccc_audit_call_lambda" {
   update_role                       = false
 
   environment_variables = {
-    CLEANED_BUCKET_NAME          = "sdge-dtdes-dev-wus2-s3-nla-cleaned"
-    CLEANED_VERIFIED_BUCKET_NAME = "sdge-dtdes-dev-wus2-s3-nla-verified-clean"
-    DIRTY_BUCKET_NAME            = "sdge-dtdes-dev-wus2-s3-nla-dirty"
-    TABLE_NAME                   = "sdge-dtdes-dev-wus2-dydb-nla-ccc-call-audit"
-    TRANSCRIPTION_BUCKET_NAME    = "sdge-dtdes-dev-wus2-s3-nla-pii-transcription"
-    UNREFINED_BUCKET_NAME        = "sdge-dtdes-dev-wus2-s3-nla-unrefined"
+    CLEANED_BUCKET_NAME          = var.ccc_cleaned_bucket_id
+    CLEANED_VERIFIED_BUCKET_NAME = var.ccc_verified_clean_bucket_id
+    DIRTY_BUCKET_NAME            = var.ccc_dirty_bucket_id
+    TABLE_NAME                   = var.dynamodb_audit_table_name
+    TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
+    UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3

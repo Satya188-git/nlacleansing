@@ -20,6 +20,25 @@ locals {
 }
 
 # Define IAM roles
+module "nla_replication_role" {
+
+  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version           = "4.0.2"
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-s3-replication-role"
+  service_resources = ["s3.amazonaws.com"]
+
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
+    },
+  )
+}
+
 module "comprehend_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
   version           = "4.0.2"
@@ -197,6 +216,57 @@ module "custom_transcribe_lambda_role" {
 }
 
 # custom policies
+
+resource "aws_iam_policy" "s3_replication_policy" {
+
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetReplicationConfiguration",
+          "s3:GetObjectVersionForReplication",
+          "s3:GetObjectVersionAcl",
+          "s3:GetObjectVersionTagging",
+          "s3:GetObjectVersion",
+          "s3:ObjectOwnerOverrideToBucketOwner"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
+          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+        ]
+      },
+      {
+        "Action" : [
+          "s3:ReplicateObject",
+          "s3:ReplicateDelete",
+          "s3:ReplicateTags",
+          "s3:GetObjectVersionTagging",
+          "s3:ObjectOwnerOverrideToBucketOwner"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"
+      },
+      {
+        "Action" : [
+          "kms:Decrypt"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:kms:us-west-2:183095018968:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
+      },
+      {
+        "Action" : [
+          "kms:Encrypt"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+      }
+    ]
+  })
+}
 resource "aws_iam_policy" "iam_pass_role_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-pass-role-policy"
   policy = jsonencode(
@@ -303,6 +373,11 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
 }
 
 # Policies
+# replication policies
+resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
+  policy_arn = aws_iam_policy.s3_replication_policy.arn
+  role       = module.nla_replication_role.name
+}
 
 # comprehend lambda permissions
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {

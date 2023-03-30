@@ -142,6 +142,10 @@ variable "ccc_athenaresults_bucket_id" {
   description = "ccc_athenaresults_bucket_id"
 }
 
+variable "dynamodb_audit_table_name" {
+  type        = string
+  description = "dynamodb_audit_table_name"
+}
 
 
 variable "tf_artifact_s3" {

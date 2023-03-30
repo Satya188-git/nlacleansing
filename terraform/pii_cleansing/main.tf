@@ -130,27 +130,29 @@ module "lambda" {
   ccc_dirty_bucket_id                 = module.s3.ccc_dirty_bucket_id
   ccc_athenaresults_bucket_id         = module.s3.ccc_athenaresults_bucket_id
   kms_key_ccc_sns_lambda_arn          = module.kms.kms_key_ccc_sns_lambda_arn
+  dynamodb_audit_table_name           = module.dynamodb.dynamodb_audit_table_name
 
 }
 
 module "s3" {
-  source                         = "./modules/s3"
-  region                         = var.region
-  environment                    = var.environment
-  application_use                = var.application_use
-  company_code                   = var.company_code
-  application_code               = var.application_code
-  environment_code               = var.environment_code
-  owner                          = var.owner
-  namespace                      = var.namespace
-  region_code                    = var.region_code
-  tag-version                    = var.tag-version
-  billing-guid                   = var.billing-guid
-  unit                           = var.unit
-  portfolio                      = var.portfolio
-  support-group                  = var.support-group
-  cmdb-ci-id                     = var.cmdb-ci-id
-  data-classification            = var.data-classification
+  source              = "./modules/s3"
+  region              = var.region
+  environment         = var.environment
+  application_use     = var.application_use
+  company_code        = var.company_code
+  application_code    = var.application_code
+  environment_code    = var.environment_code
+  owner               = var.owner
+  namespace           = var.namespace
+  region_code         = var.region_code
+  tag-version         = var.tag-version
+  billing-guid        = var.billing-guid
+  unit                = var.unit
+  portfolio           = var.portfolio
+  support-group       = var.support-group
+  cmdb-ci-id          = var.cmdb-ci-id
+  data-classification = var.data-classification
+  # aws_assume_role                = var.aws_assume_role
   kms_key_ccc_unrefined_arn      = module.kms.kms_key_ccc_unrefined_arn
   kms_key_ccc_initial_arn        = module.kms.kms_key_ccc_initial_arn
   kms_key_ccc_clean_arn          = module.kms.kms_key_ccc_clean_arn
@@ -159,4 +161,5 @@ module "s3" {
   kms_key_ccc_maciefindings_arn  = module.kms.kms_key_ccc_maciefindings_arn
   kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
+  # nla_replication_role_arn       = module.iam.nla_replication_role_arn
 }

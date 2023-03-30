@@ -1,9 +1,9 @@
 variable "region" {
-  type=string
-  description="The AWS region where to deploy Terraform resources"
+  type        = string
+  description = "The AWS region where to deploy Terraform resources"
 }
 variable "environment" {
-  type=string
+  type = string
 }
 variable "application_use" {
   type        = string
@@ -75,26 +75,34 @@ variable "data-classification" {
   description = "Data privacy classification"
 }
 variable "kms_key_ccc_unrefined_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_initial_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_clean_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_dirty_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_verified_clean_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_maciefindings_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_piimetadata_arn" {
-  type=string
+  type = string
 }
 variable "kms_key_ccc_athenaresults_arn" {
-  type=string
+  type = string
 }
+
+# variable "nla_replication_role_arn" {
+#   type = string
+# }
+
+# variable "aws_assume_role" {
+#   type = string
+# }

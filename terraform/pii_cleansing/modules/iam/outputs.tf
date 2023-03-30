@@ -1,3 +1,7 @@
+output "nla_replication_role_arn" {
+  description = "arn for the nla_replication_role"
+  value       = module.nla_replication_role.arn
+}
 output "transcribe_lambda_role_arn" {
   description = "arn for the transcribe_lambda_role role"
   value       = module.transcribe_lambda_role.arn
