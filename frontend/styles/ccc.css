@@ -4,6 +4,8 @@
 
 .call-list-header .call-list-title {
     margin-left: 10px;
+    position: relative;
+    top: 8px;
 }
 
 .call-list-header .ant-input-search {

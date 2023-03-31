@@ -3,13 +3,14 @@ import DateUtil from "helpers/DateUtil";
 import moment from "moment";
 
 export const lastYearDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+export const lastYearStartDate = new Date(lastYearDate.getFullYear(), lastYearDate.getMonth()+1, 1);
 
 export const dashboardSlice = createSlice({
     name: 'dashboard',
     initialState: {
         date: {
-            startDate: moment(new Date(lastYearDate)).format(DateUtil.DATE_FORMAT),
-            endDate: moment(new Date()).format(DateUtil.DATE_FORMAT),
+            startDate: moment(new Date(new Date(lastYearStartDate).getFullYear(), new Date(lastYearStartDate).getMonth(), 1).toLocaleDateString()).format(DateUtil.DATE_FORMAT),
+            endDate: moment(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toLocaleDateString()).format(DateUtil.DATE_FORMAT),
         },
         ivrType: "",
         tag: "",
@@ -30,8 +31,8 @@ export const dashboardSlice = createSlice({
         },
         resetDashboardData: (state) => {
             state.date = {
-                startDate: moment(new Date(lastYearDate)).format(DateUtil.DATE_FORMAT),
-                endDate: moment(new Date()).format(DateUtil.DATE_FORMAT),
+                startDate: moment(new Date(new Date(lastYearStartDate).getFullYear(), new Date(lastYearStartDate).getMonth(), 1).toLocaleDateString()).format(DateUtil.DATE_FORMAT),
+                endDate: moment(new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toLocaleDateString()).format(DateUtil.DATE_FORMAT),
             };
             state.ivrType = "";
             state.tag = "";

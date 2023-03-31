@@ -21,11 +21,13 @@ const ChartDateFilter = () => {
         const prevStart = moment(date.startDate).format(DateUtil.MONTH_FORMAT);
         const prevEnd = moment(date.endDate).format(DateUtil.MONTH_FORMAT);
         if (__end !== prevEnd) {
-            const _start = new Date(new Date(dateString[1]).setFullYear(new Date(dateString[1]).getFullYear() - 1));
+            let _start = new Date(new Date(dateString[1]).setFullYear(new Date(dateString[1]).getFullYear() - 1));
+            _start = new Date(_start.getFullYear(), _start.getMonth() + 1, 1);
             setStart(moment(_start).format(DateUtil.MONTH_FORMAT));
             setEnd(__end);
         } else if (__start !== prevStart) {
-            const _end = new Date(new Date(dateString[0]).setFullYear(new Date(dateString[0]).getFullYear() + 1));
+            let _end = new Date(new Date(dateString[0]).setFullYear(new Date(dateString[0]).getFullYear() + 1));
+            _end = new Date(_end.getFullYear(), _end.getMonth() - 1, 1);
             setEnd(moment(_end).format(DateUtil.MONTH_FORMAT));
             setStart(__start);
         }

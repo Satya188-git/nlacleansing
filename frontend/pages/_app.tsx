@@ -55,10 +55,7 @@ const App = ({ Component, pageProps }) => {
 				<Layout style={{ minHeight: '100vh' }}>
 					<Head>
 						<title>Social Listening Dashboard</title>
-						<meta
-							name='description'
-							content='Social Insights on Emergency Outreach and Operations'
-						/>
+						<meta name='description' content='Social Insights on Emergency Outreach and Operations' />
 						<link rel='icon' href='/favicon.ico' />
 					</Head>
 					<Navbar />

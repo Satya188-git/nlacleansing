@@ -36,7 +36,7 @@ const CallVolumeChart = () => {
     useEffect(() => {
         setCallVolumeData(null);
         setIsLoading(true);
-        let months = monthDiff(date.startDate, date.endDate);
+        let months = monthDiff(date.startDate, date.endDate) + 1;
         let monthLabels = [];
         for (let m = 1; m <= months; m++) {
             monthLabels = [...monthLabels, m];
@@ -50,7 +50,7 @@ const CallVolumeChart = () => {
                     for (let d in res.data) {
                         const dataArr = JSON.parse(res.data[d]);
                         let _data = [];
-                        for (let i = 1; i < dataArr.length; i++) {
+                        for (let i = 0; i < dataArr.length; i++) {
                             _data = [..._data, dataArr[i]];
                         }
                         const obj = {
