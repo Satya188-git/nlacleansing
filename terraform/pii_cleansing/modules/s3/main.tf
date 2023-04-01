@@ -403,60 +403,60 @@ module "ccc_maciefindings_bucket" {
   ]
   additional_policy_statements = [
     {
-      "Sid"       = "AllowSSLRequestsOnly",
-      "Effect"    = "Deny",
-      "Principal" = "*",
-      "Action"    = "s3:*",
-      "Resource" = [
+      Sid       = "AllowSSLRequestsOnly"
+      Effect    = "Deny"
+      Principal = "*"
+      Action    = "s3:*"
+      Resource = [
         "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
         "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*"
-      ],
-      "Condition" = {
-        "Bool" = {
+      ]
+      Condition = {
+        Bool = {
           "aws:SecureTransport" = "false"
         }
       }
-    },
-    {
-      "Sid"    = "Allow Macie to upload objects to the bucket",
-      "Effect" = "Allow",
-      "Principal" = {
-        "Service" = "macie.amazonaws.com"
-      },
-      "Action"   = "s3:PutObject",
-      "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
-      "Condition" = {
-        "StringEquals" = {
-          "aws:SourceAccount" : "183095018968"
-        },
-        "ArnLike" = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-            "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-          ]
-        }
-      }
-    },
-    {
-      "Sid"    = "Allow Macie to use the getBucketLocation operation",
-      "Effect" = "Allow",
-      "Principal" = {
-        "Service" = "macie.amazonaws.com"
-      },
-      "Action"   = "s3:GetBucketLocation",
-      "Resource" = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
-      "Condition" = {
-        "StringEquals" = {
-          "aws:SourceAccount" = "183095018968"
-        },
-        "ArnLike" = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-            "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-          ]
-        }
-      }
     }
+    # {
+    #   Sid    = "Allow Macie to upload objects to the bucket"
+    #   Effect = "Allow"
+    #   Principa = {
+    #     Service = "macie.amazonaws.com"
+    #   }
+    #   Action   = "s3:PutObject",
+    #   Resource = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
+    #   Condition = {
+    #     StringEquals = {
+    #       "aws:SourceAccount" : "183095018968"
+    #     }
+    #     ArnLike = {
+    #       "aws:SourceArn" = [
+    #         "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
+    #         "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
+    #       ]
+    #     }
+    #   }
+    # }
+    # {
+    #   Sid    = "Allow Macie to use the getBucketLocation operation",
+    #   Effect = "Allow",
+    #   Principal = {
+    #     Service = "macie.amazonaws.com"
+    #   },
+    #   Action   = "s3:GetBucketLocation",
+    #   Resource = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
+    #   Condition = {
+    #     StringEquals = {
+    #       "aws:SourceAccount" = "183095018968"
+    #     },
+    #     ArnLike = {
+    #       "aws:SourceArn" = [
+    #         "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
+    #         "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
+    #       ]
+    #     }
+    #   }
+    # }
   ]
 }
 
