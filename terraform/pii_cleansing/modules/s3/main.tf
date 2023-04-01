@@ -401,7 +401,7 @@ module "ccc_maciefindings_bucket" {
       expose_headers  = []
     }
   ]
-  additional_policy_statements = [jsonencode([
+  additional_policy_statements = [[
     {
       "Sid"       = "AllowSSLRequestsOnly",
       "Effect"    = "Deny",
@@ -457,7 +457,7 @@ module "ccc_maciefindings_bucket" {
         }
       }
     }
-  ])]
+  ]]
 }
 
 module "ccc_piimetadata_bucket" {
