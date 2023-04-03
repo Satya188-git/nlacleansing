@@ -230,7 +230,7 @@ module "athena_crawler_role" {
     tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-athena-crawler"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
     },
   )
 }
@@ -275,7 +275,7 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:183095018968:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
+        "Resource" : "arn:aws:kms:us-west-2:${var.account_id}:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
       },
       {
         "Action" : [
@@ -311,7 +311,7 @@ resource "aws_iam_policy" "kms_full_access" {
         {
           "Effect"   = "Allow",
           "Action"   = "kms:*",
-          "Resource" = "arn:aws:kms:*:183095018968:key/*"
+          "Resource" = "arn:aws:kms:*:${var.account_id}:key/*"
         }
       ]
   })
@@ -368,7 +368,7 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
             "kms:Decrypt"
           ],
           "Resource" : [
-            "arn:aws:kms:us-west-2:183095018968:key/*"
+            "arn:aws:kms:us-west-2:${var.account_id}:key/*"
           ],
           "Condition" : {
             "StringLike" : {
@@ -508,6 +508,12 @@ resource "aws_iam_role_policy_attachment" "macie_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.macie_lambda_role.name
 }
+
+resource "aws_iam_role_policy_attachment" "athena_kms_full_access" {
+  policy_arn = aws_iam_policy.kms_full_access.arn
+  role       = module.athena_lambda_role.name
+}
+
 resource "aws_iam_role_policy_attachment" "macie_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.macie_lambda_role.name

@@ -10,7 +10,7 @@ locals {
   owner            = var.owner
 
   tags = {
-    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-crawler"
+    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-crawler"
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     unit                = var.unit
@@ -39,7 +39,7 @@ module "glue-crawler" {
 
   glue_crawler_map = {
     crawler_s3 = {
-      name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-crawler"
+      name          = "s3_crawler"
       database_name = var.crawler_db_name
       s3_targets = {
         s3_target1 = {
