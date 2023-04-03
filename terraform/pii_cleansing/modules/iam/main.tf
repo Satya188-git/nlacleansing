@@ -509,11 +509,6 @@ resource "aws_iam_role_policy_attachment" "macie_kms_full_access" {
   role       = module.macie_lambda_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "athena_kms_full_access" {
-  policy_arn = aws_iam_policy.kms_full_access.arn
-  role       = module.athena_lambda_role.name
-}
-
 resource "aws_iam_role_policy_attachment" "macie_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.macie_lambda_role.name
@@ -599,4 +594,10 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_attachment" {
 resource "aws_iam_role_policy_attachment" "athena_crawler_managed" {
   role       = module.athena_crawler_role.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" {
+  policy_arn = aws_iam_policy.kms_full_access.arn
+  role       = module.athena_crawler_role.name
 }
