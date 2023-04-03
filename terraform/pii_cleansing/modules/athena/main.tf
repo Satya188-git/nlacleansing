@@ -102,7 +102,7 @@ module "athena" {
   # option to create Athena DB and corresponding variables
   create_athena_database    = true
   db_force_destroy          = false
-  athena_db_name            = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-athena-db"
+  athena_db_name            = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_nla_athena_db"
   athena_database_bucket    = var.ccc_athenaresults_bucket_id
   db_encryption_option      = "SSE_KMS"
   db_kms_key_arn            = var.athena_kms_key_arn
