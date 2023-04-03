@@ -413,12 +413,12 @@ module "ccc_maciefindings_bucket" {
     Resource = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
     Condition = {
       StringEquals = {
-        "aws:SourceAccount" : "${account_id}"
+        "aws:SourceAccount" : "${var.account_id}"
       }
       ArnLike = {
         "aws:SourceArn" = [
-          "arn:aws:macie2:us-west-2:${account_id}:export-configuration:*",
-          "arn:aws:macie2:us-west-2:${account_id}:classification-job/*"
+          "arn:aws:macie2:us-west-2:${var.account_id}:export-configuration:*",
+          "arn:aws:macie2:us-west-2:${var.account_id}:classification-job/*"
         ]
       }
     }
@@ -437,8 +437,8 @@ module "ccc_maciefindings_bucket" {
       },
       ArnLike = {
         "aws:SourceArn" = [
-          "arn:aws:macie2:us-west-2:${account_id}:export-configuration:*",
-          "arn:aws:macie2:us-west-2:${account_id}:classification-job/*"
+          "arn:aws:macie2:us-west-2:${var.account_id}:export-configuration:*",
+          "arn:aws:macie2:us-west-2:${var.account_id}:classification-job/*"
         ]
       }
     }
