@@ -99,6 +99,11 @@ variable "kms_key_ccc_athenaresults_arn" {
   type = string
 }
 
+variable "account_id" {
+  type        = string
+  description = "The AWS account ID"
+}
+
 # variable "nla_replication_role_arn" {
 #   type = string
 # }

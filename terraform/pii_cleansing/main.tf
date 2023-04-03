@@ -162,4 +162,5 @@ module "s3" {
   kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
+  account_id                     = local.account_id
 }
