@@ -86,7 +86,7 @@ module "athena" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "athena-nla"
+  application_use  = "nla-pii"
   tags             = local.tags
 
   # option to create Athena workgroup and corresponding variables
