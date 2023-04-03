@@ -1,10 +1,38 @@
-variable "region" {
-  type=string
-  description="The AWS region where to deploy Terraform resources"
+variable "athena_crawler_role_id" {
+  type        = string
+  description = "The athena_crawler_role ID"
+}
+
+variable "athena_crawler_role_arn" {
+  type        = string
+  description = "The athena_crawler_role ARN"
+}
+
+variable "ccc_athenaresults_bucket_id" {
+  type        = string
+  description = "The ccc_athenaresults S3 bucket id (name)"
+}
+
+variable "crawler_db_name" {
+  type        = string
+  default     = "crawler-s3-db"
+  description = "Glue Crawler DB name for Athena S3 data"
+}
+
+variable "crawler_description" {
+  type        = string
+  default     = "Glue Crawler for Athena S3 data"
+  description = "Glue Crawler for Athena S3 data"
 }
 
 variable "environment" {
-  type=string
+  type        = string
+  description = "The AWS environment where to deploy Terraform resources"
+}
+
+variable "region" {
+  type        = string
+  description = "The AWS region where to deploy Terraform resources"
 }
 
 variable "application_use" {
@@ -20,11 +48,6 @@ variable "namespace" {
 variable "company_code" {
   type        = string
   description = "The company code prefix for Terraform resources"
-}
-
-variable "unit" {
-  type        = string
-  description = "Organizational unit"
 }
 
 variable "application_code" {
@@ -57,6 +80,11 @@ variable "billing-guid" {
   description = "Internal order - from SAP"
 }
 
+variable "unit" {
+  type        = string
+  description = "Organizational unit"
+}
+
 variable "portfolio" {
   type        = string
   description = "Portfolio associated with the application"
@@ -76,23 +104,3 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
-variable "transcribe_lambda_role_arn" {
-  type=string
-}
-
-variable "comprehend_lambda_role_arn" {
-  type=string
-}
-
-variable "informational_macie_lambda_role_arn" {
-  type=string
-}
-
-variable "macie_lambda_role_arn" {
-  type=string
-}
-
-variable "trigger_macie_lambda_role_arn" {
-  type=string
-}
-

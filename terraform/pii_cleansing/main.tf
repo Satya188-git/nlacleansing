@@ -22,6 +22,29 @@ locals {
 
 data "aws_caller_identity" "current" {}
 
+module "athena" {
+  source                       = "./modules/athena"
+  region                 = var.region
+  environment            = var.environment
+  application_use        = var.application_use
+  namespace              = var.namespace
+  company_code           = var.company_code
+  application_code       = var.application_code
+  environment_code       = var.environment_code
+  region_code            = var.region_code
+  owner                  = var.owner
+  tag-version            = var.tag-version
+  billing-guid           = var.billing-guid
+  unit                   = var.unit
+  portfolio              = var.portfolio
+  support-group          = var.support-group
+  cmdb-ci-id             = var.cmdb-ci-id
+  data-classification    = var.data-classification
+  ccc_athenaresults_bucket_id  = module.s3.ccc_athenaresults_bucket_id
+  ccc_athenaresults_bucket_arn = module.s3.ccc_athenaresults_bucket_arn
+  athena_kms_key_arn           = module.kms.athena_kms_key_arn
+}
+
 module "dynamodb" {
   source                 = "./modules/dynamodb"
   autoscaler_iam_role_id = module.iam.autoscaler_iam_role_id
@@ -41,6 +64,29 @@ module "dynamodb" {
   support-group          = var.support-group
   cmdb-ci-id             = var.cmdb-ci-id
   data-classification    = var.data-classification
+}
+
+module "glue" {
+  source                  = "./modules/glue"
+  region                  = var.region
+  environment             = var.environment
+  application_use         = var.application_use
+  namespace               = var.namespace
+  company_code            = var.company_code
+  application_code        = var.application_code
+  environment_code        = var.environment_code
+  region_code             = var.region_code
+  owner                   = var.owner
+  tag-version             = var.tag-version
+  billing-guid            = var.billing-guid
+  unit                    = var.unit
+  portfolio               = var.portfolio
+  support-group           = var.support-group
+  cmdb-ci-id              = var.cmdb-ci-id
+  data-classification     = var.data-classification
+  athena_crawler_role_id  = module.iam.athena_crawler_role_id
+  athena_crawler_role_arn = module.iam.athena_crawler_role_arn
+  ccc_athenaresults_bucket_id  = module.s3.ccc_athenaresults_bucket_id
 }
 
 module "iam" {
@@ -63,7 +109,7 @@ module "iam" {
   data-classification                = var.data-classification
   account_id                         = local.account_id
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
-
+  ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
 }
 
 module "kms" {
@@ -162,5 +208,5 @@ module "s3" {
   kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
-  account_id                     = local.account_id
+  account_id = local.account_id
 }

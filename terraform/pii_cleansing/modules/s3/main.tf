@@ -121,14 +121,6 @@ module "ccc_cleaned_bucket" {
   ]
 }
 
-# provider "aws" {
-#   alias  = "west"
-#   region = "us-west-2"
-#   assume_role {
-#     role_arn     = var.aws_assume_role
-#     session_name = "AWS-STSSession-TF"
-#   }
-# }
 # module "nla_replication_role" {
 
 #   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"

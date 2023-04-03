@@ -215,10 +215,30 @@ module "custom_transcribe_lambda_role" {
   )
 }
 
+// create IAM role for crawler
+module "athena_crawler_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-glue-crawler-role"
+  description       = "IAM role for Athena Glue Crawler"
+  service_resources = ["glue.amazonaws.com"]
+    tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-athena-crawler"
+    },
+  )
+}
+
+
 # custom policies
 
 resource "aws_iam_policy" "s3_replication_policy" {
-
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -370,6 +390,28 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
         }
       ]
   })
+}
+
+// create policy
+resource "aws_iam_policy" "athena_crawler_role_policy" {
+  name        = "AthenaBucketAccess"
+  description = "Get and Put access for Athena bucket"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "${var.ccc_athenaresults_bucket_arn}*"
+    }
+  ]
+}
+EOF
 }
 
 # Policies
@@ -531,11 +573,25 @@ resource "aws_iam_role_policy_attachment" "CustomTranscribeAmazonS3FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = module.custom_transcribe_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "CustomAmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
   role       = module.custom_transcribe_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
   policy_arn = aws_iam_policy.custom_transcribe_lambda_policy.arn
   role       = module.custom_transcribe_lambda_role.name
+}
+
+# attach policy for athena glue crawler
+resource "aws_iam_policy_attachment" "athena_crawler_attachment" {
+  name       = "athena-glue-crawler-attachment"
+  roles      = [module.athena_crawler_role.id]
+  policy_arn = aws_iam_policy.athena_crawler_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
