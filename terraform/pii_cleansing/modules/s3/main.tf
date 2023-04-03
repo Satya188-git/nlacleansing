@@ -404,19 +404,33 @@ module "ccc_maciefindings_bucket" {
 
   additional_policy_statements = [
     {
-      Sid    = "AllowMacietoUploadObjectstotheBucket"
+      Sid    = "Allow Macie to upload objects to the bucket"
       Effect = "Allow"
       Principal = { 
         Service = ["macie.amazonaws.com"]
       }
-      Action = [
-        "s3:PutObject",
-        "s3:GetBucketLocation"
-      ],
-      Resource = [
-        "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}",
-        "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}/*"
-        ],
+      Action = ["s3:PutObject"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}/*",
+      Condition = {
+          StringEquals = {
+            "aws:SourceAccount" : "${var.account_id}"
+          }
+          ArnLike = {
+            "aws:SourceArn" = [
+              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+            ]
+          }
+        }
+    },
+    {
+      Sid    = "Allow Macie to use the getBucketLocation operation"
+      Effect = "Allow"
+      Principal = { 
+        Service = ["macie.amazonaws.com"]
+      }
+      Action = ["s3:GetBucketLocation"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}",
       Condition = {
           StringEquals = {
             "aws:SourceAccount" : "${var.account_id}"
