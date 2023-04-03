@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Input, Row, Spin, Typography } from 'antd';
+import { Button, Col, Divider, Input, Pagination, Row, Spin, Typography } from 'antd';
 import { Partner } from 'constants/partner';
 import { usePartnerContext } from 'context/PartnerContext';
 import DateUtil from 'helpers/DateUtil';
@@ -22,19 +22,25 @@ const CenterContainer = styled.div`
 const CustomerCallCenterAnalytics: React.FC = () => {
 	const { partner } = usePartnerContext();
 	const [pageLoaded, setPageLoaded] = useState(false);
+	const [filtered, setFiltered] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [callIdSearchLoading, setCallIdSearchLoading] = useState(false);
 	const date = useSelector((state: any) => state.ccc.date);
 	const tags = useSelector((state: any) => state.ccc.tags);
-	const agents = useSelector((state: any) => state.ccc.agents);
+	const agent = useSelector((state: any) => state.ccc.agent);
 	const callDuration = useSelector((state: any) => state.ccc.callDuration);
 	const callID = useSelector((state: any) => state.ccc.callID);
+	const [page, setPage] = useState(1);
+	const [limit, setLimit] = useState(30);
+	const pageSizeOptions = [30, 50, 100];
+	const [listOfValues, setListOfValues] = useState({ agentList: [], tagList: [] });
 	const dispatch = useDispatch();
 
+	const [pageDetails, setPageDetails] = useState(null);
+
 	const { Title } = Typography;
-	const format = DateUtil.DATE_FORMAT;
 	const { Search } = Input;
-    const router = useRouter();
+	const router = useRouter();
 
 	useEffect(() => {
 		if (partner.name === Partner.SCG) {
@@ -43,35 +49,53 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 			setPageLoaded(true);
 		}
 	}, []);
-	
-    useEffect(() => {
-        router.events.on('routeChangeStart', (url) => {
-            if (!url.includes("ccc")) {
-                dispatch(resetAll());
-            }
-        });
-    }, []);
+
+	useEffect(() => {
+		router.events.on('routeChangeStart', (url) => {
+			if (!url.includes("ccc")) {
+				dispatch(resetAll());
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		if (isLoading || callIdSearchLoading) {
 			var params: any = {
 				callstartdate: `${date.startDate} 00:00:00.000`,
 				callenddate: `${date.endDate} 00:00:00.000`,
+				page,
+				limit,
 			}
 			if (callDuration) params = { ...params, callduration: callDuration };
 			if (tags.length > 0) params = { ...params, calltags: tags.toString() };
 			if (callID) params = { ...params, callid: callID };
 			axios.get(`${process.env.NEXT_PUBLIC_CCC_API_GATEWAY}/call-list`, { params })
 				.then(res => {
-					dispatch(setCallInsights(res.data));
+					setPageDetails(res.data);
+					dispatch(setCallInsights(res?.data?.contents || []));
 				}).catch((error) => {
 					console.log(error);
 				}).finally(() => {
 					setIsLoading(false);
+					if (filtered) setFiltered(false);
 					setCallIdSearchLoading(false);
 				})
 		}
-	}, [isLoading, callIdSearchLoading]);
+	}, [isLoading, callIdSearchLoading, page, limit]);
+
+	useEffect(() => {
+		var _params: any = {
+			callstartdate: `${date.startDate} 00:00:00.000`,
+			callenddate: `${date.endDate} 00:00:00.000`,
+		}
+		if (callDuration) _params = { ..._params, callduration: callDuration };
+		axios.get(`${process.env.NEXT_PUBLIC_CCC_API_GATEWAY}/call-list-tagagentlister`, { params: _params })
+			.then(res => {
+				setListOfValues(res.data);
+			}).catch((error) => {
+				console.log(error);
+			});
+	}, [date, callDuration]);
 
 	if (!pageLoaded) {
 		return <div></div>;
@@ -80,6 +104,20 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 	const onSearch = () => {
 		dispatch(resetData());
 		setCallIdSearchLoading(true);
+		setPage(1);
+	}
+
+	const onFilter = () => {
+		setIsLoading(true);
+		setPage(1);
+		setFiltered(true);
+		dispatch(setCallID(""));
+	}
+
+	const onChange = (page, pageSize) => {
+		setPage(page);
+		setLimit(pageSize);
+		setIsLoading(true);
 	}
 
 	return (
@@ -95,6 +133,7 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 					onChange={(evt) => dispatch(setCallID(evt.target.value))}
 					onSearch={onSearch}
 					loading={callIdSearchLoading}
+					disabled={isLoading}
 				/>
 			</Row>
 			<Divider />
@@ -103,10 +142,10 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 					<DateSelector />
 				</Col>
 				<Col xs={5} md={5}>
-					<CallIntentSelector />
+					<CallIntentSelector tagList={listOfValues?.tagList} />
 				</Col>
 				<Col xs={5} md={5}>
-					<AgentSearch />
+					<AgentSearch agentList={listOfValues?.agentList} />
 				</Col>
 				<Col xs={4} md={4}>
 					<TimeSelector />
@@ -114,14 +153,25 @@ const CustomerCallCenterAnalytics: React.FC = () => {
 				<Col xs={3} md={3}>
 					<Button
 						title='Search Filters'
-						onClick={() => {setIsLoading(true); dispatch(setCallID(""))}}
+						onClick={onFilter}
 						className="search-btn mt-27"
 						// icon={<SearchOutlined />}
-						loading={isLoading}
+						loading={filtered}
+						disabled={isLoading || callIdSearchLoading}
 					>Filter</Button>
 				</Col>
 			</Row>
-			{/* <Divider /> */}
+			<Divider />
+			{(pageDetails && !filtered && !callIdSearchLoading) && <Row className='call-list-pagination'>
+				<Pagination
+					showSizeChanger
+					onChange={onChange}
+					defaultCurrent={pageDetails?.currentPageNumber}
+					pageSize={limit}
+					pageSizeOptions={pageSizeOptions}
+					total={pageDetails?.totalRecordCount}
+				/>
+			</Row>}
 			<Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} className="call-list-section">
 				{(isLoading || callIdSearchLoading) ? (
 					<CenterContainer>

@@ -48,5 +48,9 @@
 }
 
 .call-list-section {
-    margin-top: 20px;
+    margin-top: 10px;
+}
+
+.call-list-pagination .ant-pagination {
+    margin-left: auto;
 }

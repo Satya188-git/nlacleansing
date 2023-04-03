@@ -1,5 +1,6 @@
 import { Card, Col, Divider, Row, Typography } from "antd";
 import { ListCard } from "components";
+import CallDetails from "components/Dashboard/CallDetails";
 import CallHandleTimeSentimentChart from "components/Dashboard/CallHandleTimeSentimentCharts";
 import CallTagsChart from "components/Dashboard/CallTagsChart";
 import CallVolumeChart from "components/Dashboard/CallVolumeChart";
@@ -40,28 +41,7 @@ const Dashboard = () => {
             {/* <Divider /> */}
             <Row gutter={[24, 24]}>
                 <Col xs={7} md={7}>
-                    <Card className="count-card no-border mb-15">
-                        <p className="count-val">1,300,000</p>
-                        <p>Total Calls</p>
-                    </Card>
-                    <Row gutter={[24, 24]} className="mb-15">
-                        <Col xs={12} md={12}>
-                            <Card className="count-card no-border">
-                                <p className="count-val">18:32</p>
-                                <p>Average Talk Time</p>
-                            </Card>
-                        </Col>
-                        <Col xs={12} md={12}>
-                            <Card className="count-card no-border">
-                                <p className="count-val">5:32</p>
-                                <p>Average Hold Time</p>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Card className="count-card no-border mb-15">
-                        <p className="count-val">82%</p>
-                        <p>Percent Resolved with Positive Sentiment</p>
-                    </Card>
+                    <CallDetails />
                     <Row gutter={[24, 24]} className="mb-15">
                         <Col xs={8} md={8}>
                             <Title level={5} className="call-tags-title">Call Tags</Title>

@@ -86,7 +86,7 @@
 }
 
 .agent-select .ant-select-selection-search-input {
-    height: 40px;
+    height: 40px !important;
 }
 
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {

@@ -1,31 +1,21 @@
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { Select, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAgentsData } from 'reducers/ccc-reducer';
 
-const AgentSearch = () => {
-    const [agents, setAgents] = useState([]);
+const AgentSearch = ({ agentList }) => {
+    const [open, setOpen] = useState(false);
     const { Option } = Select;
-    const uniqueAgents = new Set<string>();
     const { Title } = Typography;
-	const dispatch = useDispatch();
-	const agentsData = useSelector((state: any) => state.ccc.agents);
-	const callInsights = useSelector((state: any) => state.ccc.callInsights);
-
-    useEffect(() => {
-        if (callInsights && callInsights?.length > 0) {
-            callInsights.forEach((item) => {
-                if (item.agentFullName) {
-                    uniqueAgents.add(item.agentFullName);
-                }
-            });
-            setAgents(Array.from(uniqueAgents).sort());
-        }
-    }, [callInsights]);
+    const dispatch = useDispatch();
+    const agentData = useSelector((state: any) => state.ccc.agent);
 
     const handleChange = (value: string[]) => {
         dispatch(setAgentsData(value));
     };
+
+    const getValue = (item) => item?.agent?.split("(")?.[1]?.split(")")[0];
 
     return (
         <>
@@ -35,15 +25,17 @@ const AgentSearch = () => {
                 showSearch
                 // mode='multiple'
                 allowClear
-                value={agentsData}
+                value={agentData}
                 onChange={handleChange}
+                suffixIcon={open ? <CaretUpOutlined /> : <CaretDownOutlined />}
                 placeholder='Search and Select from List'
-				style={{ width: '100%' }}
+                style={{ width: '100%' }}
+                onDropdownVisibleChange={(open) => setOpen(open)}
             >
-                {agents.map((item, i) => {
+                {agentList.map((item, i) => {
                     return (
-                        <Option key={`${i}${item}`} value={item}>
-                            {item}
+                        <Option key={`${i}${item?.agent}`} value={getValue(item)}>
+                            {item?.agent}
                         </Option>
                     );
                 })}

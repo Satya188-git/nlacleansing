@@ -12,7 +12,7 @@ export const cccSlice = createSlice({
             endDate: moment(new Date()).format(DateUtil.DATE_FORMAT),
         },
         tags: [],
-        agents: [],
+        agent: "",
         callDuration: "",
         callID: "",
         callInsights: [],
@@ -27,7 +27,7 @@ export const cccSlice = createSlice({
             state.tags = action.payload;
         },
         setAgentsData: (state, action) => {
-            state.agents = action.payload;
+            state.agent = action.payload;
         },
         setCallDuration: (state, action) => {
             state.callDuration = action.payload;
@@ -50,7 +50,7 @@ export const cccSlice = createSlice({
                 endDate: moment(new Date()).format(DateUtil.DATE_FORMAT),
             };
             state.tags = [];
-            state.agents = [];
+            state.agent = "";
             state.callDuration = "";
         },
         resetAll: (state) => {
@@ -59,7 +59,7 @@ export const cccSlice = createSlice({
                 endDate: moment(new Date()).format(DateUtil.DATE_FORMAT),
             };
             state.tags = [];
-            state.agents = [];
+            state.agent = "";
             state.callDuration = "";
             state.callID = "";
         },
