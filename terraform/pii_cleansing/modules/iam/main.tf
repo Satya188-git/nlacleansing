@@ -586,7 +586,7 @@ resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
 
 # attach policy for athena glue crawler
 resource "aws_iam_role_policy_attachment" "athena_crawler_attachment" {
-  roles      = module.athena_crawler_role.id
+  role      = module.athena_crawler_role.id
   policy_arn = aws_iam_policy.athena_crawler_role_policy.arn
 }
 
