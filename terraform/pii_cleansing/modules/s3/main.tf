@@ -410,7 +410,7 @@ module "ccc_maciefindings_bucket" {
         Service = ["macie.amazonaws.com"]
       }
       Action = ["s3:PutObject"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}/*",
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
       Condition = {
           StringEquals = {
             "aws:SourceAccount" : "${var.account_id}"
@@ -430,7 +430,7 @@ module "ccc_maciefindings_bucket" {
         Service = ["macie.amazonaws.com"]
       }
       Action = ["s3:GetBucketLocation"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn.s3_bucket_arn}",
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
       Condition = {
           StringEquals = {
             "aws:SourceAccount" : "${var.account_id}"
