@@ -28,7 +28,7 @@ module "glue-crawler" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
   version = "4.0.2"
 
-  depends_on = [var.athena_crawler_role_arn]
+  depends_on       = [var.athena_crawler_role_arn]
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code

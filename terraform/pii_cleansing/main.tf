@@ -45,6 +45,27 @@ module "athena" {
   athena_kms_key_arn           = module.kms.athena_kms_key_arn
 }
 
+module "eventbridge" {
+  source                          = "./modules/eventbridge"
+  region                     = var.region
+  environment                = var.environment
+  application_use            = var.application_use
+  company_code               = var.company_code
+  application_code           = var.application_code
+  environment_code           = var.environment_code
+  owner                      = var.owner
+  namespace                  = var.namespace
+  region_code                = var.region_code
+  tag-version                = var.tag-version
+  billing-guid               = var.billing-guid
+  unit                       = var.unit
+  portfolio                  = var.portfolio
+  support-group              = var.support-group
+  cmdb-ci-id                 = var.cmdb-ci-id
+  data-classification        = var.data-classification
+  comprehend_lambda_arn      = module.lambda.comprehend_lambda_arn
+}
+
 module "dynamodb" {
   source                 = "./modules/dynamodb"
   autoscaler_iam_role_id = module.iam.autoscaler_iam_role_id
