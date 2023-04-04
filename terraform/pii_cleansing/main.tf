@@ -64,6 +64,7 @@ module "eventbridge" {
   cmdb-ci-id                 = var.cmdb-ci-id
   data-classification        = var.data-classification
   comprehend_lambda_arn      = module.lambda.comprehend_lambda_arn
+  ccc_initial_bucket_id      = module.s3.ccc_initial_bucket_id
 }
 
 module "dynamodb" {

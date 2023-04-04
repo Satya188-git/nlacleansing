@@ -1,22 +1,12 @@
 
-variable "replicated_clean_data_bucket_id" {
+variable "ccc_initial_bucket_id" {
   type        = string
-  description = "The replicated_clean_data_bucket_id"
+  description = "S3 ccc_initial_bucket_id"
 }
 
-variable "call_data_insert_lambda_name" {
+variable "comprehend_lambda_arn" {
   type        = string
-  description = "The call_data_insert_lambda_name"
-}
-
-variable "call_data_insert_lambda_arn" {
-  type        = string
-  description = "The call_data_insert_lambda_arn"
-}
-
-variable "pii_transcription_bucket_id" {
-  type        = string
-  description = "S3 pii_transcription_bucket_id"
+  description = "comprehend_lambda_arn"
 }
 
 variable "environment" {
