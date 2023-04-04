@@ -88,8 +88,3 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
-
-variable "comprehend_lambda_arn" {
-  type        = string
-  description = "comprehend_lambda_arn"
-}
