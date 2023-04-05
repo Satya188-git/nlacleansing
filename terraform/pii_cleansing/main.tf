@@ -206,6 +206,7 @@ module "lambda" {
   customercallcenterpiitranscription_s3_event_rule_arn  = module.eventbridge.customercallcenterpiitranscription_s3_event_rule_arn
   customercallcenterpiicleanedverified_s3_event_rule_arn = module.eventbridge.customercallcenterpiicleanedverified_s3_event_rule_arn
   customercallcenterpiiunrefined_s3_event_rule_arn      = module.eventbridge.customercallcenterpiiunrefined_s3_event_rule_arn
+  customercallcenterpiicleaned_s3_event_rule_arn        = module.eventbridge.customercallcenterpiicleaned_s3_event_rule_arn
 }
 
 module "s3" {
@@ -235,6 +236,7 @@ module "s3" {
   kms_key_ccc_maciefindings_arn  = module.kms.kms_key_ccc_maciefindings_arn
   kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
+  macie_info_trigger_arn         = module.lambda.macie_info_trigger_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
   account_id = local.account_id
 }

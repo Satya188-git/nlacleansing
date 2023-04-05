@@ -351,7 +351,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_comprehend_lambda
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda1" {
   statement_id  = "AllowExecutionFromCloudWatch1"
   action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda_arn.lambda_function_name
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.customercallcenterpiitranscription_s3_event_rule_arn
 }
@@ -359,7 +359,31 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda2" {
   statement_id  = "AllowExecutionFromCloudWatch2"
   action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda_arn.lambda_function_name
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.customercallcenterpiicleanedverified_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda3" {
+  statement_id  = "AllowExecutionFromCloudWatch2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_transcribe_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_transcribe_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiicleaned_s3_event_rule_arn
 }

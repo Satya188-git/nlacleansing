@@ -502,3 +502,14 @@ module "ccc_athenaresults_bucket" {
     }
   ]
 }
+
+
+resource "aws_s3_bucket_notification" "info_macie_lambda_notification" {
+  bucket     = module.ccc_maciefindings_bucket.s3_bucket_id
+  depends_on = [module.ccc_maciefindings_bucket]
+  lambda_function {
+    lambda_function_arn = var.macie_info_trigger_arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".gz"
+  }
+}

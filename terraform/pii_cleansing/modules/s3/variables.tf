@@ -76,27 +76,35 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
 variable "kms_key_ccc_unrefined_arn" {
   type = string
 }
+
 variable "kms_key_ccc_initial_arn" {
   type = string
 }
+
 variable "kms_key_ccc_clean_arn" {
   type = string
 }
+
 variable "kms_key_ccc_dirty_arn" {
   type = string
 }
+
 variable "kms_key_ccc_verified_clean_arn" {
   type = string
 }
+
 variable "kms_key_ccc_maciefindings_arn" {
   type = string
 }
+
 variable "kms_key_ccc_piimetadata_arn" {
   type = string
 }
+
 variable "kms_key_ccc_athenaresults_arn" {
   type = string
 }
@@ -104,6 +112,11 @@ variable "kms_key_ccc_athenaresults_arn" {
 variable "account_id" {
   type        = string
   description = "The AWS account ID"
+}
+
+variable "macie_info_trigger_arn" {
+  type        = string
+  description = "macie_info_trigger_arn"
 }
 
 # variable "nla_replication_role_arn" {

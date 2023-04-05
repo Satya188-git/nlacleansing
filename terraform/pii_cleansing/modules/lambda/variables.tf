@@ -171,3 +171,8 @@ variable "customercallcenterpiicleanedverified_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiicleanedverified_s3_event_rule_arn"
 }
+
+variable "customercallcenterpiicleaned_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiicleaned_s3_event_rule_arn"
+}

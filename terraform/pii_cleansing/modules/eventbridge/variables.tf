@@ -108,3 +108,10 @@ variable "ccc_verified_clean_bucket_id" {
   type        = string
   description = "ccc_verified_clean_bucket_id"
 }
+
+variable "ccc_cleaned_bucket_id" {
+  type        = string
+  description = "ccc_cleaned_bucket_id"
+}
+
+  

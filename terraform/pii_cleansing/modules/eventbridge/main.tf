@@ -42,6 +42,8 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_even
    }
   }
 EOF
+
+  tags = local.tags   
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiiunrefined_s3_event_rule" {
@@ -64,6 +66,32 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiiunrefined_s3_event_ru
   }
 }
 EOF
+
+  tags = local.tags
+}
+
+resource "aws_cloudwatch_event_rule" "customercallcenterpiicleaned_s3_event_rule" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-rule"
+  description = "activate lambda when object is created into bucket cleaned"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_cleaned_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiicleanedverified_s3_event_rule" {
@@ -86,6 +114,8 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiicleanedverified_s3_ev
   }
 }
 EOF
+
+  tags = local.tags
 }
 
 
@@ -113,6 +143,11 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiiunrefined_lambda_ta
 resource "aws_cloudwatch_event_target" "customercallcenterpiicleanedverified_lambda_target" {
   arn = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiicleanedverified_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiicleaned_lambda_target" {
+  arn = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiicleaned_s3_event_rule.name
 }
 
 # module "eventbridge" {
