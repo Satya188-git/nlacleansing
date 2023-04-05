@@ -69,6 +69,7 @@ module "eventbridge" {
   ccc_unrefined_call_data_bucket_id = module.s3.ccc_unrefined_call_data_bucket_id
   ccc_transcribe_lambda_arn  = module.lambda.ccc_transcribe_lambda_arn
   ccc_verified_clean_bucket_id  = module.s3.ccc_verified_clean_bucket_id
+  ccc_cleaned_bucket_id               = module.s3.ccc_cleaned_bucket_id
 }
 
 module "dynamodb" {
