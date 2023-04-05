@@ -379,7 +379,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda3" {
-  statement_id  = "AllowExecutionFromCloudWatch2"
+  statement_id  = "AllowExecutionFromCloudWatch3"
   action        = "lambda:InvokeFunction"
   function_name = module.ccc_audit_call_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
@@ -387,15 +387,15 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_transcribe_lambda" {
-  statement_id  = "AllowExecutionFromCloudWatch2"
+  statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.ccc_transcribe_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda" {
-  statement_id  = "AllowExecutionFromCloudWatch2"
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda4" {
+  statement_id  = "AllowExecutionFromCloudWatch4"
   action        = "lambda:InvokeFunction"
   function_name = module.ccc_audit_call_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
