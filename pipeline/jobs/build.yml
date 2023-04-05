@@ -44,12 +44,6 @@ jobs:
         inputs:
           versionSpec: "16.x"
         displayName: "Install Node.js"
-      - task: CopyFiles@2
-        displayName: "Copy lambda layer files"
-        inputs:
-          sourceFolder: "$(Build.Repository.LocalPath)/backend/python/src/layers"
-          contents: "*.zip"
-          targetFolder: "$(Build.ArtifactStagingDirectory)"
       - task: ArchiveFiles@2
         displayName: "Archive Lambda audit_call files"
         inputs:
