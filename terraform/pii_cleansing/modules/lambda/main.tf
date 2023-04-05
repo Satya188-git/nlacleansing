@@ -68,6 +68,8 @@ module "ccc_transcribe_lambda" {
     CONF_TRANSCRIBE_LANG	       = "en-US"
     CONF_VOCABNAME               = "undefined"
     CONF_VOCAB_FILTER_MODE	     = "mask"
+    CONF_API_MODE                = "standard"
+    CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
   }
 
   tags = merge(local.tags,
