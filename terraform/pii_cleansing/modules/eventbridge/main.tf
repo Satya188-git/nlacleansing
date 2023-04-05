@@ -20,7 +20,7 @@ locals {
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_event_rule" {
-  name = "profile-generator-lambda-event-rule"
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
   description = "activate lambda when object is created into bucket pii-transcription"
   event_pattern = <<EOF
   {
@@ -44,10 +44,75 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_even
 EOF
 }
 
+resource "aws_cloudwatch_event_rule" "customercallcenterpiiunrefined_s3_event_rule" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-unrefined-rule"
+  description = "activate lambda when object is created into bucket unrefined"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_unrefined_call_data_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+}
+
+resource "aws_cloudwatch_event_rule" "customercallcenterpiicleanedverified_s3_event_rule" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-verified-rule"
+  description = "activate lambda when object is created into bucket verified-clean"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_verified_clean_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+}
+
+
 # select lambda target for eventbridge rule
-resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target" {
+resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target1" {
   arn = var.comprehend_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiitranscription_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target2" {
+  arn = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiitranscription_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiiunrefined_lambda_target1" {
+  arn = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiiunrefined_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiiunrefined_lambda_target2" {
+  arn = var.ccc_transcribe_lambda_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiiunrefined_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiicleanedverified_lambda_target" {
+  arn = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiicleanedverified_s3_event_rule.name
 }
 
 # module "eventbridge" {

@@ -65,6 +65,10 @@ module "eventbridge" {
   data-classification        = var.data-classification
   comprehend_lambda_arn      = module.lambda.comprehend_lambda_arn
   ccc_initial_bucket_id      = module.s3.ccc_initial_bucket_id
+  ccc_audit_call_lambda_arn  = module.lambda.ccc_audit_call_lambda_arn
+  ccc_unrefined_call_data_bucket_id = module.s3.ccc_unrefined_call_data_bucket_id
+  ccc_transcribe_lambda_arn  = module.lambda.ccc_transcribe_lambda_arn
+  ccc_verified_clean_bucket_id  = module.s3.ccc_verified_clean_bucket_id
 }
 
 module "dynamodb" {
@@ -199,7 +203,9 @@ module "lambda" {
   ccc_athenaresults_bucket_id         = module.s3.ccc_athenaresults_bucket_id
   kms_key_ccc_sns_lambda_arn          = module.kms.kms_key_ccc_sns_lambda_arn
   dynamodb_audit_table_name           = module.dynamodb.dynamodb_audit_table_name
-
+  customercallcenterpiitranscription_s3_event_rule_arn  = module.eventbridge.customercallcenterpiitranscription_s3_event_rule_arn
+  customercallcenterpiicleanedverified_s3_event_rule_arn = module.eventbridge.customercallcenterpiicleanedverified_s3_event_rule_arn
+  customercallcenterpiiunrefined_s3_event_rule_arn      = module.eventbridge.customercallcenterpiiunrefined_s3_event_rule_arn
 }
 
 module "s3" {

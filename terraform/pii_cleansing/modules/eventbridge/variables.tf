@@ -88,3 +88,23 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
+variable "ccc_audit_call_lambda_arn" {
+  type        = string
+  description = "ccc_audit_call_lambda_arn"
+}
+
+variable "ccc_unrefined_call_data_bucket_id" {
+  type        = string
+  description = "ccc_unrefined_call_data_bucket_id"
+}
+
+variable "ccc_transcribe_lambda_arn" {
+  type        = string
+  description = "ccc_transcribe_lambda_arn"
+}
+
+variable "ccc_verified_clean_bucket_id" {
+  type        = string
+  description = "ccc_verified_clean_bucket_id"
+}
