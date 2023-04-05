@@ -1,0 +1,71 @@
+steps:
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName1 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName1 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey1 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName2 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName2 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey2 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName3 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName3 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey3 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName4 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName4 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey4 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName5 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName5 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey5 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName6 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName6 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey6 }}"
+  - task: LambdaDeployFunction@1
+    displayName: "Deploy ${{ parameters.lambdaFunctionName7 }} lambda"
+    inputs:
+      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
+      regionName: "${{ parameters.awsRegionCode }}"
+      deploymentMode: "codeonly"
+      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName7 }}"
+      codeLocation: "s3object"
+      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
+      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey7 }}"
