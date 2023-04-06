@@ -495,7 +495,22 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole5" {
   role       = module.trigger_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
+resource "aws_iam_role_policy_attachment" "macie_trigger_iam_pass_role_policy" {
+  policy_arn = aws_iam_policy.iam_pass_role_policy.arn
+  role       = module.trigger_macie_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "macie_trigger_kms_full_access" {
+  policy_arn = aws_iam_policy.kms_full_access.arn
+  role       = module.trigger_macie_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonS3FullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = module.trigger_macie_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonMacieFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
+  role       = module.trigger_macie_lambda_role.name
+}
 #  audit call lambda
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
   role       = module.audit_call_lambda_role.name

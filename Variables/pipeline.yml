@@ -30,7 +30,7 @@ variables:
   - name: bucketSuffix
     value: tf-artifacts
   - name: sourceFolder
-    value: "../$(Build.SourceBranchName)" #$(Pipeline.Workspace)/backend/python/src/zip_packages
+    value: "../$(Build.SourceBranchName)"
   - name: globExpressions
     value: "**/*.*"
   - name: awsRegionAbbreviation

@@ -55,9 +55,21 @@ module "ccc_transcribe_lambda" {
   }
 
   environment_variables = {
-    CONF_DESTINATION_BUCKET_NAME = var.ccc_initial_bucket_id
-    CONF_S3BUCKET_OUTPUT         = var.ccc_unrefined_call_data_bucket_id
-    CONF_ROLE_ARN                = var.custom_transcribe_lambda_role_arn
+    CONF_VOCAB_FILTER_MODE          = "mask"
+    CONF_CUSTOM_VOCAB_NAME          = "CCC-CustomVocabs"
+    CONF_FILTER_NAME                = "TestVocabFilter1"
+    CONF_MAX_SPEAKERS               = "2"
+    CONF_REDACTION_LANGS            = "en-US"
+    CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
+    CONF_S3BUCKET_OUTPUT            = var.ccc_unrefined_call_data_bucket_id
+    CONF_ROLE_ARN                   = var.custom_transcribe_lambda_role_arn
+    CONF_SPEAKER_MODE               = "channel"
+    CONF_TRANSCRIBE_API             = "analytics"
+    CONF_TRANSCRIBE_LANG            = "en-US"
+    CONF_VOCABNAME                  = "undefined"
+    CONF_REDACTION_TRANSCRIPT       = "true"
+    CONF_API_MODE                   = "standard"
+    CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
   }
 
   tags = merge(local.tags,
@@ -101,8 +113,12 @@ module "ccc_comprehend_lambda" {
   update_role                       = false
 
   environment_variables = {
-    CLEANED_BUCKET_NAME = var.ccc_cleaned_bucket_id
-    OUTPUT              = "s3://${var.ccc_athenaresults_bucket_id}/"
+    STANDARD_FULL_TRANSCRIPT_SUB_FOLDER   = "standard_full_transcripts/"
+    STANDARD_FULL_TRANSCRIPT_FILE_FORMAT  = ".txt"
+    STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE = "text/plain"
+    DF_COMPANY_NAME                       = "SDG&E"
+    OUTPUT                                = var.ccc_athenaresults_bucket_arn
+    CLEANED_BUCKET_NAME                   = var.ccc_cleaned_bucket_id
   }
 
   s3_existing_package = {

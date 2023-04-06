@@ -156,3 +156,14 @@ variable "kms_key_ccc_sns_lambda_arn" {
   type        = string
   description = "kms_key_ccc_sns_lambda_arn"
 }
+
+variable "dynamodb_audit_table_name" {
+  type        = string
+  description = "dynamodb_audit_table_name"
+
+}
+
+variable "ccc_athenaresults_bucket_arn" {
+  type        = string
+  description = "ccc_athenaresults_bucket_arn"
+}
