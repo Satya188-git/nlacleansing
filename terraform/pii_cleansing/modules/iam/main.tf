@@ -392,24 +392,24 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
   })
 }
 
-resource "aws_iam_policy" "replication_assume_role" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "AWS" : [
-            "${var.aws_assume_role_insights}",
-            "${var.aws_assume_role_user_pii}"
-          ]
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
-}
+# resource "aws_iam_policy" "replication_assume_role" {
+#   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
+#   policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Effect" : "Allow",
+#         "Principal" : {
+#           "AWS" : [
+#             "${var.aws_assume_role_insights}",
+#             "${var.aws_assume_role_user_pii}"
+#           ]
+#         },
+#         "Action" : "sts:AssumeRole"
+#       }
+#     ]
+#   })
+# }
 // create policy
 resource "aws_iam_policy" "athena_crawler_role_policy" {
   name        = "AthenaBucketAccess"

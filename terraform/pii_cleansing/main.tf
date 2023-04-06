@@ -147,7 +147,7 @@ module "iam" {
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
   aws_assume_role_user_pii           = var.aws_assume_role_user_pii
-  aws_assume_role_insights           = var.aws_assume_role_insights
+  # aws_assume_role_insights           = var.aws_assume_role_insights
 }
 
 
@@ -176,8 +176,8 @@ module "kms" {
   macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
   nla_replication_role_arn            = module.iam.nla_replication_role_arn
-  account_id_insights                 = local.account_id_insights
-  aws_assume_role_insights            = var.aws_assume_role_insights
+  # account_id_insights                 = local.account_id_insights
+  # aws_assume_role_insights            = var.aws_assume_role_insights
 }
 
 module "lambda" {
@@ -246,17 +246,17 @@ module "s3" {
   cmdb-ci-id          = var.cmdb-ci-id
   data-classification = var.data-classification
   # aws_assume_role                = var.aws_assume_role
-  kms_key_ccc_unrefined_arn               = module.kms.kms_key_ccc_unrefined_arn
-  kms_key_ccc_initial_arn                 = module.kms.kms_key_ccc_initial_arn
-  kms_key_ccc_clean_arn                   = module.kms.kms_key_ccc_clean_arn
-  kms_key_ccc_dirty_arn                   = module.kms.kms_key_ccc_dirty_arn
-  kms_key_ccc_verified_clean_arn          = module.kms.kms_key_ccc_verified_clean_arn
-  kms_key_ccc_maciefindings_arn           = module.kms.kms_key_ccc_maciefindings_arn
-  kms_key_ccc_piimetadata_arn             = module.kms.kms_key_ccc_piimetadata_arn
-  kms_key_ccc_athenaresults_arn           = module.kms.kms_key_ccc_athenaresults_arn
-  kms_key_ccc_verified_clean_insights_arn = module.kms.kms_key_ccc_verified_clean_insights_arn
-  macie_info_trigger_arn                  = module.lambda.macie_info_trigger_arn
+  kms_key_ccc_unrefined_arn      = module.kms.kms_key_ccc_unrefined_arn
+  kms_key_ccc_initial_arn        = module.kms.kms_key_ccc_initial_arn
+  kms_key_ccc_clean_arn          = module.kms.kms_key_ccc_clean_arn
+  kms_key_ccc_dirty_arn          = module.kms.kms_key_ccc_dirty_arn
+  kms_key_ccc_verified_clean_arn = module.kms.kms_key_ccc_verified_clean_arn
+  kms_key_ccc_maciefindings_arn  = module.kms.kms_key_ccc_maciefindings_arn
+  kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
+  kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
+  # kms_key_ccc_verified_clean_insights_arn = module.kms.kms_key_ccc_verified_clean_insights_arn
+  macie_info_trigger_arn = module.lambda.macie_info_trigger_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
-  account_id               = local.account_id
-  aws_assume_role_insights = var.aws_assume_role_insights
+  account_id = local.account_id
+  # aws_assume_role_insights = var.aws_assume_role_insights
 }
