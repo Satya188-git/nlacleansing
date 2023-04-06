@@ -173,6 +173,7 @@ module "kms" {
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
   nla_replication_role_arn            = module.iam.nla_replication_role_arn
   account_id_insights                 = local.account_id_insights
+  aws_assume_role_insights            = var.aws_assume_role_insights
 }
 
 module "lambda" {
@@ -251,5 +252,6 @@ module "s3" {
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
   macie_info_trigger_arn         = module.lambda.macie_info_trigger_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
-  account_id = local.account_id
+  account_id               = local.account_id
+  aws_assume_role_insights = var.aws_assume_role_insights
 }

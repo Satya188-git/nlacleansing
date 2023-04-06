@@ -198,8 +198,18 @@ module "ccc_verified_clean_bucket" {
   ]
 }
 
+provider "aws" {
+  alias  = "nla-insights"
+  region = var.region
+  assume_role {
+    role_arn     = var.aws_assume_role_insights
+    session_name = "AWS-STSSession-Insights"
+  }
+}
+
+
 module "ccc_verified_clean_bucket_insights_account" {
-  providers                      = [aws.nla-insights]
+  providers                      = { aws = aws.nla-insights }
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
   company_code                   = local.company_code

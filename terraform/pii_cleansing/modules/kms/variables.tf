@@ -1,10 +1,10 @@
 variable "region" {
-  type=string
-  description="The AWS region where to deploy Terraform resources"
+  type        = string
+  description = "The AWS region where to deploy Terraform resources"
 }
 
 variable "environment" {
-  type=string
+  type = string
 }
 
 variable "application_use" {
@@ -77,23 +77,23 @@ variable "data-classification" {
   description = "Data privacy classification"
 }
 variable "transcribe_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "comprehend_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "informational_macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "trigger_macie_lambda_role_arn" {
-  type=string
+  type = string
 }
 
 variable "nla_replication_role_arn" {
@@ -104,4 +104,9 @@ variable "nla_replication_role_arn" {
 variable "account_id_insights" {
   type        = string
   description = "AWS Account ID for NLA Insights"
+}
+
+variable "aws_assume_role_insights" {
+  type        = string
+  description = "aws_assume_role_insights"
 }

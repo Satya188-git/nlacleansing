@@ -37,8 +37,18 @@ module "athena_kms_key" {
   )
 }
 
+provider "aws" {
+  alias  = "nla-insights"
+  region = var.region
+  assume_role {
+    role_arn     = var.aws_assume_role_insights
+    session_name = "AWS-STSSession-Insights"
+  }
+}
+
+
 module "ccc_verified_clean_insights_kms_key" {
-  providers        = [aws.nla-insights]
+  providers        = { aws = aws.nla-insights }
   source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
   version          = "4.0.2"
   description      = local.description
