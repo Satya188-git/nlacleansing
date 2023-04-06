@@ -122,6 +122,11 @@ variable "aws_assume_role_insights" {
   type        = string
   description = "aws_assume_role_insights"
 }
+variable "kms_key_ccc_verified_clean_insights_arn" {
+  type        = string
+  description = "kms_key_ccc_verified_clean_insights_arn"
+
+}
 # variable "nla_replication_role_arn" {
 #   type = string
 # }

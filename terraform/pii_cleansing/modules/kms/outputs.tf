@@ -38,3 +38,8 @@ output "kms_key_ccc_sns_lambda_arn" {
 output "athena_kms_key_arn" {
   value = module.athena_kms_key.key_arn
 }
+
+output "kms_key_ccc_verified_clean_insights_arn" {
+  value = module.ccc_verified_clean_insights_kms_key.key_arn
+
+}
