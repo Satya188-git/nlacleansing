@@ -119,6 +119,20 @@ module "ccc_comprehend_lambda" {
     DF_COMPANY_NAME                       = "SDG&E"
     OUTPUT                                = var.ccc_athenaresults_bucket_arn
     CLEANED_BUCKET_NAME                   = var.ccc_cleaned_bucket_id
+    EBBilling_NAME                        = "EBBilling"
+    EBBilling_VECTOR_ID                   = "1245654"
+    EBCSR_NAME                            = "EBCSR"
+    EBCSR_VECTOR_ID                       = "1245610"
+    EBMove_NAME                           = "EBMove"
+    EBMove_VECTOR_ID                      = "1245655"
+    ERBilling_NAME                        = "ERBilling"
+    ERBilling_VECTOR_ID                   = "1245667"
+    ERCredit_NAME                         = "ERCredit"
+    ERCredit_VECTOR_ID                    = "1245616"
+    ERCSR_NAME                            = "ERCSR"
+    ERCSR_VECTOR_ID                       = "1245602"
+    ERMove_NAME                           = "ERMove"
+    ERMove_VECTOR_ID                      = "1245668"
   }
 
   s3_existing_package = {
@@ -255,7 +269,12 @@ module "ccc_macie_scan_trigger_lambda" {
   update_role                       = false
 
   environment_variables = {
-    SCAN_BUCKET_NAME_VERIFIED = var.ccc_cleaned_bucket_id
+    BUCKET_NAME                     = var.ccc_cleaned_bucket_id
+    ACCOUNT_ID                      = "1.83095E+11"
+    CLIENT_TOKEN                    = "d7db50c1-faab-42a8-9d8e-8ba23644e446"
+    JOB_TYPE                        = "ONE_TIME"
+    MANAGE_DATA_IDENTIFIER_SELECTOR = "ALL"
+    SAMPLING_PERCENTAGE             = "100"
   }
 
   s3_existing_package = {
