@@ -24,7 +24,7 @@ module "layers" {
 
 # CustomerCallCenter-Lambda-Transcribe
 module "ccc_transcribe_lambda" {
-  depends_on       = [var.custom_transcribe_lambda_role_arn, module.layers.ccc_transcribe_lambda_archive_id]
+  depends_on       = [var.custom_transcribe_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -87,7 +87,7 @@ module "ccc_transcribe_lambda" {
 
 # CustomerCallCenter-Lambda-Comprehend
 module "ccc_comprehend_lambda" {
-  depends_on       = [var.comprehend_lambda_role_arn, module.layers.ccc_comprehend_lambda_archive_id]
+  depends_on       = [var.comprehend_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -179,7 +179,7 @@ module "ccc_informational_macie_lambda" {
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
-  depends_on                        = [var.sns_lambda_role_arn, module.layers.ccc_notification_forwarder_lambda_archive_id]
+  depends_on                        = [var.sns_lambda_role_arn]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version                           = "6.0.0-prerelease"
   company_code                      = local.company_code
@@ -218,7 +218,7 @@ module "ccc_notification_forwarder_lambda" {
 
 # Trigger-Macie-Scan
 module "ccc_macie_scan_trigger_lambda" {
-  depends_on       = [var.trigger_macie_lambda_role_arn, module.layers.ccc_macie_scan_trigger_lambda_archive_id]
+  depends_on       = [var.trigger_macie_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -261,7 +261,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
 # CustomerCallCenter-Lambda-Macie
 module "ccc_macie_lambda" {
-  depends_on       = [var.macie_lambda_role_arn, module.layers.ccc_macie_lambda_archive_id]
+  depends_on       = [var.macie_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -301,7 +301,7 @@ module "ccc_macie_lambda" {
 }
 
 module "ccc_audit_call_lambda" {
-  depends_on       = [var.audit_call_lambda_role_arn, module.layers.ccc_audit_call_lambda_archive_id]
+  depends_on       = [var.audit_call_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
