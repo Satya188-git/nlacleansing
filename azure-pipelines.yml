@@ -220,13 +220,13 @@ parameters:
 
   #Edit to ServiceNow assignment group assigned to application/team
   - name: AssignmentGroup
-    default: "CHANGE ME IN THE YAML"
+    default: "CM-TOA:APPL GENERAL"
     displayName: "Assignment Group Name"
     type: string
 
   #Edit to ServiceNow CI-Name group assigned to application/team
   - name: CIName
-    default: "CHANGE ME IN THE YAML"
+    default: "APM0002920"
     displayName: "CI Name"
     type: string
 
