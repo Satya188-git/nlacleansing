@@ -199,7 +199,7 @@ module "ccc_verified_clean_bucket" {
 }
 
 module "ccc_verified_clean_bucket_insights_account" {
-  providers                      = { aws = aws.nla-insights }
+  providers                      = aws.nla-insights
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
   company_code                   = local.company_code
@@ -425,44 +425,44 @@ module "ccc_maciefindings_bucket" {
     {
       Sid    = "Allow Macie to upload objects to the bucket"
       Effect = "Allow"
-      Principal = { 
+      Principal = {
         Service = ["macie.amazonaws.com"]
       }
-      Action = ["s3:PutObject"],
+      Action   = ["s3:PutObject"],
       Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
       Condition = {
-          StringEquals = {
-            "aws:SourceAccount" : "${var.account_id}"
-          }
-          ArnLike = {
-            "aws:SourceArn" = [
-              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-            ]
-          }
+        StringEquals = {
+          "aws:SourceAccount" : "${var.account_id}"
         }
+        ArnLike = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+          ]
+        }
+      }
     },
     {
       Sid    = "Allow Macie to use the getBucketLocation operation"
       Effect = "Allow"
-      Principal = { 
+      Principal = {
         Service = ["macie.amazonaws.com"]
       }
-      Action = ["s3:GetBucketLocation"],
+      Action   = ["s3:GetBucketLocation"],
       Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
       Condition = {
-          StringEquals = {
-            "aws:SourceAccount" : "${var.account_id}"
-          }
-          ArnLike = {
-            "aws:SourceArn" = [
-              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-            ]
-          }
+        StringEquals = {
+          "aws:SourceAccount" : "${var.account_id}"
         }
+        ArnLike = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+          ]
+        }
+      }
     }
-  ] 
+  ]
 }
 
 module "ccc_piimetadata_bucket" {

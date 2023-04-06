@@ -8,7 +8,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "nla-insights"
+  alias  = "nla-insights"
   region = var.region
   assume_role {
     role_arn     = var.aws_assume_role_insights
