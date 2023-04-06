@@ -101,12 +101,12 @@ variable "nla_replication_role_arn" {
   description = "S3 replication role"
 }
 
-variable "account_id_insights" {
-  type        = string
-  description = "AWS Account ID for NLA Insights"
-}
+# variable "account_id_insights" {
+#   type        = string
+#   description = "AWS Account ID for NLA Insights"
+# }
 
-variable "aws_assume_role_insights" {
-  type        = string
-  description = "aws_assume_role_insights"
-}
+# variable "aws_assume_role_insights" {
+#   type        = string
+#   description = "aws_assume_role_insights"
+# }
