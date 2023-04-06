@@ -199,7 +199,7 @@ module "ccc_verified_clean_bucket" {
 }
 
 module "ccc_verified_clean_bucket_insights_account" {
-  providers                      = aws.nla-insights
+  providers                      = [aws.nla-insights]
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
   company_code                   = local.company_code
