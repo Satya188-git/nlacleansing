@@ -1,10 +1,10 @@
 steps:
-  - task: ExtractFiles@1
-    displayName: Extract UI Archive
-    inputs:
-      archiveFilePatterns: "../$(Build.SourceBranchName) }}" # string. Required. Archive file patterns. Default: **/*.zip.
-      destinationFolder: "$(Pipeline.Workspace)}}/"
-      cleanDestinationFolder: false
+  # - task: ExtractFiles@1
+  #   displayName: Extract UI Archive
+  #   inputs:
+  #     archiveFilePatterns: "../$(Build.SourceBranchName) }}" # string. Required. Archive file patterns. Default: **/*.zip.
+  #     destinationFolder: "$(Pipeline.Workspace)}}/"
+  #     cleanDestinationFolder: false
   - task: AWSCLI@1
     displayName: "Upload artifacts to UI s3 bucket"
     inputs:
