@@ -1,14 +1,14 @@
 locals {
-  application_use     = var.application_use
-  region              = var.region
-  namespace           = var.namespace
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  region_code         = var.region_code
-  owner               = var.owner
-  account_id          = data.aws_caller_identity.current.account_id
-  account_id_insights = data.aws_caller_identity.nla-insights.account_id
+  application_use  = var.application_use
+  region           = var.region
+  namespace        = var.namespace
+  company_code     = var.company_code
+  application_code = var.application_code
+  environment_code = var.environment_code
+  region_code      = var.region_code
+  owner            = var.owner
+  account_id       = data.aws_caller_identity.current.account_id
+  # account_id_insights = data.aws_caller_identity.nla-insights.account_id
   #account_id       = data.aws_caller_identity.nla-pii.account_id
   tags = {
     tag-version         = var.tag-version
@@ -27,9 +27,9 @@ data "aws_caller_identity" "current" {}
 #   provider = aws.nla-pii
 # }
 
-data "aws_caller_identity" "nla-insights" {
-  provider = aws.nla-insights
-}
+# data "aws_caller_identity" "nla-insights" {
+#   provider = aws.nla-insights
+# }
 
 module "athena" {
   source                       = "./modules/athena"
