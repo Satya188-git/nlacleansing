@@ -440,7 +440,8 @@ resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
 }
 resource "aws_iam_policy_attachment" "replication_assume_role_policy" {
   policy_arn = aws_iam_policy.replication_assume_role
-  role       = module.nla_replication_role.name
+  roles      = [module.nla_replication_role.name]
+  name       = "replication_assume_role_policy"
 }
 # comprehend lambda permissions
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
