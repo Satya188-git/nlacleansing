@@ -121,14 +121,6 @@ module "ccc_cleaned_bucket" {
   ]
 }
 
-# provider "aws" {
-#   alias  = "west"
-#   region = "us-west-2"
-#   assume_role {
-#     role_arn     = var.aws_assume_role
-#     session_name = "AWS-STSSession-TF"
-#   }
-# }
 # module "nla_replication_role" {
 
 #   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
@@ -204,6 +196,33 @@ module "ccc_verified_clean_bucket" {
       expose_headers  = []
     }
   ]
+}
+
+module "ccc_verified_clean_bucket_insights_account" {
+  providers                      = { aws = aws.nla-insights }
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-verified-clean"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  versioning                     = true
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_verified_clean_insights_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 }
 
 # #source replication configuration
@@ -401,63 +420,49 @@ module "ccc_maciefindings_bucket" {
       expose_headers  = []
     }
   ]
-  # additional_policy_statements = [
-  #   {
-  #     Sid       = "AllowSSLRequestsOnly"
-  #     Effect    = "Deny"
-  #     Principal = "*"
-  #     Action    = "s3:*"
-  #     Resource = [
-  #       "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
-  #       "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*"
-  #     ]
-  #     Condition = {
-  #       Bool = {
-  #         "aws:SecureTransport" = "false"
-  #       }
-  #     }
-  #   }
-  # {
-  #   Sid    = "Allow Macie to upload objects to the bucket"
-  #   Effect = "Allow"
-  #   Principa = {
-  #     Service = "macie.amazonaws.com"
-  #   }
-  #   Action   = "s3:PutObject",
-  #   Resource = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings/*",
-  #   Condition = {
-  #     StringEquals = {
-  #       "aws:SourceAccount" : "183095018968"
-  #     }
-  #     ArnLike = {
-  #       "aws:SourceArn" = [
-  #         "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-  #         "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-  #       ]
-  #     }
-  #   }
-  # }
-  # {
-  #   Sid    = "Allow Macie to use the getBucketLocation operation",
-  #   Effect = "Allow",
-  #   Principal = {
-  #     Service = "macie.amazonaws.com"
-  #   },
-  #   Action   = "s3:GetBucketLocation",
-  #   Resource = "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-macie-findings",
-  #   Condition = {
-  #     StringEquals = {
-  #       "aws:SourceAccount" = "183095018968"
-  #     },
-  #     ArnLike = {
-  #       "aws:SourceArn" = [
-  #         "arn:aws:macie2:us-west-2:183095018968:export-configuration:*",
-  #         "arn:aws:macie2:us-west-2:183095018968:classification-job/*"
-  #       ]
-  #     }
-  #   }
-  # }
-  # ]
+
+  additional_policy_statements = [
+    {
+      Sid    = "Allow Macie to upload objects to the bucket"
+      Effect = "Allow"
+      Principal = { 
+        Service = ["macie.amazonaws.com"]
+      }
+      Action = ["s3:PutObject"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
+      Condition = {
+          StringEquals = {
+            "aws:SourceAccount" : "${var.account_id}"
+          }
+          ArnLike = {
+            "aws:SourceArn" = [
+              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+            ]
+          }
+        }
+    },
+    {
+      Sid    = "Allow Macie to use the getBucketLocation operation"
+      Effect = "Allow"
+      Principal = { 
+        Service = ["macie.amazonaws.com"]
+      }
+      Action = ["s3:GetBucketLocation"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
+      Condition = {
+          StringEquals = {
+            "aws:SourceAccount" : "${var.account_id}"
+          }
+          ArnLike = {
+            "aws:SourceArn" = [
+              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+            ]
+          }
+        }
+    }
+  ] 
 }
 
 module "ccc_piimetadata_bucket" {
@@ -523,4 +528,15 @@ module "ccc_athenaresults_bucket" {
       expose_headers  = []
     }
   ]
+}
+
+
+resource "aws_s3_bucket_notification" "info_macie_lambda_notification" {
+  bucket     = module.ccc_maciefindings_bucket.s3_bucket_id
+  depends_on = [module.ccc_maciefindings_bucket]
+  lambda_function {
+    lambda_function_arn = var.macie_info_trigger_arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".gz"
+  }
 }

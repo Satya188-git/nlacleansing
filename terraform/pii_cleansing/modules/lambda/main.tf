@@ -55,19 +55,19 @@ module "ccc_transcribe_lambda" {
   }
 
   environment_variables = {
-    CONF_VOCAB_FILTER_MODE          = "mask"
+    CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
+    CONF_S3BUCKET_OUTPUT            = var.ccc_unrefined_call_data_bucket_id
+    CONF_ROLE_ARN                   = var.custom_transcribe_lambda_role_arn
     CONF_CUSTOM_VOCAB_NAME          = "CCC-CustomVocabs"
     CONF_FILTER_NAME                = "TestVocabFilter1"
     CONF_MAX_SPEAKERS               = "2"
     CONF_REDACTION_LANGS            = "en-US"
-    CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
-    CONF_S3BUCKET_OUTPUT            = var.ccc_unrefined_call_data_bucket_id
-    CONF_ROLE_ARN                   = var.custom_transcribe_lambda_role_arn
+    CONF_REDACTION_TRANSCRIPT       = "true"
     CONF_SPEAKER_MODE               = "channel"
     CONF_TRANSCRIBE_API             = "analytics"
     CONF_TRANSCRIBE_LANG            = "en-US"
     CONF_VOCABNAME                  = "undefined"
-    CONF_REDACTION_TRANSCRIPT       = "true"
+    CONF_VOCAB_FILTER_MODE          = "mask"
     CONF_API_MODE                   = "standard"
     CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
   }
@@ -163,6 +163,8 @@ module "ccc_informational_macie_lambda" {
   environment_variables = {
     DESTINATION_BUCKET_NAME_VERIFIED = var.ccc_verified_clean_bucket_id
     DESTINATION_BUCKET_NAME_DIRTY    = var.ccc_dirty_bucket_id
+    TRANSCRIPTION_BUCKET_NAME        = var.ccc_initial_bucket_id
+    UNREFINED_BUCKET_NAME            = var.ccc_unrefined_call_data_bucket_id
   }
 
   s3_existing_package = {
@@ -353,4 +355,53 @@ module "ccc_audit_call_lambda" {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
     },
   )
+}
+
+# Permissions for EventBridge
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_comprehend_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_comprehend_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiitranscription_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda1" {
+  statement_id  = "AllowExecutionFromCloudWatch1"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiitranscription_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda2" {
+  statement_id  = "AllowExecutionFromCloudWatch2"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiicleanedverified_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda3" {
+  statement_id  = "AllowExecutionFromCloudWatch3"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_transcribe_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_transcribe_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda4" {
+  statement_id  = "AllowExecutionFromCloudWatch4"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_audit_call_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiicleaned_s3_event_rule_arn
 }

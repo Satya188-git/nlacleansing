@@ -215,10 +215,30 @@ module "custom_transcribe_lambda_role" {
   )
 }
 
+// create IAM role for crawler
+module "athena_crawler_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-glue-crawler-role"
+  description       = "IAM role for Athena Glue Crawler"
+  service_resources = ["glue.amazonaws.com"]
+    tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
+    },
+  )
+}
+
+
 # custom policies
 
 resource "aws_iam_policy" "s3_replication_policy" {
-
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -255,7 +275,7 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:183095018968:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
+        "Resource" : "arn:aws:kms:us-west-2:${var.account_id}:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
       },
       {
         "Action" : [
@@ -291,7 +311,7 @@ resource "aws_iam_policy" "kms_full_access" {
         {
           "Effect"   = "Allow",
           "Action"   = "kms:*",
-          "Resource" = "arn:aws:kms:*:183095018968:key/*"
+          "Resource" = "arn:aws:kms:*:${var.account_id}:key/*"
         }
       ]
   })
@@ -348,7 +368,7 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
             "kms:Decrypt"
           ],
           "Resource" : [
-            "arn:aws:kms:us-west-2:183095018968:key/*"
+            "arn:aws:kms:us-west-2:${var.account_id}:key/*"
           ],
           "Condition" : {
             "StringLike" : {
@@ -370,6 +390,28 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
         }
       ]
   })
+}
+
+// create policy
+resource "aws_iam_policy" "athena_crawler_role_policy" {
+  name        = "AthenaBucketAccess"
+  description = "Get and Put access for Athena bucket"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "${var.ccc_athenaresults_bucket_arn}*"
+    }
+  ]
+}
+EOF
 }
 
 # Policies
@@ -466,6 +508,7 @@ resource "aws_iam_role_policy_attachment" "macie_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.macie_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "macie_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.macie_lambda_role.name
@@ -546,11 +589,30 @@ resource "aws_iam_role_policy_attachment" "CustomTranscribeAmazonS3FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = module.custom_transcribe_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "CustomAmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
   role       = module.custom_transcribe_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
   policy_arn = aws_iam_policy.custom_transcribe_lambda_policy.arn
   role       = module.custom_transcribe_lambda_role.name
+}
+
+# attach policy for athena glue crawler
+resource "aws_iam_role_policy_attachment" "athena_crawler_attachment" {
+  role      = module.athena_crawler_role.id
+  policy_arn = aws_iam_policy.athena_crawler_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" {
+  policy_arn = aws_iam_policy.kms_full_access.arn
+  role       = module.athena_crawler_role.name
 }
