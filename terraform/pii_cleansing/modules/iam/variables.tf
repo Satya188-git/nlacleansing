@@ -95,7 +95,7 @@ variable "aws_assume_role_user_pii" {
   type        = string
   description = "aws_assume_role_user_pii"
 }
-variable "aws_assume_role_insights" {
-  type        = string
-  description = "aws_assume_role_insights"
-}
+# variable "aws_assume_role_insights" {
+#   type        = string
+#   description = "aws_assume_role_insights"
+# }
