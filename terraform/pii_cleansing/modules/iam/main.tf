@@ -227,7 +227,7 @@ module "athena_crawler_role" {
   application_use   = "${local.application_use}-glue-crawler-role"
   description       = "IAM role for Athena Glue Crawler"
   service_resources = ["glue.amazonaws.com"]
-    tags = merge(
+  tags = merge(
     local.tags,
     {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
@@ -420,7 +420,11 @@ resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
   policy_arn = aws_iam_policy.s3_replication_policy.arn
   role       = module.nla_replication_role.name
 }
-
+resource "aws_iam_policy_attachment" "assume_role_policy" {
+  name       = "assume-role-policy"
+  policy_arn = var.aws_assume_role_insights
+  users      = [var.aws_assume_role_user_pii]
+}
 # comprehend lambda permissions
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ComprehendFullAccess"
@@ -602,7 +606,7 @@ resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
 
 # attach policy for athena glue crawler
 resource "aws_iam_role_policy_attachment" "athena_crawler_attachment" {
-  role      = module.athena_crawler_role.id
+  role       = module.athena_crawler_role.id
   policy_arn = aws_iam_policy.athena_crawler_role_policy.arn
 }
 

@@ -91,3 +91,11 @@ variable "ccc_athenaresults_bucket_arn" {
   type        = string
   description = "The ccc_athenaresults S3 bucket ARN"
 }
+variable "aws_assume_role_user_pii" {
+  type        = string
+  description = "aws_assume_role_user_pii"
+}
+variable "aws_assume_role_insights" {
+  type        = string
+  description = "aws_assume_role_insights"
+}

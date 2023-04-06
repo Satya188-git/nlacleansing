@@ -146,7 +146,11 @@ module "iam" {
   account_id                         = local.account_id
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
+  aws_assume_role_user_pii           = var.aws_assume_role_user_pii
+  aws_assume_role_insights           = var.aws_assume_role_insights
 }
+
+
 
 module "kms" {
   source                              = "./modules/kms"
