@@ -11,8 +11,9 @@ import boto3
 from botocore.exceptions import ClientError
 
 
-target_buckets_list = ['customercallcenterpiicleaned']
+# target_buckets_list = ['customercallcenterpiicleaned']
 # target_buckets_list = ['customercallcenterpiitranscription']
+target_buckets_list = os.environ["TARGET_BUCKETS_LIST"]
 
 
 # job_name = 'Scanning the Transcription bucket (unclean)'
@@ -22,9 +23,14 @@ job_name = 'Scanning the Cleaned bucket 5'
 job_desc = "This is a test to scan clean data"
 
 job_tags = {
-    '4BBB57DFE4C0A8939C612246DFE85EAE': '4BBB57DFE4C0A8939C612246DFE85EAE',
-    'Customer Sentiment': 'PII Cleansing'
+    'Key': 'billing-guid',
+    'Value': '3993843B8B8C58852AEA9A4420D3E0CC'
 }
+
+# job_tags = {
+#     '4BBB57DFE4C0A8939C612246DFE85EAE': '4BBB57DFE4C0A8939C612246DFE85EAE',
+#     'Customer Sentiment': 'PII Cleansing'
+# }
 """
 custom_data_identifiers_list = [
     {

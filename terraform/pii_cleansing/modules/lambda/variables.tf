@@ -137,6 +137,17 @@ variable "ccc_dirty_bucket_id" {
   description = "ccc_dirty_bucket_id"
 }
 
+variable "ccc_athenaresults_bucket_id" {
+  type        = string
+  description = "ccc_athenaresults_bucket_id"
+}
+
+variable "dynamodb_audit_table_name" {
+  type        = string
+  description = "dynamodb_audit_table_name"
+}
+
+
 variable "tf_artifact_s3" {
   type = string
 }
@@ -155,4 +166,23 @@ variable "dynamodb_audit_table_name" {
 variable "ccc_athenaresults_bucket_arn" {
   type        = string
   description = "ccc_athenaresults_bucket_arn"
+}
+variable "customercallcenterpiitranscription_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiitranscription_s3_event_rule_arn"
+}
+
+variable "customercallcenterpiiunrefined_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiiunrefined_s3_event_rule_arn"
+}
+
+variable "customercallcenterpiicleanedverified_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiicleanedverified_s3_event_rule_arn"
+}
+
+variable "customercallcenterpiicleaned_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiicleaned_s3_event_rule_arn"
 }

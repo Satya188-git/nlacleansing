@@ -17,6 +17,7 @@ locals {
   }
 }
 
+
 module "ccc_unrefined_call_data_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -119,6 +120,50 @@ module "ccc_cleaned_bucket" {
     }
   ]
 }
+
+# module "nla_replication_role" {
+
+#   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+#   version           = "4.0.2"
+#   company_code      = local.company_code
+#   application_code  = local.application_code
+#   environment_code  = local.environment_code
+#   region_code       = local.region_code
+#   application_use   = "${local.application_use}-s3-replication-role"
+#   service_resources = ["s3.amazonaws.com"]
+
+#   tags = merge(
+#     local.tags,
+#     {
+#       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
+#     },
+#   )
+# }
+# data "aws_iam_policy_document" "replication_role_document" {
+#   version = "2012-10-17"
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "sts:AssumeRole",
+#     ]
+#     principals {
+#       type = "Service"
+#       identifiers = [
+#         "s3.amazonaws.com"
+#       ]
+#     }
+#   }
+# }
+# resource "aws_iam_policy" "replication" {
+#   name        = "nla_replication_role_policy"
+#   description = "Policy to allow replication to the bucket"
+#   policy      = data.aws_iam_policy_document.replication_policy.json
+# }
+# # Attach the permission polcy created above to the role.
+# resource "aws_iam_role_policy_attachment" "attach" {
+#   role       = module.nla_replication_role.name
+#   policy_arn = aws_iam_policy.replication.arn
+# }
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -131,6 +176,7 @@ module "ccc_verified_clean_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
+  versioning                     = true
   tags                           = local.tags
 
   acl = "private"
@@ -139,7 +185,6 @@ module "ccc_verified_clean_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_verified_clean_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -152,6 +197,166 @@ module "ccc_verified_clean_bucket" {
     }
   ]
 }
+
+module "ccc_verified_clean_bucket_insights_account" {
+  providers                      = { aws = aws.nla-insights }
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-verified-clean"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  versioning                     = true
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_verified_clean_insights_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
+# #source replication configuration
+# resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
+#   provider = aws.west
+#   # Must have bucket versioning enabled first
+#   depends_on = [module.ccc_verified_clean_bucket.s3_bucket_id, module.nla_replication_role.arn, module.insights_verified_clean_bucket.s3_bucket_arn]
+
+#   # role   = var.nla_replication_role_arn
+#   role   = module.nla_replication_role.arn
+#   bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+
+
+#   rule {
+#     id = "insights_bucket_replication_rule"
+
+#     filter {
+#       prefix = "final_outputs/"
+#     }
+
+#     status = "Disabled"
+#     source_selection_criteria {
+#       sse_kms_encrypted_objects {
+#         status = "Enabled"
+#       }
+#     }
+#     destination {
+#       account = data.aws_caller_identity.destination_acc_id.account_id
+#       # bucket        = "arn:aws:s3:::ccc-verified-cleaned-nla-temp"
+#       bucket        = module.insights_verified_clean_bucket.arn
+#       storage_class = "STANDARD"
+#       encryption_configuration {
+#         replica_kms_key_id = "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+#       }
+#     }
+
+#   }
+# }
+
+# # source object ownership
+# resource "aws_s3_bucket_ownership_controls" "ccc_verified_clean_bucket" {
+#   bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+#   rule {
+#     object_ownership = "BucketOwnerPreferred"
+#   }
+# }
+# # source bucket policy
+# data "aws_iam_policy_document" "insights_source_policy" {
+#   version = "2012-10-17"
+#   statement {
+#     actions = [
+#       "s3:ListBucket",
+#       "s3:GetReplicationConfiguration",
+#       "s3:GetObjectVersionForReplication",
+#       "s3:GetObjectVersionAcl",
+#       "s3:GetObjectVersionTagging",
+#       "s3:GetObjectVersion",
+#       "s3:ObjectOwnerOverrideToBucketOwner"
+#     ]
+#     effect = "Allow"
+#     resources = [
+#       "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
+#       "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+#     ]
+#   }
+#   statement {
+#     actions = [
+#       "s3:ReplicateObject",
+#       "s3:ReplicateDelete",
+#       "s3:ReplicateTags",
+#       "s3:GetObjectVersionTagging",
+#       "s3:ObjectOwnerOverrideToBucketOwner"
+#     ]
+#     effect    = "Allow"
+#     resources = ["arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"]
+#   }
+#   statement {
+#     actions = [
+#       "kms:Decrypt"
+#     ]
+#     effect    = "Allow"
+#     resources = ["arn:aws:kms:us-west-2:183095018968:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"]
+#   }
+#   statement {
+#     actions = [
+#       "kms:Encrypt"
+#     ]
+#     effect    = "Allow"
+#     resources = ["arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"]
+#   }
+
+# }
+# resource "aws_s3_bucket_policy" "ccc_verified_clean_bucket" {
+#   bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+#   policy = data.aws_iam_policy_document.insights_source_policy.json
+# }
+
+
+# # verified cllean replication bucket
+# module "insights_verified_clean_bucket" {
+#   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+#   version                        = "5.3.0"
+#   company_code                   = local.company_code
+#   application_code               = local.application_code
+#   environment_code               = local.environment_code
+#   region_code                    = local.region_code
+#   application_use                = "${local.application_use}-insights-verified-clean"
+#   owner                          = "NLA Team"
+#   create_bucket                  = true
+#   create_log_bucket              = false
+#   attach_alb_log_delivery_policy = false
+#   versioning                     = true
+#   tags                           = local.tags
+
+#   acl = "private"
+#   server_side_encryption_configuration = {
+#     rule = {
+#       apply_server_side_encryption_by_default = {
+#         kms_master_key_id = var.kms_key_ccc_verified_clean_arn
+#         sse_algorithm     = "aws:kms"
+#       }
+#     }
+#   }
+#   cors_rule = [
+#     {
+#       allowed_methods = ["GET", "PUT", "POST"]
+#       allowed_origins = ["*"]
+#       allowed_headers = ["*"]
+#       expose_headers  = []
+#     }
+#   ]
+# }
+# TODO add replication config
+
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -172,7 +377,6 @@ module "ccc_dirty_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_dirty_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -205,7 +409,6 @@ module "ccc_maciefindings_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_maciefindings_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -217,6 +420,49 @@ module "ccc_maciefindings_bucket" {
       expose_headers  = []
     }
   ]
+
+  additional_policy_statements = [
+    {
+      Sid    = "Allow Macie to upload objects to the bucket"
+      Effect = "Allow"
+      Principal = { 
+        Service = ["macie.amazonaws.com"]
+      }
+      Action = ["s3:PutObject"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
+      Condition = {
+          StringEquals = {
+            "aws:SourceAccount" : "${var.account_id}"
+          }
+          ArnLike = {
+            "aws:SourceArn" = [
+              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+            ]
+          }
+        }
+    },
+    {
+      Sid    = "Allow Macie to use the getBucketLocation operation"
+      Effect = "Allow"
+      Principal = { 
+        Service = ["macie.amazonaws.com"]
+      }
+      Action = ["s3:GetBucketLocation"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
+      Condition = {
+          StringEquals = {
+            "aws:SourceAccount" : "${var.account_id}"
+          }
+          ArnLike = {
+            "aws:SourceArn" = [
+              "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+              "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+            ]
+          }
+        }
+    }
+  ] 
 }
 
 module "ccc_piimetadata_bucket" {
@@ -239,7 +485,6 @@ module "ccc_piimetadata_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_piimetadata_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -272,7 +517,6 @@ module "ccc_athenaresults_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_athenaresults_arn
         sse_algorithm     = "aws:kms"
-        # sse_algorithm       = "AES256"
       }
     }
   }
@@ -284,4 +528,15 @@ module "ccc_athenaresults_bucket" {
       expose_headers  = []
     }
   ]
+}
+
+
+resource "aws_s3_bucket_notification" "info_macie_lambda_notification" {
+  bucket     = module.ccc_maciefindings_bucket.s3_bucket_id
+  depends_on = [module.ccc_maciefindings_bucket]
+  lambda_function {
+    lambda_function_arn = var.macie_info_trigger_arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".gz"
+  }
 }

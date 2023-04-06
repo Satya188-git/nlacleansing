@@ -87,4 +87,7 @@ variable "ccc_unrefined_call_data_bucket_arn" {
   type = string
 }
 
-
+variable "ccc_athenaresults_bucket_arn" {
+  type        = string
+  description = "The ccc_athenaresults S3 bucket ARN"
+}

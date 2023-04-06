@@ -1,10 +1,22 @@
-variable "region" {
-  type=string
-  description="The AWS region where to deploy Terraform resources"
+
+variable "ccc_initial_bucket_id" {
+  type        = string
+  description = "S3 ccc_initial_bucket_id"
+}
+
+variable "comprehend_lambda_arn" {
+  type        = string
+  description = "comprehend_lambda_arn"
 }
 
 variable "environment" {
-  type=string
+  type        = string
+  description = "The AWS environment where to deploy Terraform resources"
+}
+
+variable "region" {
+  type        = string
+  description = "The AWS region where to deploy Terraform resources"
 }
 
 variable "application_use" {
@@ -20,11 +32,6 @@ variable "namespace" {
 variable "company_code" {
   type        = string
   description = "The company code prefix for Terraform resources"
-}
-
-variable "unit" {
-  type        = string
-  description = "Organizational unit"
 }
 
 variable "application_code" {
@@ -57,6 +64,11 @@ variable "billing-guid" {
   description = "Internal order - from SAP"
 }
 
+variable "unit" {
+  type        = string
+  description = "Organizational unit"
+}
+
 variable "portfolio" {
   type        = string
   description = "Portfolio associated with the application"
@@ -76,32 +88,30 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
-variable "transcribe_lambda_role_arn" {
-  type=string
-}
 
-variable "comprehend_lambda_role_arn" {
-  type=string
-}
-
-variable "informational_macie_lambda_role_arn" {
-  type=string
-}
-
-variable "macie_lambda_role_arn" {
-  type=string
-}
-
-variable "trigger_macie_lambda_role_arn" {
-  type=string
-}
-
-variable "nla_replication_role_arn" {
+variable "ccc_audit_call_lambda_arn" {
   type        = string
-  description = "S3 replication role"
+  description = "ccc_audit_call_lambda_arn"
 }
 
-variable "account_id_insights" {
+variable "ccc_unrefined_call_data_bucket_id" {
   type        = string
-  description = "AWS Account ID for NLA Insights"
+  description = "ccc_unrefined_call_data_bucket_id"
 }
+
+variable "ccc_transcribe_lambda_arn" {
+  type        = string
+  description = "ccc_transcribe_lambda_arn"
+}
+
+variable "ccc_verified_clean_bucket_id" {
+  type        = string
+  description = "ccc_verified_clean_bucket_id"
+}
+
+variable "ccc_cleaned_bucket_id" {
+  type        = string
+  description = "ccc_cleaned_bucket_id"
+}
+
+  

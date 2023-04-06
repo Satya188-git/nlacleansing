@@ -4,3 +4,4 @@
 /ui/
 /devops/azure-pipelines/
 /terraform/pii_cleansing/.terraform/
+/terraform/insights/.terraform/

@@ -35,3 +35,6 @@ output "kms_key_ccc_sns_lambda_arn" {
   value = aws_kms_key.sns_lambda_kms_key.arn
 }
 
+output "athena_kms_key_arn" {
+  value = module.athena_kms_key.key_arn
+}

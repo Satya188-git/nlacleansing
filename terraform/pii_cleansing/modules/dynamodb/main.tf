@@ -1,12 +1,12 @@
 locals {
-    application_use  = var.application_use
-    region           = var.region
-    namespace        = var.namespace
-    company_code     = var.company_code
-    application_code = var.application_code
-    environment_code = var.environment_code
-    region_code      = var.region_code
-    owner            = var.owner
+  application_use  = var.application_use
+  region           = var.region
+  namespace        = var.namespace
+  company_code     = var.company_code
+  application_code = var.application_code
+  environment_code = var.environment_code
+  region_code      = var.region_code
+  owner            = var.owner
   tags = {
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
@@ -18,38 +18,38 @@ locals {
     data-classification = var.data-classification
   }
 }
-
-  module "dynamodb_audit_table" {
-  region           = local.region
-  region_code      = local.region_code
-  source           = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
-  table_name       = "ccc-call-audit"
-  hash_key         = "UUID"
-  range_key        = "DateTimeStamp"
-  dynamodb_attributes= [
+# TODO verify kms allow lambdas to decrpyt dynamodb data
+module "dynamodb_audit_table" {
+  region      = local.region
+  region_code = local.region_code
+  source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
+  table_name  = "ccc-call-audit"
+  hash_key    = "UUID"
+  range_key   = "DateTimeStamp"
+  dynamodb_attributes = [
     {
-      name="UUID"
-      type="S"
+      name = "UUID"
+      type = "S"
     },
     {
-      name="CallType"
-      type="S"
+      name = "CallType"
+      type = "S"
     },
     {
-      name="CallID"
-      type="S"
+      name = "CallID"
+      type = "S"
     },
     {
-      name="FileName"
-      type="S"
+      name = "FileName"
+      type = "S"
     },
     {
-      name="DateTimeStamp"
-      type="S"
+      name = "DateTimeStamp"
+      type = "S"
     }
   ]
 
-  local_secondary_index_map    = [
+  local_secondary_index_map = [
     {
       name               = "CallType"
       non_key_attributes = []
@@ -72,15 +72,15 @@ locals {
 
     }
   ]
-  enable_autoscaler         = true
-  company_code     = local.company_code
-  application_code = local.application_code
-  application_use  = local.application_use
-  environment_code = local.environment_code
-  autoscaler_iam_role_id    = var.autoscaler_iam_role_id
-  read_capacity = var.read_capacity
-  write_capacity = var.write_capacity
-  
+  enable_autoscaler      = true
+  company_code           = local.company_code
+  application_code       = local.application_code
+  application_use        = local.application_use
+  environment_code       = local.environment_code
+  autoscaler_iam_role_id = var.autoscaler_iam_role_id
+  read_capacity          = var.read_capacity
+  write_capacity         = var.write_capacity
+
 
   autoscaling_read = {
     "max_capacity" : 5,
@@ -99,4 +99,4 @@ locals {
   )
 }
 
- 
+
