@@ -102,10 +102,15 @@ variable "tf_artifact_s3" {
 
 variable "aws_assume_role_pii" {
   description = "AWS IAM role to assume when creation resources in the NLA PII accounts"
-  type = string
+  type        = string
 }
 
 variable "aws_assume_role_insights" {
   description = "AWS IAM role to assume when creation resources in the NLA Insights accounts"
-  type = string
+  type        = string
+}
+variable "aws_assume_role_user_pii" {
+  type        = string
+  description = "AWS IAM user to assume a role when creation resources in the NLA PII accounts"
+
 }
