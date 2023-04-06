@@ -96,3 +96,12 @@ variable "trigger_macie_lambda_role_arn" {
   type=string
 }
 
+variable "nla_replication_role_arn" {
+  type        = string
+  description = "S3 replication role"
+}
+
+variable "account_id_insights" {
+  type        = string
+  description = "AWS Account ID for NLA Insights"
+}

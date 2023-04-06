@@ -8,6 +8,8 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   account_id       = data.aws_caller_identity.current.account_id
+  account_id_insights       = data.aws_caller_identity.nla-insights.account_id
+  #account_id       = data.aws_caller_identity.nla-pii.account_id
   tags = {
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
@@ -21,6 +23,13 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
+# data "aws_caller_identity" "nla-pii" {
+#   provider = aws.nla-pii
+# }
+
+data "aws_caller_identity" "nla-insights" {
+  provider = aws.nla-insights
+}
 
 module "athena" {
   source                       = "./modules/athena"
@@ -162,6 +171,8 @@ module "kms" {
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
   macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
+  nla_replication_role_arn            = module.iam.nla_replication_role_arn
+  account_id_insights                 = local.account_id_insights
 }
 
 module "lambda" {

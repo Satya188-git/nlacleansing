@@ -198,6 +198,33 @@ module "ccc_verified_clean_bucket" {
   ]
 }
 
+module "ccc_verified_clean_bucket_insights_account" {
+  providers                      = { aws = aws.nla-insights }
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-verified-clean"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  versioning                     = true
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_verified_clean_insights_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+}
+
 # #source replication configuration
 # resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
 #   provider = aws.west

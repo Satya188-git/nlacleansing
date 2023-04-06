@@ -22,7 +22,7 @@ locals {
 
 module "athena_kms_key" {
   source  = "app.terraform.io/SempraUtilities/seu-kms/aws"
-  version = "4.0.0"
+  version = "4.0.2"
   description      = local.description
   aws_region       = local.region
   company_code     = local.company_code
@@ -35,6 +35,64 @@ module "athena_kms_key" {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-athena-key"
     },      
   )
+}
+
+module "ccc_verified_clean_insights_kms_key" {
+  providers        = { aws = aws.nla-insights }
+  source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
+  version          = "4.0.2"
+  description      = local.description
+  aws_region       = local.region
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_name = local.application_name
+
+  tags = merge ( local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-verified-clean-insights-key"
+    },      
+  )
+
+    policy = <<EOT
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "${var.nla_replication_role_arn}"
+            },
+            "Action": [
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${var.account_id_insights}:root"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowLambdaDecrypt",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::713342716921:role/call-list-lambda-role-NLA-temp" (Insights call list lambda role)
+            },
+            "Action": "kms:Decrypt",
+            "Resource": "arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"
+        }
+    ]
+}
+EOT
 }
 
 resource "aws_kms_key" "unrefined_kms_key" {
