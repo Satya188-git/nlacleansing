@@ -121,6 +121,60 @@ EOF
   tags = local.tags
 }
 
+resource "aws_cloudwatch_event_rule" "customercallcenterpiimaciescan_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-rule"
+  description   = "activate lambda when object is created into bucket cleaned"
+  event_pattern = <<EOF
+  {
+    "detail-type": [
+      "Object Created"
+    ],
+    "source": [
+      "aws.s3"
+    ],
+    "detail": {
+      "bucket": {
+        "name": ["${var.ccc_cleaned_bucket_id}"]
+      },
+    "object": {
+      "key": [{
+        "prefix": "standard_full_transcripts/"
+      }]
+    }
+   }
+  }
+EOF
+
+  tags = local.tags
+}
+
+
+resource "aws_cloudwatch_event_rule" "customercallcenterpiimacieinfo_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-macie-info-rule"
+  description   = "activate lambda when object is created into bucket macie-findings"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_maciefindings_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+
+
 
 # select lambda target for eventbridge rule
 resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target1" {
@@ -151,6 +205,16 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiicleanedverified_lam
 resource "aws_cloudwatch_event_target" "customercallcenterpiicleaned_lambda_target" {
   arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiicleaned_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiimacieinfo_lambda_target" {
+  arn  = var.macie_info_trigger_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
+  arn  = var.macie_scan_trigger_arn
+  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
 }
 
 # module "eventbridge" {

@@ -66,3 +66,8 @@ output "ccc_maciefindings_bucket_arn" {
   description = "ccc_maciefindings_bucket S3 bucket ARN"
   value       = module.ccc_maciefindings_bucket.s3_bucket_arn
 }
+output "ccc_maciefindings_bucket_id" {
+  description = "ccc_maciefindings_bucket S3 bucket ID"
+  value       = module.ccc_maciefindings_bucket.s3_bucket_id
+}
+

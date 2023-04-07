@@ -79,6 +79,9 @@ module "eventbridge" {
   ccc_transcribe_lambda_arn         = module.lambda.ccc_transcribe_lambda_arn
   ccc_verified_clean_bucket_id      = module.s3.ccc_verified_clean_bucket_id
   ccc_cleaned_bucket_id             = module.s3.ccc_cleaned_bucket_id
+  ccc_maciefindings_bucket_id       = module.s3.ccc_maciefindings_bucket_id
+  macie_scan_trigger_arn            = module.lambda.macie_scan_trigger_arn
+  macie_info_trigger_arn            = module.lambda.macie_info_trigger_arn
 }
 
 module "dynamodb" {

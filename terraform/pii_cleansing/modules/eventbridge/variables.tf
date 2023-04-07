@@ -114,4 +114,18 @@ variable "ccc_cleaned_bucket_id" {
   description = "ccc_cleaned_bucket_id"
 }
 
-  
+variable "ccc_maciefindings_bucket_id" {
+  type        = string
+  description = "ccc_maciefindings_bucket_id"
+}
+
+variable "macie_info_trigger_arn" {
+  type        = string
+  description = "macie_info_trigger_arn"
+
+}
+variable "macie_scan_trigger_arn" {
+  type        = string
+  description = "macie_scan_trigger_arn"
+
+}
