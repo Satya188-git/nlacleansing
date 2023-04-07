@@ -11,6 +11,18 @@ from datetime import datetime
 s3 = boto3.resource("s3")
 logger = logging.getLogger()
 
+if os.environ['DEBUG'] == 'enabled':
+    logger.setLevel(logging.DEBUG)
+
+else:
+    if os.environ['ENV'] == 'prd':
+        logger.setLevel(logging.ERROR)
+    elif os.environ['ENV'] == 'qa':
+        logger.setLevel(logging.WARNING)
+    else:
+        # for dev
+        logger.setLevel(logging.INFO)
+
 
 def lambda_handler(event, context):
     logger.info("Event: " + json.dumps(event))
