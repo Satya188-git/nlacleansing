@@ -195,14 +195,6 @@ module "ccc_informational_macie_lambda" {
   )
 }
 
-resource "aws_lambda_permission" "info_macie_trigger" {
-  depends_on    = [module.ccc_informational_macie_lambda.lambda_function_name]
-  statement_id  = "AllowExecutionFromS3BucketProcess"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_informational_macie_lambda.lambda_function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = var.ccc_maciefindings_bucket_arn
-}
 
 # aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
@@ -427,4 +419,19 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda
   function_name = module.ccc_audit_call_lambda.lambda_function_name
   principal     = "events.amazonaws.com"
   source_arn    = var.customercallcenterpiicleaned_s3_event_rule_arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_info_lambda4" {
+  statement_id  = "AllowExecutionFromCloudWatch4"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_informational_macie_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiimacieinfo_s3_event_rule_arn
+}
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_scan_lambda4" {
+  statement_id  = "AllowExecutionFromCloudWatch4"
+  action        = "lambda:InvokeFunction"
+  function_name = module.ccc_macie_scan_trigger_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.customercallcenterpiimaciescan_s3_event_rule_arn
 }

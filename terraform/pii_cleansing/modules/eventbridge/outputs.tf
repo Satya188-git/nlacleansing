@@ -18,3 +18,12 @@ output "customercallcenterpiicleaned_s3_event_rule_arn" {
   value       = aws_cloudwatch_event_rule.customercallcenterpiicleaned_s3_event_rule.arn
 }
 
+output "customercallcenterpiimacieinfo_s3_event_rule_arn" {
+  description = "customercallcenterpiimacieinfo_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.arn
+}
+
+output "customercallcenterpiimaciescan_s3_event_rule_arn" {
+  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.arn
+}

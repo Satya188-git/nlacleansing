@@ -184,3 +184,15 @@ variable "customercallcenterpiicleaned_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiicleaned_s3_event_rule_arn"
 }
+
+variable "customercallcenterpiimaciescan_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
+
+}
+
+variable "customercallcenterpiimacieinfo_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiimacieinfo_s3_event_rule_arn"
+
+}
