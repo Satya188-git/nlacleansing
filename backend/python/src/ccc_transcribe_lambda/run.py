@@ -3,40 +3,21 @@ import json
 import boto3
 import functions_definitions as my
 import os
-# billing-guid = os.environ(billing-guid)
 
-CONF_VOCAB_FILTER_MODE = 'mask'
-CONF_CUSTOM_VOCAB_NAME = 'CCC-CustomVocabs'
-
-CONF_FILTER_NAME = 'TestVocabFilter1'
-CONF_MAX_SPEAKERS = 2
-CONF_PREFIX_TRANSCRIBE_RESULTS = ''
-CONF_REDACTION_LANGS = 'en-US'
+CONF_VOCAB_FILTER_MODE = os.environ["CONF_VOCAB_FILTER_MODE"]
+CONF_CUSTOM_VOCAB_NAME = os.environ["CONF_CUSTOM_VOCAB_NAME"]
+CONF_FILTER_NAME = os.environ["CONF_FILTER_NAME"]
+CONF_MAX_SPEAKERS = os.environ["CONF_MAX_SPEAKERS"]
+CONF_REDACTION_LANGS = os.environ["CONF_REDACTION_LANGS"]
 CONF_S3BUCKET_OUTPUT = os.environ["CONF_S3BUCKET_OUTPUT"]
-# CONF_S3BUCKET_OUTPUT = 'sdge-dtdes-dev-wus2-s3-nla-unrefined-s3'
-CONF_SPEAKER_MODE = 'channel'
-CONF_TRANSCRIBE_API = 'analytics'
-CONF_TRANSCRIBE_LANG = 'en-US'
-CONF_VOCABNAME = 'undefined'
-CONF_REDACTION_TRANSCRIPT = 'true'
-
-# CONF_DESTINATION_BUCKET_URI = 's3://customercallcenterpiicleaned'
-# CONF_DESTINATION_BUCKET_NAME = 'customercallcenterpiicleaned'
-
-# CONF_DESTINATION_BUCKET_URI = 's3://sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
-# CONF_DESTINATION_BUCKET_NAME = 'sdge-dtdes-dev-wus2-s3-nla-pii-transcription'
-
-# CONF_DESTINATION_BUCKET_URI = os.environ["s3://sdge-dtdes-dev-wus2-s3-nla-pii-transcription"]
+CONF_SPEAKER_MODE = os.environ["CONF_SPEAKER_MODE"]
+CONF_TRANSCRIBE_API = os.environ["CONF_TRANSCRIBE_API"]
+CONF_TRANSCRIBE_LANG = os.environ["CONF_TRANSCRIBE_LANG"]
+CONF_VOCABNAME = os.environ["CONF_VOCABNAME"]
+CONF_REDACTION_TRANSCRIPT = os.environ["CONF_REDACTION_TRANSCRIPT"]
 CONF_DESTINATION_BUCKET_NAME = os.environ["CONF_DESTINATION_BUCKET_NAME"]
-
-
-# CONF_DESTINATION_BUCKET_URI = 's3://nla-file-upload'
-# CONF_DESTINATION_BUCKET_NAME = 'nla-file-upload'
-
-# Doing the splits on the values
-# CONF_REDACTION_LANGS = CONF_REDACTION_LANGS.split(" | ")
-# CONF_TRANSCRIBE_LANG = CONF_TRANSCRIBE_LANG.split(" | ")
-# CONF_SPEAKER_NAMES = CONF_SPEAKER_NAMES.split(" | ")
+KEY = os.environ["KEY"]
+VALUE = os.environ["VALUE"]
 
 CONF_MINNEGATIVE = float(0.5)
 CONF_MINPOSITIVE = float(0.5)
@@ -44,23 +25,11 @@ CONF_ENTITYCONF = float(0.5)
 
 # CONF_API_MODE = "analytics"
 CONF_API_MODE = "standard"
-
-# CONF_ROLE_ARN = "arn:aws:iam::544868842803:role/LambdaExecutionRoleFull"
 CONF_ROLE_ARN = os.environ["CONF_ROLE_ARN"]
 
-
-# job_tags = [{
-#                 'Key': 'billing-guid',
-#                 'Value': '3993843B8B8C58852AEA9A4420D3E0CC'
-#             },
-#             {
-#                 'Key': 'Customer Sentiment',
-#                 'Value': 'PII Cleansing'
-#             }]
-
 job_tags = [{
-    'Key': 'billing-guid',
-    'Value': '3993843B8B8C58852AEA9A4420D3E0CC'
+    'Key': KEY,
+    'Value': VALUE
 }]
 
 
@@ -94,7 +63,7 @@ def lambda_handler(event, context):
     # elif CONF_API_MODE == "standard":
     #    job_name = job_name + '_standard'
 
-    job_name_analytics = job_name + '_callanalytics'
+    # job_name_analytics = job_name + '_callanalytics'
     job_name_standard = job_name + '_standard'
 
     print("job name: ", job_name_standard)
@@ -112,25 +81,27 @@ def lambda_handler(event, context):
     ##########################################################################################
     # Check if the job is already exist and running
 
-    current_job_status_analytics = my.check_existing_job_status(
-        transcribe, job_name_analytics, "analytics")
+    # current_job_status_analytics = my.check_existing_job_status(
+    #     transcribe, job_name_analytics, "analytics")
     current_job_status_standard = my.check_existing_job_status(
         transcribe, job_name_standard, "standard")
 
-    print("Current job status - analytics: ", current_job_status_analytics)
+    # print("Current job status - analytics: ", current_job_status_analytics)
     print("Current job status - standard: ", current_job_status_standard)
 
     # If there's a job already running then the input file may have been copied - quit
-    if (current_job_status_analytics == "IN_PROGRESS") or (current_job_status_analytics == "QUEUED") or (current_job_status_standard == "IN_PROGRESS") or (current_job_status_standard == "QUEUED"):
+    if (current_job_status_standard == "IN_PROGRESS") or (current_job_status_standard == "QUEUED"):
         # Return empty job name
         print("A Transcription job named \'{}\' is already in progress - cannot continue.".format(job_name))
+        print("11111111111111111111111111111111111111111")
         return ""
-    elif current_job_status_analytics != "" or current_job_status_standard != "":
+    elif current_job_status_standard != "":
         # But if an old one exists we can delete it
         # we want to attempt to delete both type of jobs
         # CONF_API_MODE = "analytics"
         # CONF_API_MODE = "standard"
-        my.delete_existing_job(transcribe, job_name_analytics,  "analytics")
+        # my.delete_existing_job(transcribe, job_name_analytics,  "analytics")
+        print("22222222222222222222222222222222222222222")
         my.delete_existing_job(transcribe, job_name_standard,  "standard")
 
     ###########################################################################################
@@ -171,32 +142,32 @@ def lambda_handler(event, context):
     # running the job for Call Analytics API
 
     """
-    # defining the settings of the job
-    kwargs = {
-            'CallAnalyticsJobName': job_name_analytics,
-            'Media': media_settings,
-            'OutputLocation': CONF_DESTINATION_BUCKET_URI,
-            'DataAccessRoleArn': CONF_ROLE_ARN,
-            'Settings': {
-                    #'VocabularyName': CONF_CUSTOM_VOCAB_NAME,
-                    #'VocabularyFilterMethod': CONF_VOCAB_FILTER_MODE,
-                    #'ContentRedaction': content_redaction,
-                    'LanguageOptions': [CONF_TRANSCRIBE_LANG]
-            },
-            #'Tags': job_tags,                          # There is no tagging allowed
-            'ChannelDefinitions': channel_definition
-        }    
+    # # defining the settings of the job
+    # kwargs = {
+    #         'CallAnalyticsJobName': job_name_analytics,
+    #         'Media': media_settings,
+    #         'OutputLocation': CONF_DESTINATION_BUCKET_URI,
+    #         'DataAccessRoleArn': CONF_ROLE_ARN,
+    #         'Settings': {
+    #                 #'VocabularyName': CONF_CUSTOM_VOCAB_NAME,
+    #                 #'VocabularyFilterMethod': CONF_VOCAB_FILTER_MODE,
+    #                 #'ContentRedaction': content_redaction,
+    #                 'LanguageOptions': [CONF_TRANSCRIBE_LANG]
+    #         },
+    #         #'Tags': job_tags,                          # There is no tagging allowed
+    #         'ChannelDefinitions': channel_definition
+    #     }    
     
-    print("all the arguments: ", kwargs)
+    # print("all the arguments: ", kwargs)
 
 
-    # Start the Transcribe job, removing any params that are "None"
-    response = transcribe.start_call_analytics_job(
-            **{k: v for k, v in kwargs.items() if v is not None}
-        )
+    # # Start the Transcribe job, removing any params that are "None"
+    # response = transcribe.start_call_analytics_job(
+    #         **{k: v for k, v in kwargs.items() if v is not None}
+    #     )
         
         
-    print("Call Analytics Job submission:", response)    
+    # print("Call Analytics Job submission:", response)    
     """
 
     ###############################################################################

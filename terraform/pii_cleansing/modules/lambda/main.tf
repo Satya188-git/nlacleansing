@@ -70,6 +70,8 @@ module "ccc_transcribe_lambda" {
     CONF_VOCAB_FILTER_MODE          = "mask"
     CONF_API_MODE                   = "standard"
     CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
+    KEY                             = "ACCOUNT_ID"
+    VALUE                           = var.account_id
   }
 
   tags = merge(local.tags,
@@ -270,7 +272,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   environment_variables = {
     BUCKET_NAME                     = var.ccc_cleaned_bucket_id
-    ACCOUNT_ID                      = "1.83095E+11"
+    ACCOUNT_ID                      = var.account_id
     CLIENT_TOKEN                    = "d7db50c1-faab-42a8-9d8e-8ba23644e446"
     JOB_TYPE                        = "ONE_TIME"
     MANAGE_DATA_IDENTIFIER_SELECTOR = "ALL"
@@ -363,6 +365,8 @@ module "ccc_audit_call_lambda" {
     TABLE_NAME                   = var.dynamodb_audit_table_name
     TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
+    DEBUG                        = "disabled"
+    DEV                          = var.environment_code
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3

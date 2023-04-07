@@ -74,6 +74,10 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+variable "account_id" {
+  type        = string
+  description = "The AWS account ID"
+}
 variable "custom_transcribe_lambda_role_arn" {
   type = string
 }

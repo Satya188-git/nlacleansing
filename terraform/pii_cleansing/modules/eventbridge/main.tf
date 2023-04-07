@@ -20,8 +20,8 @@ locals {
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_event_rule" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
-  description = "activate lambda when object is created into bucket pii-transcription"
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
+  description   = "activate lambda when object is created into bucket pii-transcription"
   event_pattern = <<EOF
   {
     "detail-type": [
@@ -37,18 +37,21 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_even
     "object": {
       "key": [{
         "prefix": "standard/NLA"
+      },
+      { 
+        "prefix": "standard_full_transcripts/NLA"
       }]
     }
    }
   }
 EOF
 
-  tags = local.tags   
+  tags = local.tags
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiiunrefined_s3_event_rule" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-unrefined-rule"
-  description = "activate lambda when object is created into bucket unrefined"
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-unrefined-rule"
+  description   = "activate lambda when object is created into bucket unrefined"
   event_pattern = <<EOF
 {
   "source": [
@@ -71,8 +74,8 @@ EOF
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiicleaned_s3_event_rule" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-rule"
-  description = "activate lambda when object is created into bucket cleaned"
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-rule"
+  description   = "activate lambda when object is created into bucket cleaned"
   event_pattern = <<EOF
 {
   "source": [
@@ -95,8 +98,8 @@ EOF
 }
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiicleanedverified_s3_event_rule" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-verified-rule"
-  description = "activate lambda when object is created into bucket verified-clean"
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-verified-rule"
+  description   = "activate lambda when object is created into bucket verified-clean"
   event_pattern = <<EOF
 {
   "source": [
@@ -121,32 +124,32 @@ EOF
 
 # select lambda target for eventbridge rule
 resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target1" {
-  arn = var.comprehend_lambda_arn
+  arn  = var.comprehend_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiitranscription_s3_event_rule.name
 }
 
 resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target2" {
-  arn = var.ccc_audit_call_lambda_arn
+  arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiitranscription_s3_event_rule.name
 }
 
 resource "aws_cloudwatch_event_target" "customercallcenterpiiunrefined_lambda_target1" {
-  arn = var.ccc_audit_call_lambda_arn
+  arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiiunrefined_s3_event_rule.name
 }
 
 resource "aws_cloudwatch_event_target" "customercallcenterpiiunrefined_lambda_target2" {
-  arn = var.ccc_transcribe_lambda_arn
+  arn  = var.ccc_transcribe_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiiunrefined_s3_event_rule.name
 }
 
 resource "aws_cloudwatch_event_target" "customercallcenterpiicleanedverified_lambda_target" {
-  arn = var.ccc_audit_call_lambda_arn
+  arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiicleanedverified_s3_event_rule.name
 }
 
 resource "aws_cloudwatch_event_target" "customercallcenterpiicleaned_lambda_target" {
-  arn = var.ccc_audit_call_lambda_arn
+  arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiicleaned_s3_event_rule.name
 }
 

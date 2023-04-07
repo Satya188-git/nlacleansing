@@ -4,19 +4,22 @@ import uuid
 import status_list
 import buckets
 import folders
+import logging
+import json
 from datetime import datetime
 
 s3 = boto3.resource("s3")
+logger = logging.getLogger()
 
 
 def lambda_handler(event, context):
-    print("Event: ", event)
+    logger.info("Event: " + json.dumps(event))
 
     # Get bucket and file name
     bucket = event['detail']['bucket']['name']
     key = event['detail']['object']['key']
 
-    print("Bucket: ", bucket)
+    logger.info("Bucket: " + bucket)
 
     folder = os.path.dirname(key)
     file = os.path.basename(key)
@@ -44,7 +47,7 @@ def lambda_handler(event, context):
 
     status = ""
 
-    print("Path: ", path)
+    logger.info("Path: " + path)
 
     if path == buckets.UNREFINED:
         status = status_list.AUDIO_FILE_RECEIVED

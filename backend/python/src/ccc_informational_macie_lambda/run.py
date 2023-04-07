@@ -19,6 +19,7 @@ logger.setLevel(logging.INFO)
 # destination_bucket_name_dirty = 'customercallcenterpiidirty'
 destination_bucket_name_verified = os.environ["DESTINATION_BUCKET_NAME_VERIFIED"]
 destination_bucket_name_dirty = os.environ["DESTINATION_BUCKET_NAME_DIRTY"]
+FINAL_OUTPUTS_FOLDER = os.environ["FINAL_OUTPUTS_FOLDER"]
 
 
 def lambda_handler(event, context):
@@ -73,10 +74,10 @@ def lambda_handler(event, context):
 
             # generating the related file names which needs to be
             related_file = finding_file.split('/')[-1]
-            related_file_final = "final_outputs/" + \
+            related_file_final = FINAL_OUTPUTS_FOLDER + "/" + \
                 related_file.replace("full_transcript", "final_output")
-            related_file_final2 = "final_outputs2/" + \
-                related_file.replace("full_transcript", "final_output")
+            # related_file_final2 = "final_outputs2/" + \
+            #     related_file.replace("full_transcript", "final_output")
             # related_file_standard = "standard/" + related_file.replace("full_transcript_", "")
 
             # Related File:  NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_full_transcript_cleaned.json
@@ -84,7 +85,7 @@ def lambda_handler(event, context):
             # final_outputs/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned.json
             print("Related File Final: ", related_file_final)
             # final_outputs2/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned.json
-            print("Related File Final2: ", related_file_final2)
+            # print("Related File Final2: ", related_file_final2)
             # print("Related File Standard: ", related_file_standard)   #  standard/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_cleaned.json
 
             # generating the target file name
@@ -95,14 +96,14 @@ def lambda_handler(event, context):
             target_file_final = related_file_final.split(
                 '.')[0] + "_verified." + related_file_final.split('.')[1]
             # final_outputs2/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned_verified.json
-            target_file_final2 = related_file_final2.split(
-                '.')[0] + "_verified." + related_file_final2.split('.')[1]
+            # target_file_final2 = related_file_final2.split(
+            #     '.')[0] + "_verified." + related_file_final2.split('.')[1]
 
             # target_file_standard = related_file_standard.split('.')[0] + "_verified." + related_file_standard.split('.')[1]  # standard/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_cleaned_verified.json
 
             print("target_file: ", target_file)
             print("target_file Final: ", target_file_final)
-            print("target_file Final: ", target_file_final2)
+            # print("target_file Final: ", target_file_final2)
             # print("target file Standard: ", target_file_standard)
 
             # constructing the source objects
@@ -115,13 +116,13 @@ def lambda_handler(event, context):
                 'Bucket': finding_bucket, 'Key': related_file_final}
             print("2 *************")
             # {'Bucket': 'cccpiicleanedpoc', 'Key': 'final_outputs/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned.json'}
-            print(copy_source_object_final)
-            copy_source_object_final2 = {
-                'Bucket': finding_bucket, 'Key': related_file_final2}
-            print("3 *************")
-            # {'Bucket': 'cccpiicleanedpoc', 'Key': 'final_outputs2/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned.json'}
-            print(copy_source_object_final2)
-            # copy_source_object_standard = {'Bucket': finding_bucket, 'Key': related_file_standard}
+            # print(copy_source_object_final)
+            # copy_source_object_final2 = {
+            #     'Bucket': finding_bucket, 'Key': related_file_final2}
+            # print("3 *************")
+            # # {'Bucket': 'cccpiicleanedpoc', 'Key': 'final_outputs2/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_final_output_cleaned.json'}
+            # print(copy_source_object_final2)
+            # # copy_source_object_standard = {'Bucket': finding_bucket, 'Key': related_file_standard}
             # print("4 *************")
             # print(copy_source_object_standard) # {'Bucket': 'cccpiicleanedpoc', 'Key': 'standard/NLA_EBHB_1245602_7150364831740142348_Summed_wav_standard_cleaned.json'}
 
@@ -135,9 +136,9 @@ def lambda_handler(event, context):
                 print("5 *************")
                 my.s3_copy_object(s3client, copy_source_object_final,
                                   destination_bucket_name_verified, target_file_final)
-                print("6*************")
-                my.s3_copy_object(s3client, copy_source_object_final2,
-                                  destination_bucket_name_verified, target_file_final2)
+                # print("6*************")
+                # my.s3_copy_object(s3client, copy_source_object_final2,
+                #                   destination_bucket_name_verified, target_file_final2)
                 print("7 *************")
                 # my.s3_copy_object(s3client, copy_source_object_standard, destination_bucket_name_verified, target_file_standard)
                 print("8 *************")
@@ -150,9 +151,9 @@ def lambda_handler(event, context):
                 print("9 *************")
                 my.s3_copy_object(s3client, copy_source_object_final,
                                   destination_bucket_name_dirty, target_file_final)
-                print("10 *************")
-                my.s3_copy_object(s3client, copy_source_object_final2,
-                                  destination_bucket_name_dirty, target_file_final2)
+                # print("10 *************")
+                # my.s3_copy_object(s3client, copy_source_object_final2,
+                #                   destination_bucket_name_dirty, target_file_final2)
                 print("11 *************")
                 # my.s3_copy_object(s3client, copy_source_object_standard, destination_bucket_name_dirty, target_file_standard)
                 print("12 *************")
