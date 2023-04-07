@@ -70,8 +70,8 @@ module "ccc_transcribe_lambda" {
     CONF_VOCAB_FILTER_MODE          = "mask"
     CONF_API_MODE                   = "standard"
     CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
-    KEY                             = "ACCOUNT_ID"
-    VALUE                           = var.account_id
+    KEY                             = "billing-guid"
+    VALUE                           = var.billing-guid
   }
 
   tags = merge(local.tags,
