@@ -358,7 +358,7 @@ module "ccc_audit_call_lambda" {
     TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
     DEBUG                        = "disabled"
-    DEV                          = var.environment_code
+    ENV                          = var.environment_code
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3
