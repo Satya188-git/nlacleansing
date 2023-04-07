@@ -165,13 +165,10 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiimacieinfo_s3_event_ru
       "name": [
         "${var.ccc_maciefindings_bucket_id}"
       ]
-    },
-    "object": {
-      "key": {
-        "suffix": [".gz"]
-      }
     }
-  }
+  },
+  "FileName": [ { "suffix": ".gz" } ]
+
 }
 EOF
 
