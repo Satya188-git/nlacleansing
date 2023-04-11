@@ -52,6 +52,10 @@ module "ccc_unrefined_call_data_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "unrefined_call_data_bucket_notification" {
+  bucket      = module.ccc_unrefined_call_data_bucket.s3_bucket_id
+  eventbridge = true
+}
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -87,6 +91,10 @@ module "ccc_initial_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "ccc_initial_bucket_notification" {
+  bucket      = module.ccc_initial_bucket.s3_bucket_id
+  eventbridge = true
+}
 module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -120,50 +128,11 @@ module "ccc_cleaned_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "ccc_cleaned_bucket_notification" {
+  bucket      = module.ccc_cleaned_bucket.s3_bucket_id
+  eventbridge = true
+}
 
-# module "nla_replication_role" {
-
-#   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-#   version           = "4.0.2"
-#   company_code      = local.company_code
-#   application_code  = local.application_code
-#   environment_code  = local.environment_code
-#   region_code       = local.region_code
-#   application_use   = "${local.application_use}-s3-replication-role"
-#   service_resources = ["s3.amazonaws.com"]
-
-#   tags = merge(
-#     local.tags,
-#     {
-#       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
-#     },
-#   )
-# }
-# data "aws_iam_policy_document" "replication_role_document" {
-#   version = "2012-10-17"
-#   statement {
-#     effect = "Allow"
-#     actions = [
-#       "sts:AssumeRole",
-#     ]
-#     principals {
-#       type = "Service"
-#       identifiers = [
-#         "s3.amazonaws.com"
-#       ]
-#     }
-#   }
-# }
-# resource "aws_iam_policy" "replication" {
-#   name        = "nla_replication_role_policy"
-#   description = "Policy to allow replication to the bucket"
-#   policy      = data.aws_iam_policy_document.replication_policy.json
-# }
-# # Attach the permission polcy created above to the role.
-# resource "aws_iam_role_policy_attachment" "attach" {
-#   role       = module.nla_replication_role.name
-#   policy_arn = aws_iam_policy.replication.arn
-# }
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -196,6 +165,10 @@ module "ccc_verified_clean_bucket" {
       expose_headers  = []
     }
   ]
+}
+resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
+  bucket      = module.ccc_verified_clean_bucket.s3_bucket_id
+  eventbridge = true
 }
 
 # provider "aws" {
@@ -399,6 +372,10 @@ module "ccc_dirty_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
+  bucket      = module.ccc_dirty_bucket.s3_bucket_id
+  eventbridge = true
+}
 module "ccc_maciefindings_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -474,6 +451,10 @@ module "ccc_maciefindings_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "ccc_maciefindings_bucket_notification" {
+  bucket      = module.ccc_maciefindings_bucket.s3_bucket_id
+  eventbridge = true
+}
 
 module "ccc_piimetadata_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -507,6 +488,10 @@ module "ccc_piimetadata_bucket" {
     }
   ]
 }
+resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
+  bucket      = module.ccc_piimetadata_bucket.s3_bucket_id
+  eventbridge = true
+}
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.0"
@@ -539,4 +524,10 @@ module "ccc_athenaresults_bucket" {
     }
   ]
 }
+
+resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
+  bucket      = module.ccc_athenaresults_bucket.s3_bucket_id
+  eventbridge = true
+}
+
 
