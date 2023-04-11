@@ -1,13 +1,13 @@
 locals {
-  application_use  = "${var.application_use}-s3-crawler"
-  region           = var.region
-  aws_region       = var.region
-  company_code     = var.company_code
-  application_code = var.application_code
-  environment_code = var.environment_code
-  region_code      = var.region_code
-  namespace        = var.namespace
-  owner            = var.owner
+  application_use                   = "${var.application_use}-s3-crawler"
+  region                            = var.region
+  aws_region                        = var.region
+  company_code                      = var.company_code
+  application_code                  = var.application_code
+  environment_code                  = var.environment_code
+  region_code                       = var.region_code
+  namespace                         = var.namespace
+  owner                             = var.owner
   glue_catalog_database_description = "nla glue athena db"
   glue_catalog_table_description    = "nla glue table"
   glue_catalog_table_table_type     = "EXTERNAL_TABLE"
@@ -137,3 +137,121 @@ module "glue-crawler" {
 #     }
 #   }
 # }
+
+module "nla_glue_table" {
+  source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+  company_code     = local.company_code
+  application_code = local.application_code
+  application_use  = local.application_use
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  tags             = local.tags
+  # glue catalog database
+  glue_database_name = "sdge_dtdes_dev_wus2_nla_athena_db"
+  # glue catalog tables 
+  # sdge_dtdes_dev_wus2_glue_nla_s3_crawler
+  glue_catalog_map = {
+    "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata" = {
+      name                           = "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata"
+      glue_catalog_table_description = local.glue_catalog_table_description
+      glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+      glue_catalog_table_parameters = {
+        "skip.header.line.count" = 1
+        "sizeKey"                = 3487703
+        "UPDATED_BY_CRAWLER"     = "sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
+        "columnsOrdered"         = true
+        "areColumnsQuoted"       = false
+        "classification"         = "csv"
+        "delimiter"              = ","
+        "typeOfData"             = "file"
+      }
+
+      location                  = "s3://${var.ccc_piimetadata_bucket_id}/"
+      input_format              = "org.apache.hadoop.mapred.TextInputFormat"
+      output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+      compressed                = false
+      number_of_buckets         = "1"
+      stored_as_sub_directories = "false"
+      storage_descriptor_columns = [
+        {
+          columns_name = "path"
+          columns_type = "string"
+        },
+        {
+          columns_name = "file name"
+          columns_type = "string"
+        },
+        {
+          columns_name = "status"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment id"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment start time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment stop time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "internal segment client start time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "internal segment client stop time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "participant station"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment ucid"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant trunk group"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant trunk number"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment dialed number"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant phone-number"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment call direction type id"
+          columns_type = "string"
+        },
+        {
+          columns_name = "participant agent id"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "full name"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment vector number"
+          columns_type = "bigint"
+        },
+      ]
+
+      storage_descriptor_ser_de_info = [
+        {
+          ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+        },
+      ]
+    }
+  }
+}

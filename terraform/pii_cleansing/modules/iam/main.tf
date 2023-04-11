@@ -238,6 +238,57 @@ module "athena_crawler_role" {
 
 # custom policies
 
+# TODO remove the temp replication policy
+resource "aws_iam_policy" "s3_replication_policy_temp" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy-temp"
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Action" : [
+          "s3:ListBucket",
+          "s3:GetReplicationConfiguration",
+          "s3:GetObjectVersionForReplication",
+          "s3:GetObjectVersionAcl",
+          "s3:GetObjectVersionTagging",
+          "s3:GetObjectVersion",
+          "s3:ObjectOwnerOverrideToBucketOwner"
+        ],
+        "Effect" : "Allow",
+        "Resource" : [
+          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
+          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+        ]
+      },
+      {
+        "Action" : [
+          "s3:ReplicateObject",
+          "s3:ReplicateDelete",
+          "s3:ReplicateTags",
+          "s3:GetObjectVersionTagging",
+          "s3:ObjectOwnerOverrideToBucketOwner"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"
+      },
+      {
+        "Action" : [
+          "kms:Decrypt"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+      },
+      {
+        "Action" : [
+          "kms:Encrypt"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
   policy = jsonencode({
