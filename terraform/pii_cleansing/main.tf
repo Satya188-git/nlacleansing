@@ -126,6 +126,8 @@ module "glue" {
   athena_crawler_role_id      = module.iam.athena_crawler_role_id
   athena_crawler_role_arn     = module.iam.athena_crawler_role_arn
   ccc_athenaresults_bucket_id = module.s3.ccc_athenaresults_bucket_id
+  ccc_piimetadata_bucket_id   = module.s3.ccc_piimetadata_bucket_id
+  athena_database_name        = module.athena.athena_database_name
 }
 
 module "iam" {
@@ -150,6 +152,7 @@ module "iam" {
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
   aws_assume_role_user_pii           = var.aws_assume_role_user_pii
+  ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
   # aws_assume_role_insights           = var.aws_assume_role_insights
 }
 

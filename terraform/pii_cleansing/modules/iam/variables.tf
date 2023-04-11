@@ -95,6 +95,12 @@ variable "aws_assume_role_user_pii" {
   type        = string
   description = "aws_assume_role_user_pii"
 }
+
+variable "ccc_piimetadata_bucket_arn" {
+  type        = string
+  description = "ccc_piimetadata_bucket_arn"
+}
+
 # variable "aws_assume_role_insights" {
 #   type        = string
 #   description = "aws_assume_role_insights"

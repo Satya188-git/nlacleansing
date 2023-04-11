@@ -8,16 +8,26 @@ variable "athena_crawler_role_arn" {
   description = "The athena_crawler_role ARN"
 }
 
+variable "ccc_piimetadata_bucket_id" {
+  type        = string
+  description = "ccc_piimetadata_bucket_id"
+}
+
+variable "athena_database_name" {
+  type        = string
+  description = "athena_database_name"
+}
+
 variable "ccc_athenaresults_bucket_id" {
   type        = string
   description = "The ccc_athenaresults S3 bucket id (name)"
 }
 
-variable "crawler_db_name" {
-  type        = string
-  default     = "crawler-s3-db"
-  description = "Glue Crawler DB name for Athena S3 data"
-}
+# variable "crawler_db_name" {
+#   type        = string
+#   default     = "crawler-s3-db"
+#   description = "Glue Crawler DB name for Athena S3 data"
+# }
 
 variable "crawler_description" {
   type        = string

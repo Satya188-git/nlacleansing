@@ -57,8 +57,13 @@ output "ccc_athenaresults_bucket_id" {
   value       = module.ccc_athenaresults_bucket.s3_bucket_id
 }
 
-output "ccc_piimetadata_bucket-arn" {
-  description = "ccc_piimetadata_bucket S3 bucket ARN"
+output "ccc_piimetadata_bucket_id" {
+  description = "ccc_piimetadata_bucket S3 bucket id"
+  value       = module.ccc_piimetadata_bucket.s3_bucket_id
+}
+
+output "ccc_piimetadata_bucket_arn" {
+  description = "ccc_piimetadata_bucket S3 bucket arn"
   value       = module.ccc_piimetadata_bucket.s3_bucket_arn
 }
 

@@ -411,9 +411,9 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
 #   })
 # }
 // create policy
-resource "aws_iam_policy" "athena_crawler_role_policy" {
-  name        = "AthenaBucketAccess"
-  description = "Get and Put access for Athena bucket"
+resource "aws_iam_policy" "s3_crawler_role_policy" {
+  name        = "S3BucketAccess"
+  description = "Get and Put access for S3 bucket"
 
   policy = <<EOF
 {
@@ -425,7 +425,7 @@ resource "aws_iam_policy" "athena_crawler_role_policy" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "${var.ccc_athenaresults_bucket_arn}*"
+      "Resource": "${var.ccc_piimetadata_bucket_arn}*"
     }
   ]
 }
@@ -623,16 +623,35 @@ resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
 }
 
 # attach policy for athena glue crawler
-resource "aws_iam_role_policy_attachment" "athena_crawler_attachment" {
+resource "aws_iam_role_policy_attachment" "glue_crawler_attachment1" {
   role       = module.athena_crawler_role.id
-  policy_arn = aws_iam_policy.athena_crawler_role_policy.arn
+  policy_arn = aws_iam_policy.s3_crawler_role_policy.arn
 }
 
-resource "aws_iam_role_policy_attachment" "athena_crawler_managed" {
+resource "aws_iam_role_policy_attachment" "glue_crawler_attachment2" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueDataBrewServiceRole"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed1" {
   role       = module.athena_crawler_role.id
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
 }
 
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed2" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed3" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaExecute"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_managed4" {
+  role       = module.athena_crawler_role.id
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+}
 
 resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn

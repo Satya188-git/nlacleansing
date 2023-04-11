@@ -41,10 +41,10 @@ module "glue-crawler" {
   glue_crawler_map = {
     crawler_s3 = {
       name          = "pii"
-      database_name = var.crawler_db_name
+      database_name = var.athena_database_name
       s3_targets = {
         s3_target1 = {
-          path = "s3://${var.ccc_athenaresults_bucket_id}/test_data/"
+          path = "s3://${var.ccc_piimetadata_bucket_id}"
         }
       }
       dynamodb_targets = {}
@@ -54,8 +54,8 @@ module "glue-crawler" {
       optional_arguments = {
         description            = var.crawler_description
         recrawl_policy         = "CRAWL_EVERYTHING"
-        schema_delete_behavior = "LOG"
-        schema_update_behavior = "LOG"
+        schema_delete_behavior = "DEPRECATE_IN_DATABASE"
+        schema_update_behavior = "UPDATE_IN_DATABASE"
       }
     }
   }
