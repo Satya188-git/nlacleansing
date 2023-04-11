@@ -379,64 +379,72 @@ module "ccc_audit_call_lambda" {
 
 # Permissions for EventBridge
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_comprehend_lambda" {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_comprehend_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiitranscription_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_comprehend_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiitranscription_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda1" {
-  statement_id  = "AllowExecutionFromCloudWatch1"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiitranscription_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch1"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiitranscription_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda2" {
-  statement_id  = "AllowExecutionFromCloudWatch2"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiicleanedverified_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch2"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiicleanedverified_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda3" {
-  statement_id  = "AllowExecutionFromCloudWatch3"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch3"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiiunrefined_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_transcribe_lambda" {
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_transcribe_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiiunrefined_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_transcribe_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiiunrefined_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda4" {
-  statement_id  = "AllowExecutionFromCloudWatch4"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_audit_call_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiicleaned_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch4"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiicleaned_s3_event_rule_arn
+  source_account = var.account_id
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_info_lambda4" {
-  statement_id  = "AllowExecutionFromCloudWatch4"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_informational_macie_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiimacieinfo_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch4"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_informational_macie_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiimacieinfo_s3_event_rule_arn
+  source_account = var.account_id
 }
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_scan_lambda4" {
-  statement_id  = "AllowExecutionFromCloudWatch4"
-  action        = "lambda:InvokeFunction"
-  function_name = module.ccc_macie_scan_trigger_lambda.lambda_function_name
-  principal     = "events.amazonaws.com"
-  source_arn    = var.customercallcenterpiimaciescan_s3_event_rule_arn
+  statement_id   = "AllowExecutionFromCloudWatch4"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_macie_scan_trigger_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.customercallcenterpiimaciescan_s3_event_rule_arn
+  source_account = var.account_id
 }
