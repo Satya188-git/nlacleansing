@@ -174,7 +174,6 @@ module "nla_glue_table" {
       input_format              = "org.apache.hadoop.mapred.TextInputFormat"
       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
       compressed                = false
-      number_of_buckets         = "1"
       stored_as_sub_directories = "false"
       storage_descriptor_columns = [
         {
