@@ -158,15 +158,16 @@ module "nla_glue_table" {
       glue_catalog_table_parameters = {
         "skip.header.line.count" = 1
         "sizeKey"                = 3487703
+        "objectCount"            = 62
         "UPDATED_BY_CRAWLER"     = "sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
+        "recordCount"            = 10389
+        "averageRecordSize"      = 333
+        "compressionType"        = "none"
+        "classification"         = "csv"
         "columnsOrdered"         = true
         "areColumnsQuoted"       = false
-        "classification"         = "csv"
         "delimiter"              = ","
         "typeOfData"             = "file"
-        "compressionType"        = "none"
-        "averageRecordSize"      = ""
-        "recordCount"            = ""
       }
 
       location                  = "s3://${var.ccc_piimetadata_bucket_id}/"
