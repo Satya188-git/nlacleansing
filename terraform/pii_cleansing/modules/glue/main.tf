@@ -47,7 +47,7 @@ module "glue-crawler" {
       database_name = var.athena_database_name
       s3_targets = {
         s3_target1 = {
-          path = "s3://${var.ccc_piimetadata_bucket_id}"
+          path = "s3://${var.ccc_piimetadata_bucket_id}/"
         }
       }
       dynamodb_targets = {}
@@ -147,7 +147,7 @@ module "nla_glue_table" {
   region_code      = local.region_code
   tags             = local.tags
   # glue catalog database
-  glue_database_name = "sdge_dtdes_dev_wus2_nla_athena_db"
+  glue_database_name = var.athena_database_name
   # glue catalog tables 
   # sdge_dtdes_dev_wus2_glue_nla_s3_crawler
   glue_catalog_map = {
@@ -164,6 +164,9 @@ module "nla_glue_table" {
         "classification"         = "csv"
         "delimiter"              = ","
         "typeOfData"             = "file"
+        "compressionType"        = "none"
+        "averageRecordSize"      = ""
+        "recordCount"            = ""
       }
 
       location                  = "s3://${var.ccc_piimetadata_bucket_id}/"
@@ -171,6 +174,7 @@ module "nla_glue_table" {
       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
       compressed                = false
       number_of_buckets         = "1"
+      parameters                = tomap({ "field.delim" = "," })
       stored_as_sub_directories = "false"
       storage_descriptor_columns = [
         {
