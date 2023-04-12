@@ -21,64 +21,6 @@ locals {
   }
 }
 
-
-# // create IAM role for crawler
-# module "athena_crawler_role" {
-#   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-#   version = "x.x.x"
-
-#   company_code      = local.company_code
-#   application_code  = local.application_code
-#   environment_code  = local.environment_code
-#   region_code       = local.region_code
-#   application_use   = "glue-crawler-test"
-#   description       = "Test IAM role for Athena"
-#   service_resources = ["glue.amazonaws.com"]
-
-#   tags = local.tags
-# }
-
-# // create policy
-# resource "aws_iam_policy" "policy" {
-#   name        = "AthenaBucketAccess"
-#   description = "Get and Put access for Athena bucket"
-
-#   policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": [
-#         "s3:GetObject",
-#         "s3:PutObject"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": "${var.ccc_athenaresults_bucket_arn}*"
-#     }
-#   ]
-# }
-# EOF
-# }
-
-# // attach policy for role
-# resource "aws_iam_policy_attachment" "attach-custom" {
-#   name       = "athena-test-attachment"
-#   roles      = [module.athena_crawler_role.id]
-#   policy_arn = aws_iam_policy.policy.arn
-# }
-
-# resource "aws_iam_role_policy_attachment" "attach-managed-glue" {
-#   role       = module.athena_crawler_role.id
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-# }
-
-# // create kms key to encrypt athena data
-# resource "aws_kms_key" "athena_kms_key" {
-#   deletion_window_in_days = 7
-#   description             = "Athena KMS Key"
-#   enable_key_rotation     = true
-# }
-
 module "athena" {
   source           = "app.terraform.io/SempraUtilities/seu-athena/aws"
   version          = "7.1.0"

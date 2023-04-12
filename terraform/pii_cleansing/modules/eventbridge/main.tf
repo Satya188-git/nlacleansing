@@ -221,39 +221,3 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
   arn  = var.macie_scan_trigger_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
 }
-
-# module "eventbridge" {
-#   source = "terraform-aws-modules/eventbridge/aws"
-
-#   bus_name = "insert-bus"
-
-#   rules = {
-#     orders = {
-#       description = "Object creation for call metadata in final_output s3 trigger event rule"
-#       event_pattern = jsonencode({
-#         "source" : ["aws.s3"],
-#         "detail-type" : ["Object Created"],
-#         "detail" : {
-#           "bucket" : {
-#             "name" : ["${var.replicated_clean_data_bucket_id}"]
-#           },
-#           "object" : {
-#             "key" : [{
-#               "prefix" : "final_insights"
-#             }]
-#           }
-#         }
-#       })
-#       enabled = true
-#     }
-#   }
-
-#   targets = {
-#     orders = [
-#       {
-#         name = "${var.call_data_insert_lambda_name}"
-#         arn  = var.call_data_insert_lambda_arn
-#       }
-#     ]
-#   }
-# }

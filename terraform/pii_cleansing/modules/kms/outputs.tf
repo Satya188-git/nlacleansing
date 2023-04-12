@@ -16,17 +16,13 @@ output "kms_key_ccc_dirty_arn" {
   value = aws_kms_key.dirty_kms_key.arn
 }
 
-# kms_key_ccc_maciefindings_arn
 output "kms_key_ccc_maciefindings_arn" {
   value = aws_kms_key.maciefindings_kms_key.arn
 }
 
-# kms_key_ccc_piimetadata_arn
 output "kms_key_ccc_piimetadata_arn" {
   value = aws_kms_key.piimetadata_kms_key.arn
 }
-
-# kms_key_ccc_athenaresults_arn
 output "kms_key_ccc_athenaresults_arn" {
   value = aws_kms_key.athenaresults_kms_key.arn
 }

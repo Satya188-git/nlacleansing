@@ -43,6 +43,16 @@ module "ccc_unrefined_call_data_bucket" {
       }
     }
   }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
   cors_rule = [
     {
       allowed_methods = ["GET", "PUT", "POST"]
@@ -82,6 +92,16 @@ module "ccc_initial_bucket" {
       }
     }
   }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
   cors_rule = [
     {
       allowed_methods = ["GET", "PUT", "POST"]
@@ -119,6 +139,16 @@ module "ccc_cleaned_bucket" {
       }
     }
   }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
   cors_rule = [
     {
       allowed_methods = ["GET", "PUT", "POST"]
@@ -157,6 +187,16 @@ module "ccc_verified_clean_bucket" {
       }
     }
   }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
   cors_rule = [
     {
       allowed_methods = ["GET", "PUT", "POST"]
@@ -170,6 +210,238 @@ resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
   bucket      = module.ccc_verified_clean_bucket.s3_bucket_id
   eventbridge = true
 }
+
+module "ccc_dirty_bucket" {
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-dirty"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_dirty_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
+  cors_rule = [
+    {
+      allowed_methods = ["GET", "PUT", "POST"]
+      allowed_origins = ["*"]
+      allowed_headers = ["*"]
+      expose_headers  = []
+    }
+  ]
+}
+resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
+  bucket      = module.ccc_dirty_bucket.s3_bucket_id
+  eventbridge = true
+}
+module "ccc_maciefindings_bucket" {
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-macie-findings"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_maciefindings_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
+  cors_rule = [
+    {
+      allowed_methods = ["GET", "PUT", "POST"]
+      allowed_origins = ["*"]
+      allowed_headers = ["*"]
+      expose_headers  = []
+    }
+  ]
+
+  additional_policy_statements = [
+    {
+      Sid    = "Allow Macie to upload objects to the bucket"
+      Effect = "Allow"
+      Principal = {
+        Service = ["macie.amazonaws.com"]
+      }
+      Action   = ["s3:PutObject"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
+      Condition = {
+        StringEquals = {
+          "aws:SourceAccount" : "${var.account_id}"
+        }
+        ArnLike = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+          ]
+        }
+      }
+    },
+    {
+      Sid    = "Allow Macie to use the getBucketLocation operation"
+      Effect = "Allow"
+      Principal = {
+        Service = ["macie.amazonaws.com"]
+      }
+      Action   = ["s3:GetBucketLocation"],
+      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
+      Condition = {
+        StringEquals = {
+          "aws:SourceAccount" : "${var.account_id}"
+        }
+        ArnLike = {
+          "aws:SourceArn" = [
+            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+          ]
+        }
+      }
+    }
+  ]
+}
+resource "aws_s3_bucket_notification" "ccc_maciefindings_bucket_notification" {
+  bucket      = module.ccc_maciefindings_bucket.s3_bucket_id
+  eventbridge = true
+}
+
+module "ccc_piimetadata_bucket" {
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-pii-metadata"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
+  cors_rule = [
+    {
+      allowed_methods = ["GET", "PUT", "POST"]
+      allowed_origins = ["*"]
+      allowed_headers = ["*"]
+      expose_headers  = []
+    }
+  ]
+}
+resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
+  bucket      = module.ccc_piimetadata_bucket.s3_bucket_id
+  eventbridge = true
+}
+module "ccc_athenaresults_bucket" {
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "5.3.0"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-athena-results"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags                           = local.tags
+
+  acl = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_athenaresults_arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
+  cors_rule = [
+    {
+      allowed_methods = ["GET", "PUT", "POST"]
+      allowed_origins = ["*"]
+      allowed_headers = ["*"]
+      expose_headers  = []
+    }
+  ]
+}
+
+resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
+  bucket      = module.ccc_athenaresults_bucket.s3_bucket_id
+  eventbridge = true
+}
+
+
 
 # provider "aws" {
 #   alias  = "nla-insights"
@@ -339,195 +611,4 @@ resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
 #   ]
 # }
 # TODO add replication config
-
-module "ccc_dirty_bucket" {
-  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
-  company_code                   = local.company_code
-  application_code               = local.application_code
-  environment_code               = local.environment_code
-  region_code                    = local.region_code
-  application_use                = "${local.application_use}-dirty"
-  owner                          = "NLA Team"
-  create_bucket                  = true
-  create_log_bucket              = false
-  attach_alb_log_delivery_policy = false
-  tags                           = local.tags
-
-  acl = "private"
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_dirty_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
-}
-resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
-  bucket      = module.ccc_dirty_bucket.s3_bucket_id
-  eventbridge = true
-}
-module "ccc_maciefindings_bucket" {
-  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
-  company_code                   = local.company_code
-  application_code               = local.application_code
-  environment_code               = local.environment_code
-  region_code                    = local.region_code
-  application_use                = "${local.application_use}-macie-findings"
-  owner                          = "NLA Team"
-  create_bucket                  = true
-  create_log_bucket              = false
-  attach_alb_log_delivery_policy = false
-  tags                           = local.tags
-
-  acl = "private"
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_maciefindings_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
-
-  additional_policy_statements = [
-    {
-      Sid    = "Allow Macie to upload objects to the bucket"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:PutObject"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    },
-    {
-      Sid    = "Allow Macie to use the getBucketLocation operation"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:GetBucketLocation"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    }
-  ]
-}
-resource "aws_s3_bucket_notification" "ccc_maciefindings_bucket_notification" {
-  bucket      = module.ccc_maciefindings_bucket.s3_bucket_id
-  eventbridge = true
-}
-
-module "ccc_piimetadata_bucket" {
-  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
-  company_code                   = local.company_code
-  application_code               = local.application_code
-  environment_code               = local.environment_code
-  region_code                    = local.region_code
-  application_use                = "${local.application_use}-pii-metadata"
-  owner                          = "NLA Team"
-  create_bucket                  = true
-  create_log_bucket              = false
-  attach_alb_log_delivery_policy = false
-  tags                           = local.tags
-
-  acl = "private"
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_piimetadata_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
-}
-resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
-  bucket      = module.ccc_piimetadata_bucket.s3_bucket_id
-  eventbridge = true
-}
-module "ccc_athenaresults_bucket" {
-  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
-  company_code                   = local.company_code
-  application_code               = local.application_code
-  environment_code               = local.environment_code
-  region_code                    = local.region_code
-  application_use                = "${local.application_use}-athena-results"
-  owner                          = "NLA Team"
-  create_bucket                  = true
-  create_log_bucket              = false
-  attach_alb_log_delivery_policy = false
-  tags                           = local.tags
-
-  acl = "private"
-  server_side_encryption_configuration = {
-    rule = {
-      apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_athenaresults_arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
-}
-
-resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
-  bucket      = module.ccc_athenaresults_bucket.s3_bucket_id
-  eventbridge = true
-}
-
 

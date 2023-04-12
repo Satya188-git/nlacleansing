@@ -8,8 +8,6 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   account_id       = data.aws_caller_identity.current.account_id
-  # account_id_insights = data.aws_caller_identity.nla-insights.account_id
-  #account_id       = data.aws_caller_identity.nla-pii.account_id
   tags = {
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
@@ -23,13 +21,6 @@ locals {
 }
 
 data "aws_caller_identity" "current" {}
-# data "aws_caller_identity" "nla-pii" {
-#   provider = aws.nla-pii
-# }
-
-# data "aws_caller_identity" "nla-insights" {
-#   provider = aws.nla-insights
-# }
 
 module "athena" {
   source                       = "./modules/athena"
@@ -153,7 +144,6 @@ module "iam" {
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
   aws_assume_role_user_pii           = var.aws_assume_role_user_pii
   ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
-  # aws_assume_role_insights           = var.aws_assume_role_insights
 }
 
 
@@ -182,8 +172,6 @@ module "kms" {
   macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
   nla_replication_role_arn            = module.iam.nla_replication_role_arn
-  # account_id_insights                 = local.account_id_insights
-  # aws_assume_role_insights            = var.aws_assume_role_insights
 }
 
 module "lambda" {
@@ -237,24 +225,23 @@ module "lambda" {
 }
 
 module "s3" {
-  source              = "./modules/s3"
-  region              = var.region
-  environment         = var.environment
-  application_use     = var.application_use
-  company_code        = var.company_code
-  application_code    = var.application_code
-  environment_code    = var.environment_code
-  owner               = var.owner
-  namespace           = var.namespace
-  region_code         = var.region_code
-  tag-version         = var.tag-version
-  billing-guid        = var.billing-guid
-  unit                = var.unit
-  portfolio           = var.portfolio
-  support-group       = var.support-group
-  cmdb-ci-id          = var.cmdb-ci-id
-  data-classification = var.data-classification
-  # aws_assume_role                = var.aws_assume_role
+  source                         = "./modules/s3"
+  region                         = var.region
+  environment                    = var.environment
+  application_use                = var.application_use
+  company_code                   = var.company_code
+  application_code               = var.application_code
+  environment_code               = var.environment_code
+  owner                          = var.owner
+  namespace                      = var.namespace
+  region_code                    = var.region_code
+  tag-version                    = var.tag-version
+  billing-guid                   = var.billing-guid
+  unit                           = var.unit
+  portfolio                      = var.portfolio
+  support-group                  = var.support-group
+  cmdb-ci-id                     = var.cmdb-ci-id
+  data-classification            = var.data-classification
   kms_key_ccc_unrefined_arn      = module.kms.kms_key_ccc_unrefined_arn
   kms_key_ccc_initial_arn        = module.kms.kms_key_ccc_initial_arn
   kms_key_ccc_clean_arn          = module.kms.kms_key_ccc_clean_arn
@@ -267,5 +254,4 @@ module "s3" {
   macie_info_trigger_arn = module.lambda.macie_info_trigger_arn
   # nla_replication_role_arn       = module.iam.nla_replication_role_arn
   account_id = local.account_id
-  # aws_assume_role_insights = var.aws_assume_role_insights
 }
