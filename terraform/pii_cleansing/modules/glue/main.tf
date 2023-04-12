@@ -175,7 +175,6 @@ module "nla_glue_table" {
       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
       compressed                = false
       number_of_buckets         = "1"
-      parameters                = tomap({ "field.delim" = "," })
       stored_as_sub_directories = "false"
       storage_descriptor_columns = [
         {
@@ -255,6 +254,7 @@ module "nla_glue_table" {
       storage_descriptor_ser_de_info = [
         {
           ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+          ser_de_info_parameters            = tomap({ "field.delim" = "," })
         },
       ]
     }
