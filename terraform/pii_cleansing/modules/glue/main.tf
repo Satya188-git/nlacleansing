@@ -13,7 +13,7 @@ locals {
   glue_catalog_table_table_type     = "EXTERNAL_TABLE"
 
   tags = {
-    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-crawler"
+    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-crawler-pii"
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     unit                = var.unit
@@ -78,15 +78,15 @@ module "nla_glue_table" {
   # glue catalog tables 
   # sdge_dtdes_dev_wus2_glue_nla_s3_crawler
   glue_catalog_map = {
-    "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata" = {
-      name                           = "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata"
+    "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata" = {
+      name                           = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata" # "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata"
       glue_catalog_table_description = local.glue_catalog_table_description
       glue_catalog_table_table_type  = local.glue_catalog_table_table_type
       glue_catalog_table_parameters = {
         "skip.header.line.count" = 1
         "sizeKey"                = 3487703
         "objectCount"            = 62
-        "UPDATED_BY_CRAWLER"     = "${module.glue-crawler.glue_crawler_name}" #"sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
+        "UPDATED_BY_CRAWLER"     = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-glue-nla-s3-crawler-pii" #"sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
         "recordCount"            = 10389
         "averageRecordSize"      = 333
         "compressionType"        = "none"
