@@ -65,79 +65,6 @@ module "glue-crawler" {
   tags = local.tags
 }
 
-# Create Glue Crawler db table
-# module "nla_glue_table" {
-#   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
-#   company_code     = "corp"
-#   application_code = "iac"
-#   application_use  = "gdc_example"
-#   environment_code = "sbx"
-#   region_code      = "wus2"
-#   tags = local.tags
-#   # glue catalog database
-#   glue_database_name = "sdge_dtdes_dev_wus2_nla_athena_db"
-#   # glue catalog tables 
-#   # sdge_dtdes_dev_wus2_glue_nla_s3_crawler
-#   glue_catalog_map = {
-#     "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata" = {
-#       name                           = "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata"
-#       glue_catalog_table_description = local.glue_catalog_table_description
-#       glue_catalog_table_table_type  = local.glue_catalog_table_table_type
-#       glue_catalog_table_parameters = {
-#         "sizeKey"        = 3487703
-#         "tmp"            = "none"
-#         "test"           = "yes"
-#         "classification" = "csv"
-#       }
-#       glue_catalog_table_partition_keys = {
-#         partition_1 = {
-#           name = "year"
-#           type = "string"
-#         },
-#         partition_2 = {
-#           name = "month"
-#           type = "int"
-#         },
-#         partition_3= {
-#           name = "day"
-#           type = "string"
-#         },
-#         partition_4 = {
-#           name = "hour"
-#           type = "string"
-#         }
-#       }
-#       location                  = "s3://my-bucket/event-streams/my-stream"
-#       input_format              = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
-#       output_format             = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
-#       compressed                = true
-#       number_of_buckets         = "1"
-#       bucket_columns            = tolist(["test"])
-#       parameters                = tomap({ "test" = "test" })
-#       stored_as_sub_directories = "false"
-#       storage_descriptor_columns = [
-#         {
-#           columns_name    = "oid"
-#           columns_type    = "double"
-#           columns_comment = "oid"
-#         },
-#         {
-#           columns_name    = "oid2"
-#           columns_type    = "double"
-#           columns_comment = "oid2"
-#         },
-#       ]
-#       storage_descriptor_ser_de_info = [
-#         {
-#           ser_de_info_name                  = "my-stream"
-#           ser_de_info_serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
-#           ser_de_info_parameters            = tomap({ "serialization.format" = 1 })
-#         },
-#       ]
-#     }
-#   }
-# }
-
 module "nla_glue_table" {
   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   company_code     = local.company_code
@@ -159,7 +86,7 @@ module "nla_glue_table" {
         "skip.header.line.count" = 1
         "sizeKey"                = 3487703
         "objectCount"            = 62
-        "UPDATED_BY_CRAWLER"     = "sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
+        "UPDATED_BY_CRAWLER"     = "${module.glue-crawler.glue_crawler_name}" #"sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
         "recordCount"            = 10389
         "averageRecordSize"      = 333
         "compressionType"        = "none"

@@ -23,12 +23,6 @@ variable "ccc_athenaresults_bucket_id" {
   description = "The ccc_athenaresults S3 bucket id (name)"
 }
 
-# variable "crawler_db_name" {
-#   type        = string
-#   default     = "crawler-s3-db"
-#   description = "Glue Crawler DB name for Athena S3 data"
-# }
-
 variable "crawler_description" {
   type        = string
   default     = "Glue Crawler for Athena S3 data"
