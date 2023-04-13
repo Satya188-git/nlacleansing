@@ -1,0 +1,139 @@
+.chart-warpper {
+    height: auto !important;
+    min-height: 400px;
+    padding: 0 !important;
+}
+
+.dashboard-filter-section {
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.chart-header {
+    height: 37px;
+    text-align: center;
+    padding: 9px 10px 9px 0px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
+}
+
+.no-border {
+    border: 0 !important;
+}
+
+.count-card {
+    height: 106.33px;
+    padding: 8px;
+    text-align: center;
+}
+
+.count-val {
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 0;
+}
+
+.sentiment-label {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 5px 10px 9px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 15px;
+    width: 55%;
+}
+
+.sentiment-percent {
+    position: absolute;
+    font-size: 16px;
+    top: 8rem;
+    width: 88%;
+    text-align: center;
+}
+
+.call-tags-title {
+    position: absolute;
+    bottom: -8px;
+}
+
+.no-ivr-alert {
+    position: absolute;
+    padding: 30px 30px 30px 0px;
+    text-align: center;
+}
+
+.ivr-type-tag-label {
+    padding: 0 !important;
+    font-size: 14px;
+}
+
+.with-tag-label {
+    padding-bottom: 15px !important;
+    text-align: left !important;
+    margin-left: -10px;
+}
+
+.tag-chart-sec {
+    height: 432px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.tag-chart-sec canvas {
+    position: relative;
+    top: 5rem;
+}
+
+.with-ivr-chart-sec canvas {
+    top: 3rem !important;
+}
+
+.with-tag-chart-sec canvas {
+    top: 4rem !important;
+}
+
+.tag-metrics {
+    position: absolute;
+    bottom: 1rem;
+    width: 90%;
+    height: 110px;
+    left: 16px;
+}
+
+.metric-title {
+    border-bottom: 1px solid #273C4F;
+    padding-bottom: 4px;
+    margin-bottom: 4px !important;
+}
+
+.first-metric {
+    padding-bottom: 6px;
+    border-bottom: 1px solid #273C4F;
+    margin-bottom: 4px;
+}
+
+.call-analytics-title {
+    margin-left: 10px;
+    position: relative;
+    top: 8px;
+}
+
+.calls-label {
+    position: absolute;
+    top: 15px;
+    font-size: 12px;
+    left: 28px;
+}

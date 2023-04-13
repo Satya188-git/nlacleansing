@@ -1,0 +1,56 @@
+.call-list-header {
+    justify-content: space-between;
+}
+
+.call-list-header .call-list-title {
+    margin-left: 10px;
+    position: relative;
+    top: 8px;
+}
+
+.call-list-header .ant-input-search {
+    margin-right: 10px;
+}
+
+.call-list-header .ant-input-search {
+    width: 431px !important;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #FFFFFF;
+    border-radius: 16px;
+    margin-bottom: 0 !important;
+}
+
+.call-list-header .ant-input-affix-wrapper {
+    border: 0 !important;
+}
+
+.call-list-header .ant-input-group-addon {
+    border-radius: 0 16px 16px 0 !important;
+    border-left: 1px solid #fff !important;
+}
+
+.call-list-header .ant-input-search-button {
+    border: 0 !important;
+    color: #fff !important;
+}
+
+.call-list-header .anticon-search {
+    font-size: 20px;
+}
+
+.filter-section {
+    margin-top: 2rem;
+}
+
+.filter-section .ant-space-item {
+    margin-right: 15px;
+}
+
+.call-list-section {
+    margin-top: 10px;
+}
+
+.call-list-pagination .ant-pagination {
+    margin-left: auto;
+}

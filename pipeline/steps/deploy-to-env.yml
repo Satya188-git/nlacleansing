@@ -1,0 +1,100 @@
+parameters:
+  #Do not change this
+  #The value of this parameter is the value of the "AWS Service Connection Prefix" entered at pipeline runtime
+  #This value is generally the pipeline name
+  - name: "SCName"
+    type: string
+    default:
+  #Do not change this
+  #The value of this parameters is the current environment being deployed.
+  #Will be either `dev`, `tst`, `qa`, or `prd`
+  - name: "Environment"
+    type: string
+    default:
+  # The below parameters can be customized. This can break UI folder upload process if incorrect values are supplied
+  - name: awsRegionCode
+    type: string
+    default: "us-west-2"
+  - name: awsRegionAbbreviation
+    type: string
+    default: "wus2"
+  - name: s3ArtifactBucketSuffix
+    type: string
+    default: "s3-tf-artifacts"
+  - name: s3ArtifactBucketFolder
+    type: string
+    default: "terraform-artifact"
+  - name: s3LambdaObjectKey1
+    type: string
+    default: "ccc_audit_call_lambda.zip"
+  - name: lambdaFunctionName1
+    type: string
+    default: "audit-call"
+  - name: s3LambdaObjectKey2
+    type: string
+    default: "ccc_comprehend_lambda.zip"
+  - name: lambdaFunctionName2
+    type: string
+    default: "comprehend"
+  - name: s3LambdaObjectKey3
+    type: string
+    default: "ccc_informational_macie_lambda.zip"
+  - name: lambdaFunctionName3
+    type: string
+    default: "info-macie"
+  - name: s3LambdaObjectKey4
+    type: string
+    default: "ccc_macie_lambda.zip"
+  - name: lambdaFunctionName4
+    type: string
+    default: "macie"
+  - name: s3LambdaObjectKey5
+    type: string
+    default: "ccc_macie_scan_trigger_lambda.zip"
+  - name: lambdaFunctionName5
+    type: string
+    default: "macie-scan"
+  - name: s3LambdaObjectKey6
+    type: string
+    default: "ccc_notification_forwarder_lambda.zip"
+  - name: lambdaFunctionName6
+    type: string
+    default: "notification"
+  - name: s3LambdaObjectKey7
+    type: string
+    default: "ccc_transcribe_lambda.zip"
+  - name: lambdaFunctionName7
+    type: string
+    default: "lambda-transcribe"
+
+steps:
+  - template: ./S3-sync.yml
+    parameters:
+      SCName: ${{ parameters.SCName }}
+      Environment: ${{ parameters.Environment }}
+      awsRegionCode: ${{ parameters.awsRegionCode }}
+      awsRegionAbbreviation: ${{ parameters.awsRegionAbbreviation }}
+  - template: ./lambda-deploy.yml
+    parameters:
+      SCName: ${{ parameters.SCName }}
+      Environment: ${{ parameters.Environment }}
+      awsRegionCode: ${{ parameters.awsRegionCode }}
+      s3ArtifactBucketSuffix: ${{ parameters.s3ArtifactBucketSuffix }}
+      s3ArtifactBucketFolder: ${{ parameters.s3ArtifactBucketFolder }}
+      awsRegionAbbreviation: ${{ parameters.awsRegionAbbreviation }}
+      s3LambdaObjectKey1: ${{ parameters.s3LambdaObjectKey1 }}
+      lambdaFunctionName1: ${{ parameters.lambdaFunctionName1 }}
+      s3LambdaObjectKey2: ${{ parameters.s3LambdaObjectKey2 }}
+      lambdaFunctionName2: ${{ parameters.lambdaFunctionName2 }}
+      s3LambdaObjectKey3: ${{ parameters.s3LambdaObjectKey3 }}
+      lambdaFunctionName3: ${{ parameters.lambdaFunctionName3 }}
+      s3LambdaObjectKey4: ${{ parameters.s3LambdaObjectKey4 }}
+      lambdaFunctionName4: ${{ parameters.lambdaFunctionName4 }}
+      s3LambdaObjectKey5: ${{ parameters.s3LambdaObjectKey5 }}
+      lambdaFunctionName5: ${{ parameters.lambdaFunctionName5 }}
+      s3LambdaObjectKey6: ${{ parameters.s3LambdaObjectKey6 }}
+      lambdaFunctionName6: ${{ parameters.lambdaFunctionName6 }}
+      s3LambdaObjectKey7: ${{ parameters.s3LambdaObjectKey7 }}
+      lambdaFunctionName7: ${{ parameters.lambdaFunctionName7 }}
+      s3LambdaObjectKey8: ${{ parameters.s3LambdaObjectKey8 }}
+      lambdaFunctionName8: ${{ parameters.lambdaFunctionName8 }}
