@@ -145,6 +145,11 @@ variable "ccc_athenaresults_bucket_id" {
   type        = string
   description = "ccc_athenaresults_bucket_id"
 }
+variable "nla_glue_table_name" {
+  type        = string
+  description = "nla_glue_table_name"
+
+}
 
 variable "dynamodb_audit_table_name" {
   type        = string
