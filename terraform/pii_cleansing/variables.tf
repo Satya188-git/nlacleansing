@@ -34,7 +34,6 @@ variable "application_code" {
 }
 
 variable "environment_code" {
-  default     = "dev"
   type        = string
   description = "The environment code prefix for Terraform resources"
 }
