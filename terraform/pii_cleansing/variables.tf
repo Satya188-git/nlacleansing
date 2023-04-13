@@ -1,7 +1,6 @@
 
 variable "environment" {
   type        = string
-  default     = "dev"
   description = "This value should be set as variable environment"
 }
 variable "region" {
@@ -35,7 +34,6 @@ variable "application_code" {
 }
 
 variable "environment_code" {
-  default     = "dev"
   type        = string
   description = "The environment code prefix for Terraform resources"
 }
@@ -95,7 +93,6 @@ variable "data-classification" {
 }
 
 variable "tf_artifact_s3" {
-  default     = "sdge-dtdes-dev-wus2-s3-tf-artifacts"
   type        = string
   description = "Terraform deployment artifact s3"
 }

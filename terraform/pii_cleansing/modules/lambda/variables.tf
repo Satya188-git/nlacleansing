@@ -151,7 +151,6 @@ variable "dynamodb_audit_table_name" {
   description = "dynamodb_audit_table_name"
 }
 
-
 variable "tf_artifact_s3" {
   type = string
 }
