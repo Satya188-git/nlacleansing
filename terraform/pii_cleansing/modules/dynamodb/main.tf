@@ -18,7 +18,6 @@ locals {
     data-classification = var.data-classification
   }
 }
-# TODO verify kms allow lambdas to decrpyt dynamodb data
 module "dynamodb_audit_table" {
   region      = local.region
   region_code = local.region_code

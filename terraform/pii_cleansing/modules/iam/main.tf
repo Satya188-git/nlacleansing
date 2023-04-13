@@ -494,7 +494,7 @@ resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
 #   roles      = [module.nla_replication_role.name]
 #   name       = "replication_assume_role_policy"
 # }
-# comprehend lambda permissions
+
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ComprehendFullAccess"
   role       = module.comprehend_lambda_role.name
@@ -535,11 +535,6 @@ resource "aws_iam_role_policy_attachment" "TranscribeAmazonTranscribeFullAccess"
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
   role       = module.transcribe_lambda_role.name
 }
-
-# resource "aws_iam_role_policy_attachment" "TranscribeAmazonAthenaFullAccess" {
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
-#   role       = module.transcribe_lambda_role.name
-# }
 
 resource "aws_iam_role_policy_attachment" "TranscribeAmazonS3FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
@@ -673,7 +668,6 @@ resource "aws_iam_role_policy_attachment" "transcribe_custom_s3_policy" {
   role       = module.custom_transcribe_lambda_role.name
 }
 
-# attach policy for athena glue crawler
 resource "aws_iam_role_policy_attachment" "glue_crawler_attachment1" {
   role       = module.athena_crawler_role.id
   policy_arn = aws_iam_policy.s3_crawler_role_policy.arn
