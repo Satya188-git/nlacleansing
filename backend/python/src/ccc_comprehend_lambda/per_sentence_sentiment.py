@@ -46,33 +46,3 @@ def get_overall_label_score(pred_sent_dict, method, label_dict=label_dict):
         ) if sent_dict['label'] == overall_sentiment]
         overall_score = np.mean(scores)
     return overall_sentiment, overall_score
-
-
-# ------------------------------------------------------------------------------------#
-# function to generate average sentiment per sentences
-
-def generate_average_sentiments_per_sentences(comprehend, content):
-
-    # generating per sentence sentiments
-    aggregated_sentiment_label = 'NEUTRAL'
-    aggregated_sentiment_score = '55'
-    if GENERATE_PER_SENTENCE_SENTIMENT:
-        # split_line_data=content.split()
-        split_line_data = nltk.sent_tokenize(content)
-
-        if split_line_data and len(split_line_data) > 1:
-            pred_sent_dict = {}
-            idx = 0
-            for sentence in split_line_data:
-                sentiment_value, sentiment_score = comprehend_content_sentiment(
-                    comprehend, sentence)
-                pred_sent_dict[idx] = {
-                    'label': sentiment_value, 'score': sentiment_score}
-                # print("partial")
-                idx += 1
-            if pred_sent_dict:
-                method = 'majority-neu'  # 'majority-neg' 'strict'
-                aggregated_sentiment_value, aggregated_sentiment_score = get_overall_label_score(
-                    pred_sent_dict, method)
-
-    return aggregated_sentiment_value, aggregated_sentiment_score

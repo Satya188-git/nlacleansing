@@ -12,8 +12,34 @@ import os
 from datetime import datetime
 
 
-DF_COMPANY_NAME = 'SDG&E'
+DF_COMPANY_NAME = os.environ["DF_COMPANY_NAME"]
+# CSR Details
+EBCSR_NAME = os.environ["EBCSR_NAME"]
+EBCSR_VECTOR_ID = os.environ["EBCSR_VECTOR_ID"]
 
+ERCSR_NAME = os.environ["ERCSR_NAME"]
+ERCSR_VECTOR_ID = os.environ["ERCSR_VECTOR_ID"]
+# Billing Details
+EBBilling_NAME = os.environ["EBBilling_NAME"]
+EBBilling_VECTOR_ID = os.environ["EBBilling_VECTOR_ID"]
+
+ERBilling_NAME = os.environ["ERBilling_NAME"]
+ERBilling_VECTOR_ID = os.environ["ERBilling_VECTOR_ID"]
+# Credit Details
+ERCredit_NAME = os.environ["ERCredit_NAME"]
+ERCredit_VECTOR_ID = os.environ["ERCredit_VECTOR_ID"]
+# Move Details
+EBMove_NAME = os.environ["EBMove_NAME"]
+EBMove_VECTOR_ID = os.environ["EBMove_VECTOR_ID"]
+
+ERMove_NAME = os.environ["ERMove_NAME"]
+ERMove_VECTOR_ID = os.environ["ERMove_VECTOR_ID"]
+
+Athena_Database = os.environ["Athena_Database"]
+Athena_Table = os.environ["Athena_Table"]
+WHERE_FILE_NAME = os.environ["WHERE_FILE_NAME"]
+Retry_Count = os.environ["Retry_Count"]
+Athena_Output_Location = os.environ["Athena_Output_Location"]
 # ------------------------------------------------------------------------------#
 
 
@@ -26,9 +52,6 @@ def read_output_standard(json_content, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER):
 
         labels = data['results']['speaker_labels']['segments']
         speaker_start_times = {}
-
-        print("we got in")
-
         for label in labels:
             for item in label['items']:
                 speaker_start_times[item['start_time']] = item['speaker_label']
@@ -60,7 +83,6 @@ def read_output_standard(json_content, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER):
                     # replace the speaker name and add to the line
                     new_speaker = replace_speaker_name(
                         speaker, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER)
-                    # print("New Speaker:", new_speaker)
                     lines.append(
                         {'speaker': new_speaker, 'line': line, 'time': time})
                 line = content
@@ -78,8 +100,6 @@ def read_output_standard(json_content, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER):
 
             # line = '[' + str(datetime.timedelta(seconds=int(round(float(line_data['time']))))) + '] ' + line_data.get('speaker') + ': ' + line_data.get('line')
             line = line_data.get('speaker') + ': ' + line_data.get('line')
-
-            # print(line)
             results = results + line + "\n"
     else:
         results = ""
@@ -113,95 +133,12 @@ def replace_speaker_name(speaker, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER):
 
 
 # ----------------------------------------------------------#
-# Converting the output of Call Analytics API into Transcript
-
-def read_output_callanalytics(json_content):
-
-    full_transcript = ''
-    for tran in json_content["Transcript"]:
-        full_transcript = full_transcript + "\n" + \
-            tran["ParticipantRole"] + ": " + tran["Content"]
-
-    return full_transcript
-
-# ----------------------------------------------------------#
-# Cleaning of Standard output and keeping the  JSON format
-
-
-def perform_pi_redaction_standard(comprehend, s3client, s3filename, cleaned_bucket_name, content):
-
-    transcripts = content["results"]["transcripts"]
-
-    for i in range(len(transcripts)):
-
-        trans = transcripts[i]["transcript"]
-
-        # send to comprehend to clean
-        cleaned_trans = comprehend_content_cleaning(comprehend, trans)
-
-        # performing Regex based cleaning
-        cleaned_trans2 = regex_content_cleaning(cleaned_trans)
-
-        # storing the redacted results
-        transcripts[i]["transcript"] = cleaned_trans2
-
-    cleaned_content = content
-    cleaned_content["results"]["transcripts"] = transcripts
-
-    # Save the CLEANED content to S3
-    s3_path = "standard/" + s3filename + "_cleaned.json"
-    response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=(bytes(
-        json.dumps(cleaned_content, indent=4).encode('UTF-8'))), ContentType='text/plain')
-
-
-# ----------------------------------------------------------#
-# Cleaning of Call Analytics output and keeping the  JSON format
-
-def perform_pi_redaction_callanalytics(comprehend, s3client, s3filename, cleaned_bucket_name, content):
-
-    transcripts = content["Transcript"]
-
-    for i in range(len(transcripts)):
-
-        trans = transcripts[i]["Content"]
-
-        # detect sentiment
-        sentiment_value, sentiment_score = comprehend_content_sentiment(
-            comprehend, trans)
-
-        # send to comprehend to clean
-        cleaned_trans = comprehend_content_cleaning(comprehend, trans)
-
-        # performing Regex based cleaning
-        cleaned_trans2 = regex_content_cleaning(cleaned_trans)
-
-        # storing the redacted results
-        transcripts[i]["Content"] = cleaned_trans2
-
-        # storing the sentiments
-        transcripts[i]["Comprehend_Sentiment"] = sentiment_value
-        transcripts[i]["Comprehend_Sentiment_Score"] = sentiment_score
-
-    # Adding the changed content back to main JSON object
-    cleaned_content = content
-    cleaned_content["Transcript"] = transcripts
-
-    # Save the CLEANED content to S3
-    s3_path = "analytics/" + s3filename + "_cleaned.json"
-    response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=(bytes(
-        json.dumps(cleaned_content, indent=4).encode('UTF-8'))), ContentType='text/plain')
-
-
-# ----------------------------------------------------------#
 # Cleaning of Call Analytics output and keeping the  JSON format
 
 def perform_pi_redaction_full_transcript(comprehend, s3client, s3filename, cleaned_bucket_name, content):
 
-    # print(content)
-
     # send to comprehend to detect PIIs
     cleaned_content = comprehend_content_cleaning(comprehend, content)
-    # print("Content after cleaning: ", content)
 
     # performing Regex based cleaning
     cleaned_content2 = regex_content_cleaning(cleaned_content)
@@ -312,8 +249,6 @@ def capture_file_metdadata(s3filename):
     # This function will be called by "capture_file_data"
     # it queries the metadata folder in S3 for call metadata
 
-    query = 'SELECT * FROM default.ccc_metadata'
-
     query = """
 			SELECT 
 			    \"full Name\" as \"fullName\",
@@ -327,19 +262,12 @@ def capture_file_metdadata(s3filename):
 			    \"segment vector number\" as \"segmentVectorNumber\",
 			    \"internal segment client start time\" as \"internalSegmentClientStartTime\",
 			    \"internal segment client stop time\" as \"internalSegmentClientStopTime\"
-			FROM \"default\".\"ccc_sdge_dtdes_dev_wus2_s3_nla_pii_metadata\"
+		    FROM \"sdge_dtdes_dev_wus2_gdc_nla-s3-crawler_sdge_dtdes_dev_wus2_nla_athena_db\".\"sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata\"
 			where \"file Name\" = '""" + s3filename + "';"
 
-    print("query:", query)
+    DATABASE = Athena_Database
 
-    # query = "SELECT * FROM default.ccc-metadata-3 limit 10";
-
-    DATABASE = 'default'
-
-    # output = os.environ["OUTPUT"]
-    # print("output folder location", output)
-    # output = 's3://customercallcenterathenaresults/'
-    output = 's3://sdge-dtdes-dev-wus2-s3-nla-athena-results/'
+    output = Athena_Output_Location
 
     client = boto3.client('athena')
 
@@ -356,10 +284,9 @@ def capture_file_metdadata(s3filename):
 
     # get query execution id
     query_execution_id = response['QueryExecutionId']
-    print(query_execution_id)
 
     # number of retries
-    RETRY_COUNT = 10
+    RETRY_COUNT = int(Retry_Count)
 
     # get execution status
     for i in range(1, 1 + RETRY_COUNT):
@@ -367,7 +294,6 @@ def capture_file_metdadata(s3filename):
         # get query execution
         query_status = client.get_query_execution(
             QueryExecutionId=query_execution_id)
-        print("query_status : ", query_status)
         query_execution_status = query_status['QueryExecution']['Status']['State']
 
         if query_execution_status == 'SUCCEEDED':
@@ -387,26 +313,10 @@ def capture_file_metdadata(s3filename):
     # get query results
 
     result = client.get_query_results(QueryExecutionId=query_execution_id)
-    print("result *******************************")
-    print(result)
-    # This is the order of values
-    # "full Name" as "fullName",
-    # "participant agent id" as "participantAgentId",
-    # "segment call direction type id" as "segmentCallDirectionTypeId",
-    # "participant phone-number" as "participantPhoneNumber",
-    # "segment id" as "segmentID",
-    # "segment dialed number" as "segmentDialedNumber",
-    # "segment start time" as "segmentStartTime",
-    # "segment stop time" as "segmentStopTime" ,
-    # "segment vector number" as "segmentVectorNumber",
-    # "internal segment client start time" as "internalSegmentClientStartTime",
-    # "internal segment client stop time" as "internalSegmentClientStopTime"
 
     data = result["ResultSet"]["Rows"][1]["Data"]
-    print("Datas is this ", data)
 
     # Generating the time delta
-    # Sample timestamp: '2021-06-02T07:42:33.2700000'
     s1 = re.findall("(.*)\..*", data[9]['VarCharValue'])[0]
     s2 = re.findall("(.*)\..*", data[10]['VarCharValue'])[0]
 
@@ -419,7 +329,7 @@ def capture_file_metdadata(s3filename):
     customer_area_code = data[3]['VarCharValue'][1:4]
 
     result_dict = {}
-    result_dict["companyName"] = DF_COMPANY_NAME  # DF_COMPANY_NAME = SDG&E
+    result_dict["companyName"] = 'SDG&E'  # DF_COMPANY_NAME = SDG&E
     result_dict["fileID"] = data[4]['VarCharValue']
     result_dict["fileName"] = s3filename
     result_dict["fullName"] = data[0]['VarCharValue'].strip()
@@ -436,73 +346,25 @@ def capture_file_metdadata(s3filename):
     result_dict["internalSegmentClientStopTime"] = data[10]['VarCharValue']
     result_dict["callLengthSeconds"] = str(time_delta.seconds)
 
-    ####################################
-    # Capturing the Call Type information
-    # s3filename1 = "InnPOC_EBHB_1245656_6968917624718701096_Summed.wav"
-    # call_type1 = re.findall(".*_([A-Z]{4})_.*", s3filename1)
-    # print("call_type1 *************")
-    # print(call_type1)
-    # call_type = re.findall(".*_([A-Z]{4})_.*", s3filename)
-    # print("call_type *************")
-    # print(call_type)
-    # call_type = str(call_type[0])
-
-    # # capturing the language
-    # if call_type[0] == 'E':
-    # 	call_languauge = 'English'
-    # elif call_type[0] == 'S':
-    # 	call_languauge = 'Spanish'
-    # else:
-    # 	call_languauge == call_type[0]
-
-    # # Capturing the Customer Type
-    # if call_type[1] == "B":
-    # 	customer_type = "Business"
-    # elif call_type[1] == "R":
-    # 	customer_type = "Residential"
-    # else:
-    # 	customer_type = call_type[1]
-
-    # # Capturing the Call Category
-    # if call_type[2:4] == "HB":
-    # 	call_category = "High Bill"
-    # else:
-    # 	call_category = call_type[2:4]
-
-    # # Capturing the batch name
-    # call_batch = re.findall("^(.*?)_.*", s3filename)
-    # if call_batch:
-    # 	call_batch = call_batch[0]
-    # else:
-    # 	call_batch = ''
-    # s3filename = "NLA_1245669_7150299436568094190_Summed.wav"
-    # call_type = re.findall(".*_([0-9]{7})_.*", s3filename)
-
-    # vector_number = {'1245602': 'ERCSR', '1245667': 'ERBilling', '1245616': 'ERCredit', '1245668': 'ERMove'}
-
-    # call_type = str(call_type[0])
-
-    # try:
-    #     call_type = (vector_number[call_type])
-    # except KeyError:
-    #     print('Business Type Not found')
     call_pattern = re.findall(".*_([0-9]{7})_.*", s3filename)
     call_pattern = str(call_pattern[0])
 
-    if call_pattern == '1245602':
-        call_type = 'ERCSR'
-    elif call_pattern == '1245667':
-        call_type = 'ERBilling'
-    elif call_pattern == '1245616':
-        call_type = 'ERCredit'
-    elif call_pattern == '1245654':
-        call_type = 'EBBilling'
-    elif call_pattern == '1245668':
-        call_type = 'ERMove'
-    elif call_pattern == '1245655':
-        call_type = 'EBMove'
+    if call_pattern == ERCSR_VECTOR_ID:
+        call_type = ERCSR_NAME
+    elif call_pattern == ERBilling_VECTOR_ID:
+        call_type = ERBilling_NAME
+    elif call_pattern == EBCSR_VECTOR_ID:
+        call_type = EBCSR_NAME
+    elif call_pattern == ERCredit_VECTOR_ID:
+        call_type = ERCredit_NAME
+    elif call_pattern == EBBilling_VECTOR_ID:
+        call_type = EBBilling_NAME
+    elif call_pattern == ERMove_VECTOR_ID:
+        call_type = ERMove_NAME
+    elif call_pattern == EBMove_VECTOR_ID:
+        call_type = EBMove_NAME
     else:
-        print("Invalid code/ Business Number")
+        print("Invalid Segment Vector Number / Invalid Call Type")
 
     # capturing the language
     if call_type[0] == 'E':
@@ -536,100 +398,6 @@ def capture_file_metdadata(s3filename):
     result_dict["batchName"] = call_batch
 
     return result_dict
-
-# ----------------------------------------------------------------#
-
-
-def capture_file_data(s3filename):
-    """
-    Naming convention of files:			"InnPOC_ERHB__1245640_6968884106793920414_Summed.wav"
-
-    Components of name:
-
-                    -InnPOC
-                     Name of rules and associated queries created in the NICE Extraction Toolkit (ETK)
-
-                    -ERHB  (residential)
-                    -EBHB  (business)
-                     Call type is English Residential (ER) High Bill (HB)
-
-                     Call_Langauge = 'English'
-                     Call_Type = "Business"
-                     Call_IVR_Category = 'High Bill'
-
-                    -Call Date
-
-                    -1245640
-                     1245852
-                     1245872
-                     Segment Vector Number from NICE, describes what call path the customer was delivered to. Equivalent value of an Avaya Vector Directory Number (VDN)
-
-                    -6968884106793920414
-                     Segment Identification generated by the NICE System for uniqueness
-    """
-
-    # Capturing the batch name
-    call_batch = re.findall("^(.*?)_.*", s3filename)
-    if call_batch:
-        call_batch = call_batch[0]
-    else:
-        call_batch = ''
-
-    # Capturing the segment vector number
-    call_seg_vector = re.findall(".*_(\d{7})_.*", s3filename)
-    if call_seg_vector:
-        call_seg_vector = call_seg_vector[0]
-    else:
-        call_seg_vector = ''
-
-    # Capturing the CallID
-    call_id = re.findall(".*_(\d+)_Summed.*", s3filename)
-    if call_id:
-        call_id = call_id[0]
-    else:
-        call_id = uuid.uuid1().node
-        # call_id = uuid.uuid1().int
-
-    # Capturing the Call Type information
-    call_type = re.findall(".*_([A-Z]{4})_.*", s3filename)
-    call_type = str(call_type[0])
-
-    # capturing the language
-    if call_type[0] == 'E':
-        call_languauge = 'English'
-    elif call_type[0] == 'S':
-        call_languauge = 'Spanish'
-    else:
-        call_languauge == call_type[0]
-
-    # Capturing the Customer Type
-    if call_type[1] == "B":
-        customer_type = "Business"
-    elif call_type[1] == "R":
-        customer_type = "Residential"
-    else:
-        customer_type = call_type[1]
-
-    # Capturing the Call Category
-    if call_type[2:4] == "HB":
-        call_category = "High Bill"
-    else:
-        call_category = call_type[2:4]
-
-    # Appending the call level information
-    file_level_dict = {}
-    file_level_dict["callID"] = call_id
-    file_level_dict["callLength"] = "00:17:11"
-    file_level_dict["language"] = call_languauge
-    file_level_dict["customerType"] = customer_type
-    file_level_dict["ivrCallCategory"] = call_category
-    file_level_dict["batchName"] = call_batch
-    file_level_dict["segmentVectorNumber"] = call_seg_vector
-    file_level_dict["callTimestamp"] = "2022-02-03 12:13:19"
-
-    return file_level_dict
-
-# ----------------------------------------------------------------#
 
 
 def construct_final_output(comprehend, s3client, cleaned_bucket_name, s3filename, system_filename, content, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER):
@@ -674,10 +442,8 @@ def construct_final_output(comprehend, s3client, cleaned_bucket_name, s3filename
             # this is where we are breaking the lines when ParticipantRole is changed
             if current_speaker != speaker:
                 if speaker:
-                    # replace the speaker name and add to the line
                     new_speaker = replace_speaker_name(
                         speaker, CHANNEL_ID_AGENT, CHANNEL_ID_CUSTOMER)
-                    # print("New Speaker:", new_speaker)
                     lines.append({'speaker': new_speaker, 'line': line,
                                  'start_time': start_time, 'end_time': end_time})
                 line = content
@@ -693,22 +459,12 @@ def construct_final_output(comprehend, s3client, cleaned_bucket_name, s3filename
 
     # constructing the results
     results = {}
-
-    # capturing the call level info
-    # results["callLevelInformation"] = capture_file_data(s3filename)
-    print("system_filename " + system_filename)
     results["callLevelInformation"] = capture_file_metdadata(system_filename)
 
     # Capturing the medatadata info
 
     results["transcripts"] = []
     for line_data in sorted_lines:
-
-        # line = '[' + str(datetime.timedelta(seconds=int(round(float(line_data['time']))))) + '] ' + line_data.get('speaker') + ': ' + line_data.get('line')
-        # line = line_data.get('speaker') + ': ' + line_data.get('line')
-
-        # {'speaker': 'AGENT', 'line': 'And could you please provide PFC information?',
-        # 'start_time': '390.47', 'end_time': '390.69'}
 
         # generating line sentiments & cleaning the content
         cleaned_content = comprehend_content_cleaning(
@@ -717,47 +473,24 @@ def construct_final_output(comprehend, s3client, cleaned_bucket_name, s3filename
             comprehend, line_data['line'])
         # performing Regex based cleaning
         cleaned_content2 = regex_content_cleaning(cleaned_content)
-        # generating sentiment average for sentences
-        # generate_average_sentiments_per_sentences(comprehend, line_data['line'])
 
         # Generating line ID
         line_id = str(uuid.uuid4())
 
         line_dict = {}
-        # line_dict["FileId"] = file_id
-        # line_dict["CallType"] = call_type
         line_dict["lineId"] = line_id
-        # line_dict["LoudnessScores"] = "LoudnessScores"
         line_dict["content"] = cleaned_content2
         line_dict["beginOffsetMillis"] = int(
             float(line_data['start_time']) * 1000)
         line_dict["endOffsetMillis"] = int(float(line_data['end_time']) * 1000)
-        # line_dict["TranscribeSentiment"] = "Trascribe Sentiment"
         line_dict["sentiment"] = sentiment_value
         line_dict["sentimentScore"] = sentiment_score
         line_dict["participantRole"] = line_data['speaker']
-
-        # added sentence wise aggregated sentiment value and score.
-        # line_dict["Sentiment_Sentence"] = aggregated_sentiment_value
-        # line_dict["SentimentScore_Sentence"] = aggregated_sentiment_score
-
         results["transcripts"].append(line_dict)
-        print("*************************1***********************************")
     # Save the CLEANED content to S3
     s3_path = "final_outputs/" + s3filename + "_final_output_cleaned.json"
-    # response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=str(results), ContentType='text/plain')
     Body = str(json.dumps(results, indent=4))
-    print("************************Body Indented*************************************")
-    print(Body)
-    print("cleaned_bucket_name"+cleaned_bucket_name)
-    print("s3_path" + s3_path)
     response = s3client.Bucket(cleaned_bucket_name).put_object(
         Key=s3_path, Body=str(json.dumps(results, indent=4)), ContentType='text/plain')
-    # s3_path = "final_outputs2/" + s3filename + "_final_output_cleaned.json"
-    # # response = s3client.Bucket(cleaned_bucket_name).put_object(Key=s3_path, Body=str(results), ContentType='text/plain')
-    # Body = str(json.dumps(results))
-    # print("************************Body Not Indented*************************************")
-    # print(Body)
-    # response = s3client.Bucket(cleaned_bucket_name).put_object(
-    #     Key=s3_path, Body=str(json.dumps(results)), ContentType='text/plain')
+
     return results

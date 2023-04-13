@@ -195,3 +195,8 @@ variable "customercallcenterpiimacieinfo_s3_event_rule_arn" {
   description = "customercallcenterpiimacieinfo_s3_event_rule_arn"
 
 }
+variable "athena_database_name" {
+  type        = string
+  description = "athena_database_name"
+
+}
