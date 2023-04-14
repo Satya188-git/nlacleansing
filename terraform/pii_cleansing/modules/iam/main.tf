@@ -256,8 +256,8 @@ resource "aws_iam_policy" "s3_replication_policy_temp" {
         ],
         "Effect" : "Allow",
         "Resource" : [
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+         "${var.ccc_verified_clean_bucket_arn}",
+          "${var.ccc_verified_clean_bucket_arn}/*"
         ]
       },
       {
@@ -276,14 +276,14 @@ resource "aws_iam_policy" "s3_replication_policy_temp" {
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+        "Resource" : "${var.kms_key_ccc_verified_clean_arn}"
       },
       {
         "Action" : [
           "kms:Encrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+         "Resource" : "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*"
       }
     ]
   })
@@ -603,11 +603,11 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole3" {
 }
 resource "aws_iam_role_policy_attachment" "InfoMacieAmazonMacieFullAccess" {
   role       = module.informational_macie_lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonMacieFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
 }
 resource "aws_iam_role_policy_attachment" "InfoMacieAmazonS3FullAccess" {
   role       = module.informational_macie_lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonS3FullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 resource "aws_iam_role_policy_attachment" "info_macie_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn

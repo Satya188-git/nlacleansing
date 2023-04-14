@@ -343,7 +343,7 @@ module "ccc_audit_call_lambda" {
   region_code      = local.region_code
   application_use  = "audit-call-lambda"
 
-  description                       = "nla macie lambda"
+  description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
   runtime                           = "python3.8"
   publish                           = true
