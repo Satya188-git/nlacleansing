@@ -3,4 +3,4 @@ variables:
   #Add variables here when they are unique per environment and referenced in Jobs added to the pipeline by the `LocalBuildYAML` pipeline parameter
   #More information, https://dev.azure.com/SempraUtilities/SempraUtilities/_wiki/wikis/SempraUtilities.wiki/3587/LocalBuildYAML
   - name: placeholder
-  # - group: sdge-it-nla-$(environment)
+  - group: sdge-it-nla-dev
