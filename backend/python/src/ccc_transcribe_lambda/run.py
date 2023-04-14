@@ -23,7 +23,6 @@ CONF_MINNEGATIVE = float(0.5)
 CONF_MINPOSITIVE = float(0.5)
 CONF_ENTITYCONF = float(0.5)
 
-# CONF_API_MODE = "analytics"
 CONF_API_MODE = "standard"
 CONF_ROLE_ARN = os.environ["CONF_ROLE_ARN"]
 
@@ -34,13 +33,9 @@ job_tags = [{
 
 
 def lambda_handler(event, context):
-    print("Event Name ", event)
     record = event["detail"]
-    print("Record Name", record)
     s3bucket = record['bucket']['name']
     s3object = record['object']['key']
-    print(s3bucket)
-    print(s3object)
 
     # Creating the clients
     s3client = boto3.client('s3')
@@ -49,28 +44,18 @@ def lambda_handler(event, context):
     # Generate job-name
     job_name = my.generate_job_name(s3object)
 
-    # job_name_analytics = job_name + '_callanalytics'
     job_name_standard = job_name + '_standard'
-
-    print("job name: ", job_name_standard)
 
     # constructing the URI
     uri = 's3://' + s3bucket + '/' + s3object
-    print("uri: ", uri)
 
     ##########################################################################################
-    # Make Stereo - convert the Mono file to Stereo
 
-    # print(my.make_stereo(s3client, s3bucket, s3object))
     current_job_status_standard = my.check_existing_job_status(
         transcribe, job_name_standard, "standard")
 
-    # print("Current job status - analytics: ", current_job_status_analytics)
-    print("Current job status - standard: ", current_job_status_standard)
-
     # If there's a job already running then the input file may have been copied - quit
     if (current_job_status_standard == "IN_PROGRESS") or (current_job_status_standard == "QUEUED"):
-        # Return empty job name
         print("A Transcription job named \'{}\' is already in progress - cannot continue.".format(job_name))
         return ""
     elif current_job_status_standard != "":
@@ -80,14 +65,6 @@ def lambda_handler(event, context):
     # Setup the structures common to both Standard and Call Analytics
 
     media_settings = {'MediaFileUri': uri}
-    # print("media settings: ", media_settings)
-
-    # The vocal filtering methods
-
-    # The content redaction settings
-    content_redaction = ""  # if we want to disable the content redaction
-    # content_redaction = {'RedactionType': 'PII', 'RedactionOutput': 'redacted_and_unredacted'}
-    # content_redaction = {'RedactionType': 'PII', 'RedactionOutput': 'redacted'}
 
     # Creating the Channel defition
     channel_definition = [{
@@ -134,16 +111,10 @@ def lambda_handler(event, context):
             'DataAccessRoleArn': CONF_ROLE_ARN
         },
         'Tags': job_tags
-        # 'ContentRedaction': content_redaction
     }
-
-    print("all the arguments: ", kwargs)
 
     # Start the Transcribe job, removing any params that are "None"
     response = transcribe.start_transcription_job(
         **{k: v for k, v in kwargs.items() if v is not None}
     )
-
-    print("Standard Job submission:", response)
-
     return job_name

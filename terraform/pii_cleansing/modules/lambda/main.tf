@@ -56,21 +56,21 @@ module "ccc_transcribe_lambda" {
   }
 
   environment_variables = {
-    CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
-    CONF_S3BUCKET_OUTPUT            = var.ccc_unrefined_call_data_bucket_id
-    CONF_ROLE_ARN                   = var.custom_transcribe_lambda_role_arn
+
+    CONF_API_MODE                   = "standard"
     CONF_CUSTOM_VOCAB_NAME          = "CCC-CustomVocabs"
+    CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
     CONF_FILTER_NAME                = "TestVocabFilter1"
     CONF_MAX_SPEAKERS               = "2"
     CONF_REDACTION_LANGS            = "en-US"
     CONF_REDACTION_TRANSCRIPT       = "true"
+    CONF_ROLE_ARN                   = var.custom_transcribe_lambda_role_arn
+    CONF_S3BUCKET_OUTPUT            = var.ccc_unrefined_call_data_bucket_id
+    CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
     CONF_SPEAKER_MODE               = "channel"
-    CONF_TRANSCRIBE_API             = "analytics"
     CONF_TRANSCRIBE_LANG            = "en-US"
     CONF_VOCABNAME                  = "undefined"
     CONF_VOCAB_FILTER_MODE          = "mask"
-    CONF_API_MODE                   = "standard"
-    CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
   }
@@ -117,6 +117,9 @@ module "ccc_comprehend_lambda" {
   update_role                       = false
 
   environment_variables = {
+    Athena_Database                       = var.athena_database_name
+    Athena_Output_Location                = "s3://${var.ccc_athenaresults_bucket_id}/"
+    Athena_Table                          = var.nla_glue_table_name
     STANDARD_FULL_TRANSCRIPT_SUB_FOLDER   = "standard_full_transcripts/"
     STANDARD_FULL_TRANSCRIPT_FILE_FORMAT  = ".txt"
     STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE = "text/plain"
@@ -137,6 +140,7 @@ module "ccc_comprehend_lambda" {
     ERCSR_VECTOR_ID                       = "1245602"
     ERMove_NAME                           = "ERMove"
     ERMove_VECTOR_ID                      = "1245668"
+    Retry_Count                           = 10
   }
 
   s3_existing_package = {
@@ -339,7 +343,7 @@ module "ccc_audit_call_lambda" {
   region_code      = local.region_code
   application_use  = "audit-call-lambda"
 
-  description                       = "nla macie lambda"
+  description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
   runtime                           = "python3.8"
   publish                           = true

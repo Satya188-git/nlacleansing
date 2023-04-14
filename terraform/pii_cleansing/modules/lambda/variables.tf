@@ -145,6 +145,11 @@ variable "ccc_athenaresults_bucket_id" {
   type        = string
   description = "ccc_athenaresults_bucket_id"
 }
+variable "nla_glue_table_name" {
+  type        = string
+  description = "nla_glue_table_name"
+
+}
 
 variable "dynamodb_audit_table_name" {
   type        = string
@@ -193,5 +198,10 @@ variable "customercallcenterpiimaciescan_s3_event_rule_arn" {
 variable "customercallcenterpiimacieinfo_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiimacieinfo_s3_event_rule_arn"
+
+}
+variable "athena_database_name" {
+  type        = string
+  description = "athena_database_name"
 
 }

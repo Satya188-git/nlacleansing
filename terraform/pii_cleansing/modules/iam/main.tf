@@ -256,8 +256,8 @@ resource "aws_iam_policy" "s3_replication_policy_temp" {
         ],
         "Effect" : "Allow",
         "Resource" : [
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+         "${var.ccc_verified_clean_bucket_arn}",
+          "${var.ccc_verified_clean_bucket_arn}/*"
         ]
       },
       {
@@ -276,14 +276,14 @@ resource "aws_iam_policy" "s3_replication_policy_temp" {
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+        "Resource" : "${var.kms_key_ccc_verified_clean_arn}"
       },
       {
         "Action" : [
           "kms:Encrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+         "Resource" : "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*"
       }
     ]
   })
@@ -306,8 +306,8 @@ resource "aws_iam_policy" "s3_replication_policy" {
         ],
         "Effect" : "Allow",
         "Resource" : [
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean",
-          "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-verified-clean/*"
+          "${var.ccc_verified_clean_bucket_arn}",
+          "${var.ccc_verified_clean_bucket_arn}/*"
         ]
       },
       {
@@ -326,14 +326,14 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:${var.account_id}:key/551d47b3-97af-415b-ae31-71b6b7bc4cc0"
+        "Resource" : "${var.kms_key_ccc_verified_clean_arn}"
       },
       {
         "Action" : [
           "kms:Encrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
+        "Resource" : "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*"
       }
     ]
   })
@@ -596,9 +596,26 @@ resource "aws_iam_role_policy_attachment" "AmazonMacieFullAccess" {
   role       = module.macie_lambda_role.name
 }
 
+# info macie
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole3" {
   role       = module.informational_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+resource "aws_iam_role_policy_attachment" "InfoMacieAmazonMacieFullAccess" {
+  role       = module.informational_macie_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
+}
+resource "aws_iam_role_policy_attachment" "InfoMacieAmazonS3FullAccess" {
+  role       = module.informational_macie_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+resource "aws_iam_role_policy_attachment" "info_macie_kms_full_access" {
+  policy_arn = aws_iam_policy.kms_full_access.arn
+  role       = module.informational_macie_lambda_role.name
+}
+resource "aws_iam_role_policy_attachment" "info_macie_iam_pass_role_policy" {
+  policy_arn = aws_iam_policy.iam_pass_role_policy.arn
+  role       = module.informational_macie_lambda_role.name
 }
 
 # trigger macie lambda role

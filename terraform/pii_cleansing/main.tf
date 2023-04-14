@@ -8,6 +8,7 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   account_id       = data.aws_caller_identity.current.account_id
+  glue_table_name  = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata"
   tags = {
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
@@ -140,10 +141,12 @@ module "iam" {
   cmdb-ci-id                         = var.cmdb-ci-id
   data-classification                = var.data-classification
   account_id                         = local.account_id
+  kms_key_ccc_verified_clean_arn     = module.kms.kms_key_ccc_verified_clean_arn
+  ccc_verified_clean_bucket_arn      = module.s3.ccc_verified_clean_bucket_arn
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
-  aws_assume_role_user_pii           = var.aws_assume_role_user_pii
   ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
+  insights_account_id                = var.insights_account_id
 }
 
 
@@ -222,6 +225,8 @@ module "lambda" {
   customercallcenterpiicleaned_s3_event_rule_arn         = module.eventbridge.customercallcenterpiicleaned_s3_event_rule_arn
   customercallcenterpiimaciescan_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimaciescan_s3_event_rule_arn
   customercallcenterpiimacieinfo_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimacieinfo_s3_event_rule_arn
+  athena_database_name                                   = module.athena.athena_database_name
+  nla_glue_table_name                                    = module.glue.nla_glue_table_name[local.glue_table_name]
 }
 
 module "s3" {

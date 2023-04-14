@@ -116,8 +116,8 @@ parameters:
     type: object
     default:
       - env: dev
-    #- env: tst
-    #- env: qa
+      #- env: tst
+      # - env: qa
     #- env: prd
 
   #Base portion of service connection name, generally pipeline name
