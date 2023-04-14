@@ -8,6 +8,7 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   account_id       = data.aws_caller_identity.current.account_id
+  glue_table_name  = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata"
   tags = {
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
@@ -222,7 +223,7 @@ module "lambda" {
   customercallcenterpiimaciescan_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimaciescan_s3_event_rule_arn
   customercallcenterpiimacieinfo_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimacieinfo_s3_event_rule_arn
   athena_database_name                                   = module.athena.athena_database_name
-  nla_glue_table_name                                    = module.glue.nla_glue_table_name
+  nla_glue_table_name                                    = module.glue.nla_glue_table_name[local.glue_table_name]
 }
 
 module "s3" {
