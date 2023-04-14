@@ -141,9 +141,12 @@ module "iam" {
   cmdb-ci-id                         = var.cmdb-ci-id
   data-classification                = var.data-classification
   account_id                         = local.account_id
+  kms_key_ccc_verified_clean_arn     = module.kms.kms_key_ccc_verified_clean_arn
+  ccc_verified_clean_bucket_arn      = module.s3.ccc_verified_clean_bucket_arn
   ccc_unrefined_call_data_bucket_arn = module.s3.ccc_unrefined_call_data_bucket_arn
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
   ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
+  insights_account_id                = var.insights_account_id
 }
 
 

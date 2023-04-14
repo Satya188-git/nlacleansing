@@ -106,7 +106,7 @@ variable "aws_assume_role_insights" {
   description = "AWS IAM role to assume when creation resources in the NLA Insights accounts"
   type        = string
 }
-# variable "aws_assume_role_user_pii" {
-#   type        = string
-#   description = "AWS IAM user to assume a role when creation resources in the NLA PII accounts"
-# }
+variable "insights_account_id" {
+  type        = string
+  description = "AWS account id for NLA Insights accounts"
+}

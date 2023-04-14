@@ -96,3 +96,16 @@ variable "ccc_piimetadata_bucket_arn" {
   type        = string
   description = "ccc_piimetadata_bucket_arn"
 }
+variable "insights_account_id" {
+  type        = string
+  description = "AWS account id for NLA Insights accounts"
+}
+variable "kms_key_ccc_verified_clean_arn" {
+  type        = string
+  description = "kms_key_ccc_verified_clean_arn"
+}
+variable "ccc_verified_clean_bucket_arn" {
+  type        = string
+  description = "ccc_verified_clean_bucket_arn"
+
+}
