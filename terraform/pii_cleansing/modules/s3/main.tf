@@ -36,7 +36,9 @@ module "ccc_unrefined_call_data_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         sse_algorithm     = "aws:kms"
-        kms_master_key_id = "alias/aws/s3"
+        # kms_master_key_id = "alias/aws/s3"
+        kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
+       
         # kms_master_key_id = var.kms_key_ccc_unrefined_arn
         # sse_algorithm = "aws:kms"
         # sse_algorithm       = "AES256"
@@ -85,7 +87,10 @@ module "ccc_initial_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         sse_algorithm     = "aws:kms"
-        kms_master_key_id = "alias/aws/s3"
+        # kms_master_key_id = "alias/aws/s3"
+        kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
+       
+       
         # kms_master_key_id = var.kms_key_ccc_initial_arn
         # sse_algorithm = "aws:kms"
         # sse_algorithm       = "AES256"
