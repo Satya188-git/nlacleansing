@@ -134,7 +134,7 @@ module "ccc_cleaned_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         # kms_master_key_id = var.kms_key_ccc_clean_arn
-        kms_master_key_id = alias/aws/kms # revert to customer managed key after provider bug workaround
+        kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
         # sse_algorithm       = "AES256"
       }
@@ -184,7 +184,7 @@ module "ccc_verified_clean_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         # kms_master_key_id = var.kms_key_ccc_verified_clean_arn
-        kms_master_key_id = alias/aws/kms # revert to customer managed key after provider bug workaround
+        kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
       }
     }
@@ -232,7 +232,7 @@ module "ccc_dirty_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         # kms_master_key_id = var.kms_key_ccc_dirty_arn
-        kms_master_key_id = alias/aws/kms # revert to customer managed key after provider bug workaround
+        kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
       }
     }
@@ -279,7 +279,7 @@ module "ccc_maciefindings_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         # kms_master_key_id = var.kms_key_ccc_maciefindings_arn
-        kms_master_key_id = alias/aws/kms # revert to customer managed key after provider bug workaround
+        kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
       }
     }
@@ -416,7 +416,7 @@ module "ccc_athenaresults_bucket" {
     rule = {
       apply_server_side_encryption_by_default = {
         # kms_master_key_id = var.kms_key_ccc_athenaresults_arn
-        kms_master_key_id = alias/aws/kms # revert to customer managed key after provider bug workaround
+        kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
       }
     }
