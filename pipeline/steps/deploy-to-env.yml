@@ -44,26 +44,20 @@ parameters:
     default: "info-macie"
   - name: s3LambdaObjectKey4
     type: string
-    default: "ccc_macie_lambda.zip"
+    default: "ccc_macie_scan_trigger_lambda.zip"
   - name: lambdaFunctionName4
     type: string
-    default: "macie"
+    default: "macie-scan"
   - name: s3LambdaObjectKey5
     type: string
-    default: "ccc_macie_scan_trigger_lambda.zip"
+    default: "ccc_notification_forwarder_lambda.zip"
   - name: lambdaFunctionName5
     type: string
-    default: "macie-scan"
+    default: "notification"
   - name: s3LambdaObjectKey6
     type: string
-    default: "ccc_notification_forwarder_lambda.zip"
-  - name: lambdaFunctionName6
-    type: string
-    default: "notification"
-  - name: s3LambdaObjectKey7
-    type: string
     default: "ccc_transcribe_lambda.zip"
-  - name: lambdaFunctionName7
+  - name: lambdaFunctionName6
     type: string
     default: "lambda-transcribe"
 
@@ -94,7 +88,3 @@ steps:
       lambdaFunctionName5: ${{ parameters.lambdaFunctionName5 }}
       s3LambdaObjectKey6: ${{ parameters.s3LambdaObjectKey6 }}
       lambdaFunctionName6: ${{ parameters.lambdaFunctionName6 }}
-      s3LambdaObjectKey7: ${{ parameters.s3LambdaObjectKey7 }}
-      lambdaFunctionName7: ${{ parameters.lambdaFunctionName7 }}
-      s3LambdaObjectKey8: ${{ parameters.s3LambdaObjectKey8 }}
-      lambdaFunctionName8: ${{ parameters.lambdaFunctionName8 }}

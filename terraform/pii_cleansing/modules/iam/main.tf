@@ -90,23 +90,6 @@ module "informational_macie_lambda_role" {
     },
   )
 }
-module "macie_lambda_role" {
-  source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
-  company_code      = local.company_code
-  application_code  = local.application_code
-  environment_code  = local.environment_code
-  region_code       = local.region_code
-  application_use   = "${local.application_use}-macie"
-  service_resources = ["lambda.amazonaws.com"]
-
-  tags = merge(
-    local.tags,
-    {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-macie"
-    },
-  )
-}
 
 module "trigger_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
@@ -143,6 +126,7 @@ module "sns_lambda_role" {
     },
   )
 }
+
 module "athena_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
   version           = "4.0.2"
@@ -558,42 +542,6 @@ resource "aws_iam_role_policy_attachment" "transcribe_kms_full_access" {
 resource "aws_iam_role_policy_attachment" "transcribe_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.transcribe_lambda_role.name
-}
-
-# macie lambda role
-resource "aws_iam_role_policy_attachment" "MacieAmazonMacieFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
-  role       = module.macie_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole4" {
-  role       = module.macie_lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-# macie info lambda role
-resource "aws_iam_role_policy_attachment" "macie_kms_full_access" {
-  policy_arn = aws_iam_policy.kms_full_access.arn
-  role       = module.macie_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "macie_iam_pass_role_policy" {
-  policy_arn = aws_iam_policy.iam_pass_role_policy.arn
-  role       = module.macie_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "MacieAmazonS3FullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-  role       = module.macie_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "MacieAmazonAthenaFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
-  role       = module.macie_lambda_role.name
-}
-resource "aws_iam_role_policy_attachment" "AmazonMacieFullAccess" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
-  role       = module.macie_lambda_role.name
 }
 
 # info macie

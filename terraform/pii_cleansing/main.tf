@@ -172,7 +172,6 @@ module "kms" {
   transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
-  macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
   nla_replication_role_arn            = module.iam.nla_replication_role_arn
 }
@@ -201,7 +200,6 @@ module "lambda" {
   transcribe_lambda_role_arn                             = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn                             = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn                    = module.iam.informational_macie_lambda_role_arn
-  macie_lambda_role_arn                                  = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn                          = module.iam.trigger_macie_lambda_role_arn
   sns_lambda_role_arn                                    = module.iam.sns_lambda_role_arn
   audit_call_lambda_role_arn                             = module.iam.audit_call_lambda_role_arn

@@ -69,14 +69,6 @@ jobs:
           archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_informational_macie_lambda.zip"
           replaceExistingArchive: true
       - task: ArchiveFiles@2
-        displayName: "Archive Lambda ccc_macie_lambda files"
-        inputs:
-          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_macie_lambda"
-          includeRootFolder: false
-          archiveType: "zip"
-          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_macie_lambda.zip"
-          replaceExistingArchive: true
-      - task: ArchiveFiles@2
         displayName: "Archive Lambda ccc_macie_scan_trigger_lambda files"
         inputs:
           rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_macie_scan_trigger_lambda"

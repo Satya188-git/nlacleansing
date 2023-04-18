@@ -117,8 +117,8 @@ parameters:
     default:
       - env: dev
       #- env: tst
-      - env: qa
-    #- env: prd
+      #- env: qa
+      #- env: prd
 
   #Base portion of service connection name, generally pipeline name
   - name: SCName
