@@ -247,12 +247,12 @@ resource "aws_kms_grant" "infoMacie_lambda_role_kms_key" {
   operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
 }
 
-resource "aws_kms_grant" "ccc_notification_forwarder_lambda" {
-  name              = "${local.application_use}-lambda_role_kms_key_5"
-  key_id            = aws_kms_key.dirty_kms_key.key_id
-  grantee_principal = var.macie_lambda_role_arn
-  operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
-}
+# resource "aws_kms_grant" "ccc_notification_forwarder_lambda" {
+#   name              = "${local.application_use}-lambda_role_kms_key_5"
+#   key_id            = aws_kms_key.dirty_kms_key.key_id
+#   grantee_principal = var.macie_lambda_role_arn
+#   operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
+# }
 
 resource "aws_kms_grant" "ccc_macie_scan_trigger_lambda" {
   name              = "${local.application_use}-lambda_role_kms_key_6"
