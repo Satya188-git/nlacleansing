@@ -29,31 +29,31 @@ parameters:
     default: "ccc_audit_call_lambda.zip"
   - name: lambdaFunctionName1
     type: string
-    default: "audit-call-lambda"
+    default: "lambda-audit-call-lambda"
   - name: s3LambdaObjectKey2
     type: string
     default: "ccc_comprehend_lambda.zip"
   - name: lambdaFunctionName2
     type: string
-    default: "comprehend-lambda"
+    default: "lambda-comprehend-lambda"
   - name: s3LambdaObjectKey3
     type: string
     default: "ccc_informational_macie_lambda.zip"
   - name: lambdaFunctionName3
     type: string
-    default: "info-macie-lambda"
+    default: "lambda-info-macie-lambda"
   - name: s3LambdaObjectKey4
     type: string
     default: "ccc_macie_scan_trigger_lambda.zip"
   - name: lambdaFunctionName4
     type: string
-    default: "macie-scan-lambda"
+    default: "lambda-macie-scan-lambda"
   - name: s3LambdaObjectKey5
     type: string
     default: "ccc_notification_forwarder_lambda.zip"
   - name: lambdaFunctionName5
     type: string
-    default: "notification-lambda"
+    default: "lambda-notification-lambda"
   - name: s3LambdaObjectKey6
     type: string
     default: "ccc_transcribe_lambda.zip"
