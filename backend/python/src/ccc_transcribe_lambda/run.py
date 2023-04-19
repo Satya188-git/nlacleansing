@@ -4,16 +4,12 @@ import boto3
 import functions_definitions as my
 import os
 
-CONF_VOCAB_FILTER_MODE = os.environ["CONF_VOCAB_FILTER_MODE"]
-CONF_CUSTOM_VOCAB_NAME = os.environ["CONF_CUSTOM_VOCAB_NAME"]
 CONF_FILTER_NAME = os.environ["CONF_FILTER_NAME"]
 CONF_MAX_SPEAKERS = os.environ["CONF_MAX_SPEAKERS"]
 CONF_REDACTION_LANGS = os.environ["CONF_REDACTION_LANGS"]
 CONF_S3BUCKET_OUTPUT = os.environ["CONF_S3BUCKET_OUTPUT"]
 CONF_SPEAKER_MODE = os.environ["CONF_SPEAKER_MODE"]
-CONF_TRANSCRIBE_API = os.environ["CONF_TRANSCRIBE_API"]
 CONF_TRANSCRIBE_LANG = os.environ["CONF_TRANSCRIBE_LANG"]
-CONF_VOCABNAME = os.environ["CONF_VOCABNAME"]
 CONF_REDACTION_TRANSCRIPT = os.environ["CONF_REDACTION_TRANSCRIPT"]
 CONF_DESTINATION_BUCKET_NAME = os.environ["CONF_DESTINATION_BUCKET_NAME"]
 KEY = os.environ["KEY"]
@@ -101,8 +97,6 @@ def lambda_handler(event, context):
         'OutputBucketName': CONF_DESTINATION_BUCKET_NAME,
         'OutputKey': 'standard/',
         'Settings': {
-            'VocabularyName': CONF_CUSTOM_VOCAB_NAME,
-            'VocabularyFilterMethod': CONF_VOCAB_FILTER_MODE,
             "MaxSpeakerLabels": 2,
             "ShowSpeakerLabels": True,
         },

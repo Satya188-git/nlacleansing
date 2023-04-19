@@ -37,7 +37,6 @@ ERMove_VECTOR_ID = os.environ["ERMove_VECTOR_ID"]
 
 Athena_Database = os.environ["Athena_Database"]
 Athena_Table = os.environ["Athena_Table"]
-WHERE_FILE_NAME = os.environ["WHERE_FILE_NAME"]
 Retry_Count = os.environ["Retry_Count"]
 Athena_Output_Location = os.environ["Athena_Output_Location"]
 # ------------------------------------------------------------------------------#
