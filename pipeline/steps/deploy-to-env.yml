@@ -23,7 +23,7 @@ parameters:
     default: "s3-tf-artifacts"
   - name: s3ArtifactBucketFolder
     type: string
-    default: "terraform-artifact"
+    default: "pipeline-artifact"
   - name: s3LambdaObjectKey1
     type: string
     default: "ccc_audit_call_lambda.zip"
