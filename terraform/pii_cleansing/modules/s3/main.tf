@@ -471,7 +471,7 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
       prefix = "final_outputs/"
     }
 
-    status = "Disabled"
+    status = "Enabled"
     source_selection_criteria {
       sse_kms_encrypted_objects {
         status = "Enabled"
@@ -481,7 +481,6 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
     destination {
       account       = var.insights_account_id
       bucket        = var.s3bucket_insights_replication_arn
-      storage_class = "STANDARD"
       encryption_configuration {
         replica_kms_key_id = var.insights_s3kms_arn
       }
