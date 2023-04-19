@@ -62,12 +62,6 @@ parameters:
     default: "lambda-transcribe"
 
 steps:
-  - template: ./S3-sync.yml
-    parameters:
-      SCName: ${{ parameters.SCName }}
-      Environment: ${{ parameters.Environment }}
-      awsRegionCode: ${{ parameters.awsRegionCode }}
-      awsRegionAbbreviation: ${{ parameters.awsRegionAbbreviation }}
   - template: ./lambda-deploy.yml
     parameters:
       SCName: ${{ parameters.SCName }}
