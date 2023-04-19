@@ -475,15 +475,15 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
       }
     }
 
-    access_control_translation {
-      owner = "Destination"
-    }
     destination {
       account       = var.insights_account_id
       bucket        = var.s3bucket_insights_replication_arn
       storage_class = "STANDARD"
       encryption_configuration {
         replica_kms_key_id = var.insights_s3kms_arn
+      }
+      access_control_translation {
+        owner = "Destination"
       }
     }
 
