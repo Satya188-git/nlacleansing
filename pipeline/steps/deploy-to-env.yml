@@ -59,7 +59,7 @@ parameters:
     default: "ccc_transcribe_lambda.zip"
   - name: lambdaFunctionName6
     type: string
-    default: "lambda-transcribe-lambda"
+    default: "lambda-transcribe"
 
 steps:
   - template: ./lambda-deploy.yml
