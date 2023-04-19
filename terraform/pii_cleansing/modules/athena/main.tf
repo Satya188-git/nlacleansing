@@ -22,6 +22,7 @@ locals {
 }
 
 module "athena" {
+  depends_on = [var.ccc_athenaresults_bucket_id]
   source           = "app.terraform.io/SempraUtilities/seu-athena/aws"
   version          = "7.1.0"
   company_code     = local.company_code

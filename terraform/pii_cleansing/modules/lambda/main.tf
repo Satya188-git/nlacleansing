@@ -71,6 +71,7 @@ module "ccc_transcribe_lambda" {
     CONF_TRANSCRIBE_LANG            = "en-US"
     CONF_VOCABNAME                  = "undefined"
     CONF_VOCAB_FILTER_MODE          = "mask"
+    CONF_TRANSCRIBE_API             = "analytics"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
   }
