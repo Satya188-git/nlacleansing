@@ -453,6 +453,42 @@ resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
 }
 
 
+#source replication configuration
+resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
+  # Must have bucket versioning enabled first
+  depends_on = [module.ccc_verified_clean_bucket.s3_bucket_id, var.nla_replication_role_arn]
+
+  role   = var.nla_replication_role_arn
+  bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+
+  rule {
+    id = "insights_bucket_replication_rule"
+
+    filter {
+      prefix = "final_outputs/"
+    }
+
+    status = "Disabled"
+    source_selection_criteria {
+      sse_kms_encrypted_objects {
+        status = "Enabled"
+      }
+    }
+
+    access_control_translation {
+      owner = "Destination"
+    }
+    destination {
+      account       = var.insights_account_id
+      bucket        = var.s3bucket_insights_replication_arn
+      storage_class = "STANDARD"
+      encryption_configuration {
+        replica_kms_key_id = var.insights_s3kms_arn
+      }
+    }
+
+  }
+}
 
 # provider "aws" {
 #   alias  = "nla-insights"
@@ -491,42 +527,7 @@ resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
 #   }
 # }
 
-# #source replication configuration
-# resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
-#   provider = aws.west
-#   # Must have bucket versioning enabled first
-#   depends_on = [module.ccc_verified_clean_bucket.s3_bucket_id, module.nla_replication_role.arn, module.insights_verified_clean_bucket.s3_bucket_arn]
 
-#   # role   = var.nla_replication_role_arn
-#   role   = module.nla_replication_role.arn
-#   bucket = module.ccc_verified_clean_bucket.s3_bucket_id
-
-
-#   rule {
-#     id = "insights_bucket_replication_rule"
-
-#     filter {
-#       prefix = "final_outputs/"
-#     }
-
-#     status = "Disabled"
-#     source_selection_criteria {
-#       sse_kms_encrypted_objects {
-#         status = "Enabled"
-#       }
-#     }
-#     destination {
-#       account = data.aws_caller_identity.destination_acc_id.account_id
-#       # bucket        = "arn:aws:s3:::ccc-verified-cleaned-nla-temp"
-#       bucket        = module.insights_verified_clean_bucket.arn
-#       storage_class = "STANDARD"
-#       encryption_configuration {
-#         replica_kms_key_id = "arn:aws:kms:us-west-2:713342716921:key/b71c79be-8406-4ade-8db7-6e68467f46e4"
-#       }
-#     }
-
-#   }
-# }
 
 # # source object ownership
 # resource "aws_s3_bucket_ownership_controls" "ccc_verified_clean_bucket" {

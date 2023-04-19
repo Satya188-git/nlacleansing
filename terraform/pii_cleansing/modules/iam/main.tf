@@ -427,24 +427,6 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
   })
 }
 
-# resource "aws_iam_policy" "replication_assume_role" {
-#   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
-#   policy = jsonencode({
-#     "Version" : "2012-10-17",
-#     "Statement" : [
-#       {
-#         "Effect" : "Allow",
-#         "Principal" : {
-#           "AWS" : [
-#             "${var.aws_assume_role_insights}",
-#             "${var.aws_assume_role_user_pii}"
-#           ]
-#         },
-#         "Action" : "sts:AssumeRole"
-#       }
-#     ]
-#   })
-# }
 // create policy
 resource "aws_iam_policy" "s3_crawler_role_policy" {
   name        = "S3BucketAccess"
@@ -473,11 +455,6 @@ resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
   policy_arn = aws_iam_policy.s3_replication_policy.arn
   role       = module.nla_replication_role.name
 }
-# resource "aws_iam_policy_attachment" "replication_assume_role_policy" {
-#   policy_arn = aws_iam_policy.replication_assume_role
-#   roles      = [module.nla_replication_role.name]
-#   name       = "replication_assume_role_policy"
-# }
 
 resource "aws_iam_role_policy_attachment" "AmazonComprehendFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ComprehendFullAccess"

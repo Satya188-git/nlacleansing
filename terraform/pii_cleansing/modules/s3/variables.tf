@@ -118,6 +118,26 @@ variable "macie_info_trigger_arn" {
   type        = string
   description = "macie_info_trigger_arn"
 }
+
+variable "nla_replication_role_arn" {
+  type = string
+}
+
+variable "s3bucket_insights_replication_arn" {
+  type        = string
+  description = "Name of s3 bucket on insights account for object replication"
+}
+
+variable "insights_account_id" {
+  type        = string
+  description = "AWS account id for NLA Insights accounts"
+}
+
+variable "insights_s3kms_arn" {
+  type        = string
+  description = "NLA Insights account KMS key to encrypt replicated S3 objects"
+}
+
 # variable "aws_assume_role_insights" {
 #   type        = string
 #   description = "aws_assume_role_insights"
@@ -125,10 +145,6 @@ variable "macie_info_trigger_arn" {
 # variable "kms_key_ccc_verified_clean_insights_arn" {
 #   type        = string
 #   description = "kms_key_ccc_verified_clean_insights_arn"
-
-# }
-# variable "nla_replication_role_arn" {
-#   type = string
 # }
 
 # variable "aws_assume_role" {
