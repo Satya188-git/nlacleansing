@@ -463,6 +463,9 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
 
   rule {
     id = "insights_bucket_replication_rule"
+    delete_marker_replication {
+      status = "Disabled"
+    }
 
     filter {
       prefix = "final_outputs/"
