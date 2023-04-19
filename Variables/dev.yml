@@ -23,4 +23,4 @@ variables:
   #Replace the below  with the value of the adoRepoName variable (Not the variable itself! It wont work!) and the environment name at the end
   #For example, if adoRepoName is `shared-it-devsecops` and environment is `dev` this value is `shared-it-devsecops-dev`
   #Below variables are for Azure Deployment
-  - group: sdge-it-nla-dev
+  - group: "sdge-it-nla-dev"

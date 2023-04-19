@@ -74,31 +74,36 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
 variable "account_id" {
   type        = string
   description = "The AWS account ID"
 }
+
 variable "custom_transcribe_lambda_role_arn" {
   type = string
 }
+
 variable "transcribe_lambda_role_arn" {
   type = string
 }
+
 variable "comprehend_lambda_role_arn" {
   type = string
 }
+
 variable "informational_macie_lambda_role_arn" {
   type = string
 }
-variable "macie_lambda_role_arn" {
-  type = string
-}
+
 variable "trigger_macie_lambda_role_arn" {
   type = string
 }
+
 variable "sns_lambda_role_arn" {
   type = string
 }
+
 variable "audit_call_lambda_role_arn" {
   type = string
 }
@@ -106,18 +111,23 @@ variable "audit_call_lambda_role_arn" {
 variable "ccc_unrefined_call_data_bucket_arn" {
   type = string
 }
+
 variable "ccc_verified_clean_bucket_arn" {
   type = string
 }
+
 variable "ccc_maciefindings_bucket_arn" {
   type = string
 }
+
 variable "ccc_cleaned_bucket_arn" {
   type = string
 }
+
 variable "ccc_initial_bucket_arn" {
   type = string
 }
+
 variable "ccc_initial_bucket_id" {
   type        = string
   description = "ccc_initial_bucket_id"
@@ -132,10 +142,12 @@ variable "ccc_cleaned_bucket_id" {
   type        = string
   description = "ccc_cleaned_bucket_id"
 }
+
 variable "ccc_verified_clean_bucket_id" {
   type        = string
   description = "ccc_verified_clean_bucket_id"
 }
+
 variable "ccc_dirty_bucket_id" {
   type        = string
   description = "ccc_dirty_bucket_id"
@@ -145,10 +157,10 @@ variable "ccc_athenaresults_bucket_id" {
   type        = string
   description = "ccc_athenaresults_bucket_id"
 }
+
 variable "nla_glue_table_name" {
   type        = string
   description = "nla_glue_table_name"
-
 }
 
 variable "dynamodb_audit_table_name" {
@@ -169,6 +181,7 @@ variable "ccc_athenaresults_bucket_arn" {
   type        = string
   description = "ccc_athenaresults_bucket_arn"
 }
+
 variable "customercallcenterpiitranscription_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiitranscription_s3_event_rule_arn"
@@ -192,16 +205,14 @@ variable "customercallcenterpiicleaned_s3_event_rule_arn" {
 variable "customercallcenterpiimaciescan_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiimaciescan_s3_event_rule_arn"
-
 }
 
 variable "customercallcenterpiimacieinfo_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiimacieinfo_s3_event_rule_arn"
-
 }
+
 variable "athena_database_name" {
   type        = string
   description = "athena_database_name"
-
 }

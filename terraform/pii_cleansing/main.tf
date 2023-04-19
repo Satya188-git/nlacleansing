@@ -172,7 +172,6 @@ module "kms" {
   transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
-  macie_lambda_role_arn               = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn       = module.iam.trigger_macie_lambda_role_arn
   nla_replication_role_arn            = module.iam.nla_replication_role_arn
 }
@@ -201,7 +200,6 @@ module "lambda" {
   transcribe_lambda_role_arn                             = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn                             = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn                    = module.iam.informational_macie_lambda_role_arn
-  macie_lambda_role_arn                                  = module.iam.macie_lambda_role_arn
   trigger_macie_lambda_role_arn                          = module.iam.trigger_macie_lambda_role_arn
   sns_lambda_role_arn                                    = module.iam.sns_lambda_role_arn
   audit_call_lambda_role_arn                             = module.iam.audit_call_lambda_role_arn
@@ -255,8 +253,10 @@ module "s3" {
   kms_key_ccc_maciefindings_arn  = module.kms.kms_key_ccc_maciefindings_arn
   kms_key_ccc_piimetadata_arn    = module.kms.kms_key_ccc_piimetadata_arn
   kms_key_ccc_athenaresults_arn  = module.kms.kms_key_ccc_athenaresults_arn
-  # kms_key_ccc_verified_clean_insights_arn = module.kms.kms_key_ccc_verified_clean_insights_arn
-  macie_info_trigger_arn = module.lambda.macie_info_trigger_arn
-  # nla_replication_role_arn       = module.iam.nla_replication_role_arn
-  account_id = local.account_id
+  macie_info_trigger_arn         = module.lambda.macie_info_trigger_arn
+  nla_replication_role_arn       = module.iam.nla_replication_role_arn
+  s3bucket_insights_replication_arn  = var.s3bucket_insights_replication_arn
+  account_id                         = local.account_id
+  insights_account_id                = var.insights_account_id
+  insights_s3kms_arn                 = var.insights_s3kms_arn
 }

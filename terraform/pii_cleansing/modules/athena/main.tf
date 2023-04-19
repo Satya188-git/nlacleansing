@@ -22,6 +22,7 @@ locals {
 }
 
 module "athena" {
+  depends_on = [var.ccc_athenaresults_bucket_id]
   source           = "app.terraform.io/SempraUtilities/seu-athena/aws"
   version          = "7.1.0"
   company_code     = local.company_code
@@ -37,7 +38,7 @@ module "athena" {
   workgroup_description              = "Athena NLA Workgroup"
   enforce_workgroup_configuration    = true
   publish_cloudwatch_metrics_enabled = true
-  output_location                    = "s3://${var.ccc_athenaresults_bucket_id}/output/"
+  output_location                    = "s3://${var.ccc_athenaresults_bucket_id}/"
   workgroup_encryption_option        = "SSE_KMS"
   workgroup_kms_key_arn              = var.athena_kms_key_arn
 

@@ -59,13 +59,3 @@ steps:
       codeLocation: "s3object"
       s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
       s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey6 }}"
-  - task: LambdaDeployFunction@1
-    displayName: "Deploy ${{ parameters.lambdaFunctionName7 }} lambda"
-    inputs:
-      awsCredentials: "${{ parameters.SCName }}-${{ parameters.environment }}"
-      regionName: "${{ parameters.awsRegionCode }}"
-      deploymentMode: "codeonly"
-      functionName: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.lambdaFunctionName7 }}"
-      codeLocation: "s3object"
-      s3Bucket: "$(organization)-$(applicationCode)-${{ parameters.environment }}-${{ parameters.awsRegionAbbreviation }}-${{ parameters.s3ArtifactBucketSuffix }}"
-      s3ObjectKey: "${{ parameters.s3ArtifactBucketFolder }}/${{ parameters.s3LambdaObjectKey7 }}"

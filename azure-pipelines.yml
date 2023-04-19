@@ -117,8 +117,8 @@ parameters:
     default:
       - env: dev
       #- env: tst
-      # - env: qa
-    #- env: prd
+      - env: qa
+      #- env: prd
 
   #Base portion of service connection name, generally pipeline name
   - name: SCName
@@ -198,7 +198,7 @@ parameters:
 
   #Enable logic to source post tf-apply release steps from triggering repository if needed
   - name: LocalReleaseYAML
-    default: false
+    default: true
     displayName: "Use Release Step YAML From Local Repo"
     type: boolean
 

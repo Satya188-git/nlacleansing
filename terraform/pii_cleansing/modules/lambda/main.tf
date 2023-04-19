@@ -71,6 +71,7 @@ module "ccc_transcribe_lambda" {
     CONF_TRANSCRIBE_LANG            = "en-US"
     CONF_VOCABNAME                  = "undefined"
     CONF_VOCAB_FILTER_MODE          = "mask"
+    CONF_TRANSCRIBE_API             = "analytics"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
   }
@@ -288,47 +289,6 @@ module "ccc_macie_scan_trigger_lambda" {
   tags = merge(local.tags,
     {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan"
-    },
-  )
-}
-
-# CustomerCallCenter-Lambda-Macie
-module "ccc_macie_lambda" {
-  depends_on       = [var.macie_lambda_role_arn]
-  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
-  company_code     = local.company_code
-  application_code = local.application_code
-  environment_code = local.environment_code
-  region_code      = local.region_code
-  application_use  = "macie-lambda"
-
-  description                       = "nla macie lambda"
-  handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
-  publish                           = true
-  architectures                     = ["x86_64"]
-  attach_tracing_policy             = true
-  attach_dead_letter_policy         = true
-  attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
-  cloudwatch_logs_tags              = local.tags
-  memory_size                       = 128
-  timeout                           = 180
-  tracing_mode                      = "PassThrough"
-  lambda_role                       = var.macie_lambda_role_arn
-  update_role                       = false
-  environment_variables = {
-    TARGET_BUCKETS_LIST = var.ccc_cleaned_bucket_id
-  }
-  s3_existing_package = {
-    bucket = var.tf_artifact_s3
-    key    = "ccc_macie_lambda.zip"
-  }
-
-  tags = merge(local.tags,
-    {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie"
     },
   )
 }
