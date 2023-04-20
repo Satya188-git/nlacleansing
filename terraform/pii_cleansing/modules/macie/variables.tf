@@ -3,6 +3,11 @@ variable "ccc_maciefindings_bucket_id" {
   description = "ccc_maciefindings_bucket_id to store sensitive data discovery results"
 }
 
+variable "kms_key_ccc_maciefindings_arn" {
+  type        = string
+  description = "KMS key to encrypt macie findings"
+}
+
 variable "environment" {
   type = string
 }

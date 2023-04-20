@@ -14,8 +14,12 @@ resource "aws_macie2_account" "nla_macie" {
   status                       = "ENABLED"
 }
 
-resource "aws_macie_s3_bucket_association" "ccc_maciefindings_bucket_id" {
-  bucket_name = var.ccc_maciefindings_bucket_id
+resource "aws_macie2_classification_export_configuration" "macie_s3_bucket" {
+  depends_on = [aws_macie2_account.nla_macie]
+  s3_destination {
+    bucket_name = var.ccc_maciefindings_bucket_id
+    kms_key_arn = var.kms_key_ccc_maciefindings_arn
+  }
 }
 
 resource "aws_macie2_custom_data_identifier" "nla_macie_identifier1" {

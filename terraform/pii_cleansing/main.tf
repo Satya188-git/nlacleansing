@@ -235,6 +235,7 @@ module "macie" {
   cmdb-ci-id                     = var.cmdb-ci-id
   data-classification            = var.data-classification
   ccc_maciefindings_bucket_id    = module.s3.ccc_maciefindings_bucket_id
+  kms_key_ccc_maciefindings_arn  = module.kms.kms_key_ccc_maciefindings_arn
 }
 
 module "s3" {
