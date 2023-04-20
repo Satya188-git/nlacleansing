@@ -234,7 +234,7 @@ module "macie" {
   support-group                  = var.support-group
   cmdb-ci-id                     = var.cmdb-ci-id
   data-classification            = var.data-classification
-  ccc_maciefindings_bucket_id    = modules.s3.ccc_maciefindings_bucket_id
+  ccc_maciefindings_bucket_id    = module.s3.ccc_maciefindings_bucket_id
 }
 
 module "s3" {
