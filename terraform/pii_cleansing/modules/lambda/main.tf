@@ -58,7 +58,6 @@ module "ccc_transcribe_lambda" {
   environment_variables = {
 
     CONF_API_MODE                   = "standard"
-    CONF_CUSTOM_VOCAB_NAME          = "CCC-CustomVocabs"
     CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
     CONF_FILTER_NAME                = "TestVocabFilter1"
     CONF_MAX_SPEAKERS               = "2"
@@ -69,9 +68,6 @@ module "ccc_transcribe_lambda" {
     CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
     CONF_SPEAKER_MODE               = "channel"
     CONF_TRANSCRIBE_LANG            = "en-US"
-    CONF_VOCABNAME                  = "undefined"
-    CONF_VOCAB_FILTER_MODE          = "mask"
-    CONF_TRANSCRIBE_API             = "analytics"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
   }
