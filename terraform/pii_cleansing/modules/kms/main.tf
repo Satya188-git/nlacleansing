@@ -179,6 +179,83 @@ resource "aws_kms_key" "maciefindings_kms_key" {
   deletion_window_in_days = 10
   enable_key_rotation     = true
   tags                    = local.tags
+  policy = <<EOT
+    {
+    "Version": "2012-10-17",
+    "Id": "S3-Key-Policy",
+    "Statement": [
+        {
+            "Sid": "Enable IAM User Permissions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${var.account_id}:root"
+            },
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow Macie to use the key",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "macie.amazonaws.com"
+            },
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Encrypt"
+            ],
+            "Resource": "${aws_kms_key.maciefindings_kms_key.arn}",
+            "Condition": {
+                "StringEquals": {
+                    "aws:SourceAccount": "${var.account_id}"
+                },
+                "ArnLike": {
+                    "aws:SourceArn": [
+                        "arn:aws:macie2:us-west-2:${var.account_id}:export-configuration:*",
+                        "arn:aws:macie2:us-west-2:${var.account_id}:classification-job/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "Allow use of the key",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+                ]
+            },
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+                "kms:DescribeKey"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "Allow attachment of persistent resources",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": [
+                    "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
+                ]
+            },
+            "Action": [
+                "kms:CreateGrant",
+                "kms:ListGrants",
+                "kms:RevokeGrant"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "kms:GrantIsForAWSResource": "true"
+                }
+            }
+        }
+      ]
+    }
+EOT
 }
 
 resource "aws_kms_alias" "maciefindings_kms_key" {
