@@ -167,6 +167,7 @@ module "kms" {
   support-group                       = var.support-group
   cmdb-ci-id                          = var.cmdb-ci-id
   data-classification                 = var.data-classification
+  account_id                          = local.account_id
   transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
