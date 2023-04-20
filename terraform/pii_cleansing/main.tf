@@ -149,8 +149,6 @@ module "iam" {
   insights_account_id                = var.insights_account_id
 }
 
-
-
 module "kms" {
   source                              = "./modules/kms"
   region                              = var.region
@@ -225,6 +223,19 @@ module "lambda" {
   customercallcenterpiimacieinfo_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimacieinfo_s3_event_rule_arn
   athena_database_name                                   = module.athena.athena_database_name
   nla_glue_table_name                                    = module.glue.nla_glue_table_name[local.glue_table_name]
+}
+
+module "macie" {
+  source                         = "./modules/macie"
+  environment                    = var.environment
+  tag-version                    = var.tag-version
+  billing-guid                   = var.billing-guid
+  unit                           = var.unit
+  portfolio                      = var.portfolio
+  support-group                  = var.support-group
+  cmdb-ci-id                     = var.cmdb-ci-id
+  data-classification            = var.data-classification
+  ccc_maciefindings_bucket_id    = modules.s3.ccc_maciefindings_bucket_id
 }
 
 module "s3" {
