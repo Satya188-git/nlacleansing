@@ -230,7 +230,6 @@ module "macie" {
   environment                    = var.environment
   tag-version                    = var.tag-version
   billing-guid                   = var.billing-guid
-  unit                           = var.unit
   portfolio                      = var.portfolio
   support-group                  = var.support-group
   cmdb-ci-id                     = var.cmdb-ci-id
