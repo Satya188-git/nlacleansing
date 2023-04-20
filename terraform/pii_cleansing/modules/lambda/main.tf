@@ -186,6 +186,7 @@ module "ccc_informational_macie_lambda" {
     TRANSCRIPTION_BUCKET_NAME        = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME            = var.ccc_unrefined_call_data_bucket_id
     FINAL_OUTPUTS_FOLDER             = "final_outputs"
+    CLEANED_BUCKET_NAME	             = var.ccc_cleaned_bucket_id
   }
 
   s3_existing_package = {
