@@ -221,58 +221,6 @@ module "athena_crawler_role" {
 
 
 # custom policies
-
-# TODO remove the temp replication policy
-resource "aws_iam_policy" "s3_replication_policy_temp" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy-temp"
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Action" : [
-          "s3:ListBucket",
-          "s3:GetReplicationConfiguration",
-          "s3:GetObjectVersionForReplication",
-          "s3:GetObjectVersionAcl",
-          "s3:GetObjectVersionTagging",
-          "s3:GetObjectVersion",
-          "s3:ObjectOwnerOverrideToBucketOwner"
-        ],
-        "Effect" : "Allow",
-        "Resource" : [
-         "${var.ccc_verified_clean_bucket_arn}",
-          "${var.ccc_verified_clean_bucket_arn}/*"
-        ]
-      },
-      {
-        "Action" : [
-          "s3:ReplicateObject",
-          "s3:ReplicateDelete",
-          "s3:ReplicateTags",
-          "s3:GetObjectVersionTagging",
-          "s3:ObjectOwnerOverrideToBucketOwner"
-        ],
-        "Effect" : "Allow",
-        "Resource" : "${var.s3bucket_insights_replication_arn}/*"
-      },
-      {
-        "Action" : [
-          "kms:Decrypt"
-        ],
-        "Effect" : "Allow",
-        "Resource" : "${var.kms_key_ccc_verified_clean_arn}"
-      },
-      {
-        "Action" : [
-          "kms:Encrypt"
-        ],
-        "Effect" : "Allow",
-         "Resource" : "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*"
-      }
-    ]
-  })
-}
-
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
   policy = jsonencode({
@@ -303,7 +251,7 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "s3:ObjectOwnerOverrideToBucketOwner"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"
+        "Resource" : "${var.s3bucket_insights_replication_arn}/*"
       },
       {
         "Action" : [
