@@ -253,7 +253,7 @@ resource "aws_iam_policy" "s3_replication_policy_temp" {
           "s3:ObjectOwnerOverrideToBucketOwner"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:s3:::ccc-verified-cleaned-nla-temp/*"
+        "Resource" : "${var.s3bucket_insights_replication_arn}/*"
       },
       {
         "Action" : [

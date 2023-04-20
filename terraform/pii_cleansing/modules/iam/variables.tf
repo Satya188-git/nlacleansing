@@ -110,5 +110,9 @@ variable "kms_key_ccc_verified_clean_arn" {
 variable "ccc_verified_clean_bucket_arn" {
   type        = string
   description = "ccc_verified_clean_bucket_arn"
+}
 
+variable "s3bucket_insights_replication_arn" {
+  type        = string
+  description = "Name of s3 bucket on insights account for object replication"
 }

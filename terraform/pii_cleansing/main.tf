@@ -147,6 +147,7 @@ module "iam" {
   ccc_athenaresults_bucket_arn       = module.s3.ccc_athenaresults_bucket_arn
   ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
   insights_account_id                = var.insights_account_id
+  s3bucket_insights_replication_arn  = var.s3bucket_insights_replication_arn
 }
 
 module "kms" {
