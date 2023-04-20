@@ -58,7 +58,6 @@ module "ccc_transcribe_lambda" {
   environment_variables = {
 
     CONF_API_MODE                   = "standard"
-    CONF_CUSTOM_VOCAB_NAME          = "CCC-CustomVocabs"
     CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
     CONF_FILTER_NAME                = "TestVocabFilter1"
     CONF_MAX_SPEAKERS               = "2"
@@ -69,9 +68,6 @@ module "ccc_transcribe_lambda" {
     CONF_S3BUCKET_OUTPUT_SUB_FOLDER = "standard/"
     CONF_SPEAKER_MODE               = "channel"
     CONF_TRANSCRIBE_LANG            = "en-US"
-    CONF_VOCABNAME                  = "undefined"
-    CONF_VOCAB_FILTER_MODE          = "mask"
-    CONF_TRANSCRIBE_API             = "analytics"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
   }
@@ -121,6 +117,7 @@ module "ccc_comprehend_lambda" {
     Athena_Database                       = var.athena_database_name
     Athena_Output_Location                = "s3://${var.ccc_athenaresults_bucket_id}/"
     Athena_Table                          = var.nla_glue_table_name
+    DB_Name                               = var.nla_glue_database_name
     STANDARD_FULL_TRANSCRIPT_SUB_FOLDER   = "standard_full_transcripts/"
     STANDARD_FULL_TRANSCRIPT_FILE_FORMAT  = ".txt"
     STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE = "text/plain"
@@ -190,6 +187,7 @@ module "ccc_informational_macie_lambda" {
     TRANSCRIPTION_BUCKET_NAME        = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME            = var.ccc_unrefined_call_data_bucket_id
     FINAL_OUTPUTS_FOLDER             = "final_outputs"
+    CLEANED_BUCKET_NAME              = var.ccc_cleaned_bucket_id
   }
 
   s3_existing_package = {

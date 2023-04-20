@@ -43,7 +43,6 @@ def lambda_handler(event, context):
             finding_severity_desc = data["severity"]["description"]
             finding_bucket = data["resourcesAffected"]["s3Bucket"]["name"]
             finding_file = data["resourcesAffected"]["s3Object"]["key"]
-
             # generating the related file names which needs to be
             related_file = finding_file.split('/')[-1]
             related_file_final = FINAL_OUTPUTS_FOLDER + "/" + \
