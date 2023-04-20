@@ -261,7 +261,7 @@ def capture_file_metdadata(s3filename):
 			    \"segment vector number\" as \"segmentVectorNumber\",
 			    \"internal segment client start time\" as \"internalSegmentClientStartTime\",
 			    \"internal segment client stop time\" as \"internalSegmentClientStopTime\"
-		    FROM \"sdge_dtdes_dev_wus2_gdc_nla-s3-crawler_sdge_dtdes_dev_wus2_nla_athena_db\".\"sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata\"
+		    FROM \"sdge_dtdes_qa_wus2_gdc_nla-s3-crawler_sdge_dtdes_qa_wus2_nla_athena_db\".\"sdge_dtdes_qa_wus2_glue_nla_s3_crawler_pii_metadata\"
 			where \"file Name\" = '""" + s3filename + "';"
 
     DATABASE = Athena_Database
