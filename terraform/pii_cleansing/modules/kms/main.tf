@@ -203,7 +203,7 @@ resource "aws_kms_key" "maciefindings_kms_key" {
                 "kms:GenerateDataKey",
                 "kms:Encrypt"
             ],
-            "Resource": "${aws_kms_key.maciefindings_kms_key.arn}",
+            "Resource": "*",
             "Condition": {
                 "StringEquals": {
                     "aws:SourceAccount": "${var.account_id}"
