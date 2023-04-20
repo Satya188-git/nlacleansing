@@ -15,6 +15,8 @@ from datetime import datetime
 DF_COMPANY_NAME = os.environ["DF_COMPANY_NAME"]
 DB_Name = os.environ["DB_Name"]
 Table_Name = os.environ["Table_Name"]
+DB_Name = os.environ["DB_Name"]
+Table_Name = os.environ["Table_Name"]
 # CSR Details
 EBCSR_NAME = os.environ["EBCSR_NAME"]
 EBCSR_VECTOR_ID = os.environ["EBCSR_VECTOR_ID"]
