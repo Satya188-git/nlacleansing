@@ -13,6 +13,8 @@ from datetime import datetime
 
 
 DF_COMPANY_NAME = os.environ["DF_COMPANY_NAME"]
+DB_Name = os.environ["DB_Name"]
+Table_Name = os.environ["Table_Name"]
 # CSR Details
 EBCSR_NAME = os.environ["EBCSR_NAME"]
 EBCSR_VECTOR_ID = os.environ["EBCSR_VECTOR_ID"]
@@ -248,22 +250,17 @@ def capture_file_metdadata(s3filename):
     # This function will be called by "capture_file_data"
     # it queries the metadata folder in S3 for call metadata
 
-    query = """
-			SELECT 
-			    \"full Name\" as \"fullName\",
-			    \"participant agent id\" as \"participantAgentId\",
-			    \"segment call direction type id\" as \"segmentCallDirectionTypeId\",
-			    \"participant phone-number\" as \"participantPhoneNumber\",
-			    \"segment id\" as \"segmentID\",
-			    \"segment dialed number\" as \"segmentDialedNumber\",
-			    \"segment start time\" as \"segmentStartTime\",
-			    \"segment stop time\" as \"segmentStopTime\" ,
-			    \"segment vector number\" as \"segmentVectorNumber\",
-			    \"internal segment client start time\" as \"internalSegmentClientStartTime\",
-			    \"internal segment client stop time\" as \"internalSegmentClientStopTime\"
-		    FROM \"sdge_dtdes_qa_wus2_gdc_nla-s3-crawler_sdge_dtdes_qa_wus2_nla_athena_db\".\"sdge_dtdes_qa_wus2_glue_nla_s3_crawler_pii_metadata\"
-			where \"file Name\" = '""" + s3filename + "';"
-
+    query = 'SELECT "full Name" as fullName, \
+    "participant agent id" as participantAgentId, \
+    "segment call direction type id" as segmentCallDirectionTypeId, \
+    "participant phone-number" as participantPhoneNumber, \
+    "segment id" as segmentID, \
+    "segment dialed number" as segmentDialedNumber, \
+    "segment start time" as segmentStartTime, \
+    "segment stop time" as segmentStopTime , \
+    "segment vector number" as segmentVectorNumber, \
+    "internal segment client start time" as internalSegmentClientStartTime, \
+    "internal segment client stop time" as internalSegmentClientStopTime FROM ' + '"' + DB_Name + '"' + "." + Table_Name + ' WHERE "file Name" = ' + "'" + s3filename + "'" + ";"
     DATABASE = Athena_Database
 
     output = Athena_Output_Location

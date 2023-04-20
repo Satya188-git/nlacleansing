@@ -117,6 +117,7 @@ module "ccc_comprehend_lambda" {
     Athena_Database                       = var.athena_database_name
     Athena_Output_Location                = "s3://${var.ccc_athenaresults_bucket_id}/"
     Athena_Table                          = var.nla_glue_table_name
+    DB_Name                               = var.nla_glue_database_name
     STANDARD_FULL_TRANSCRIPT_SUB_FOLDER   = "standard_full_transcripts/"
     STANDARD_FULL_TRANSCRIPT_FILE_FORMAT  = ".txt"
     STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE = "text/plain"
@@ -186,7 +187,7 @@ module "ccc_informational_macie_lambda" {
     TRANSCRIPTION_BUCKET_NAME        = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME            = var.ccc_unrefined_call_data_bucket_id
     FINAL_OUTPUTS_FOLDER             = "final_outputs"
-    CLEANED_BUCKET_NAME	             = var.ccc_cleaned_bucket_id
+    CLEANED_BUCKET_NAME              = var.ccc_cleaned_bucket_id
   }
 
   s3_existing_package = {

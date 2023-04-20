@@ -163,6 +163,12 @@ variable "nla_glue_table_name" {
   description = "nla_glue_table_name"
 }
 
+variable "nla_glue_database_name" {
+  type        = string
+  description = "nla_glue_database_name"
+
+}
+
 variable "dynamodb_audit_table_name" {
   type        = string
   description = "dynamodb_audit_table_name"
