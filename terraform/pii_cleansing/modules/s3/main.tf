@@ -32,13 +32,14 @@ module "ccc_unrefined_call_data_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   acl                            = "private"
+  force_destroy                  = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
         #kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround 
         kms_master_key_id = var.kms_key_ccc_unrefined_arn
-        sse_algorithm = "aws:kms"
+        sse_algorithm     = "aws:kms"
         # sse_algorithm       = "AES256"
       }
     }
@@ -53,19 +54,20 @@ module "ccc_unrefined_call_data_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
 resource "aws_s3_bucket_notification" "unrefined_call_data_bucket_notification" {
   bucket      = module.ccc_unrefined_call_data_bucket.s3_bucket_id
   eventbridge = true
 }
+
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.2"
@@ -79,8 +81,8 @@ module "ccc_initial_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-
-  acl = "private"
+  acl                            = "private"
+  force_destroy                  = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -88,7 +90,7 @@ module "ccc_initial_bucket" {
         # kms_master_key_id = "alias/aws/s3"
         #kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
         kms_master_key_id = var.kms_key_ccc_initial_arn
-        sse_algorithm = "aws:kms"
+        sse_algorithm     = "aws:kms"
         # sse_algorithm       = "AES256"
       }
     }
@@ -103,15 +105,16 @@ module "ccc_initial_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_initial_bucket_notification" {
   bucket      = module.ccc_initial_bucket.s3_bucket_id
   eventbridge = true
@@ -129,15 +132,15 @@ module "ccc_cleaned_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-
-  acl = "private"
+  force_destroy                  = true
+  acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_clean_arn
         #kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -151,15 +154,16 @@ module "ccc_cleaned_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_cleaned_bucket_notification" {
   bucket      = module.ccc_cleaned_bucket.s3_bucket_id
   eventbridge = true
@@ -179,15 +183,15 @@ module "ccc_verified_clean_bucket" {
   attach_alb_log_delivery_policy = false
   versioning                     = true
   tags                           = local.tags
-
-  acl = "private"
+  force_destroy                  = true
+  acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_verified_clean_arn
         #kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -201,15 +205,16 @@ module "ccc_verified_clean_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
   bucket      = module.ccc_verified_clean_bucket.s3_bucket_id
   eventbridge = true
@@ -228,7 +233,8 @@ module "ccc_dirty_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-  acl = "private"
+  acl                            = "private"
+  force_destroy                  = true
 
   server_side_encryption_configuration = {
     rule = {
@@ -236,7 +242,7 @@ module "ccc_dirty_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_dirty_arn
         #kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -250,19 +256,21 @@ module "ccc_dirty_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
   bucket      = module.ccc_dirty_bucket.s3_bucket_id
   eventbridge = true
 }
+
 module "ccc_maciefindings_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.2"
@@ -276,7 +284,7 @@ module "ccc_maciefindings_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-
+  force_destroy                  = true
   acl = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -284,7 +292,7 @@ module "ccc_maciefindings_bucket" {
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_maciefindings_arn
         #kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -350,6 +358,7 @@ module "ccc_maciefindings_bucket" {
     }
   ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_maciefindings_bucket_notification" {
   bucket      = module.ccc_maciefindings_bucket.s3_bucket_id
   eventbridge = true
@@ -368,7 +377,7 @@ module "ccc_piimetadata_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-
+  force_destroy                  = true
   acl = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -389,19 +398,21 @@ module "ccc_piimetadata_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
+
 resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
   bucket      = module.ccc_piimetadata_bucket.s3_bucket_id
   eventbridge = true
 }
+
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.2"
@@ -415,15 +426,15 @@ module "ccc_athenaresults_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
-
-  acl = "private"
+  force_destroy                  = true
+  acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
         kms_master_key_id = var.kms_key_ccc_athenaresults_arn
         #kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "aws:kms"
       }
     }
   }
@@ -437,14 +448,14 @@ module "ccc_athenaresults_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
@@ -479,8 +490,8 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
     }
 
     destination {
-      account       = var.insights_account_id
-      bucket        = var.s3bucket_insights_replication_arn
+      account = var.insights_account_id
+      bucket  = var.s3bucket_insights_replication_arn
       encryption_configuration {
         replica_kms_key_id = var.insights_s3kms_arn
       }
