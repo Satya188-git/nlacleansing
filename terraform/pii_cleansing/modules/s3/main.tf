@@ -20,7 +20,7 @@ locals {
 
 module "ccc_unrefined_call_data_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -68,7 +68,7 @@ resource "aws_s3_bucket_notification" "unrefined_call_data_bucket_notification" 
 }
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -118,7 +118,7 @@ resource "aws_s3_bucket_notification" "ccc_initial_bucket_notification" {
 }
 module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -167,7 +167,7 @@ resource "aws_s3_bucket_notification" "ccc_cleaned_bucket_notification" {
 
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -217,7 +217,7 @@ resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
 
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -265,7 +265,7 @@ resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
 }
 module "ccc_maciefindings_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -357,7 +357,7 @@ resource "aws_s3_bucket_notification" "ccc_maciefindings_bucket_notification" {
 
 module "ccc_piimetadata_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -404,7 +404,7 @@ resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
 }
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.0"
+  version                        = "5.3.2"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -505,7 +505,7 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
 # module "ccc_verified_clean_bucket_insights_account" {
 #   providers                      = { aws = aws.nla-insights }
 #   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-#   version                        = "5.3.0"
+#   version                        = "5.3.2"
 #   company_code                   = local.company_code
 #   application_code               = local.application_code
 #   environment_code               = local.environment_code
@@ -593,7 +593,7 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
 # # verified cllean replication bucket
 # module "insights_verified_clean_bucket" {
 #   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-#   version                        = "5.3.0"
+#   version                        = "5.3.2"
 #   company_code                   = local.company_code
 #   application_code               = local.application_code
 #   environment_code               = local.environment_code
