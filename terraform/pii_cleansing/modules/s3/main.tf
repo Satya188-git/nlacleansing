@@ -189,9 +189,9 @@ module "ccc_verified_clean_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_verified_clean_arn
+        # kms_master_key_id = var.kms_key_ccc_verified_clean_arn
         kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        # sse_algorithm = "aws:kms"
+        sse_algorithm     = "aws:kms"
       }
     }
   }
