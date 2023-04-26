@@ -50,7 +50,6 @@ module "athena" {
   db_encryption_option      = "SSE_KMS"
   db_kms_key_arn            = var.athena_kms_key_arn
   create_athena_named_query = false
-  force_destroy             = true
 }
 
 
