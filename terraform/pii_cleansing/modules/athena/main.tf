@@ -22,7 +22,7 @@ locals {
 }
 
 module "athena" {
-  depends_on = [var.ccc_athenaresults_bucket_id]
+  depends_on       = [var.ccc_athenaresults_bucket_id]
   source           = "app.terraform.io/SempraUtilities/seu-athena/aws"
   version          = "7.1.0"
   company_code     = local.company_code
@@ -44,7 +44,7 @@ module "athena" {
 
   # option to create Athena DB and corresponding variables
   create_athena_database    = true
-  db_force_destroy          = false
+  db_force_destroy          = true
   athena_db_name            = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_nla_athena_db"
   athena_database_bucket    = var.ccc_athenaresults_bucket_id
   db_encryption_option      = "SSE_KMS"
