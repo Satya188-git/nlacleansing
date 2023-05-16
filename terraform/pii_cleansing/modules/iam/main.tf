@@ -230,6 +230,7 @@ module "insights_assumed_role" {
   region_code       = local.region_code
   application_use   = "${local.application_use}-insights-assumed-role"
   description       = "IAM role to be assumed by call-details lambda from the Insights account"
+  service_resources = ["lambda.amazonaws.com"]
 
   additional_policy_statements = [
     {
