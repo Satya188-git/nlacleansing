@@ -234,7 +234,7 @@ module "insights_assumed_role" {
 
   additional_policy_statements = [
     {
-        "Sid": "ExampleAdd"
+        "Sid": "InsightsPermission"
         "Effect": "Allow",
         "Principal": {
           "AWS": "arn:aws:iam::${var.insights_account_id}:root"
