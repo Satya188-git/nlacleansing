@@ -219,6 +219,38 @@ module "athena_crawler_role" {
   )
 }
 
+#create role to be assumed by NLA Insights call-details lambda for S3 bucket
+module "insights_assumed_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-insights-assumed-role"
+  description       = "IAM role to be assumed by call-details lambda from the Insights account"
+  service_resources = ["lambda.amazonaws.com"]
+
+  additional_policy_statements = [
+    {
+        "Sid": "InsightsPermission"
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::${var.insights_account_id}:root"
+        },
+        "Condition": {},
+        "Action": "sts:AssumeRole"
+    }
+  ]
+
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-insights-assumed-role"
+    },
+  )
+}
 
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
@@ -393,6 +425,33 @@ resource "aws_iam_policy" "s3_crawler_role_policy" {
       "Resource": "${var.ccc_piimetadata_bucket_arn}*"
     }
   ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "insights_assumed_role_policy" {
+  name        = "S3BucketAccessFromInsightsAccount"
+  description = "S3 bucket and KMS access"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "s3:GetObject",
+            "Effect": "Allow",
+            "Resource": "${var.ccc_unrefined_call_data_bucket_arn}/*",
+            "Sid": "S3Read"
+        },
+        {
+            "Action": [
+                "kms:Decrypt"
+            ],
+            "Effect": "Allow",
+            "Resource": "${var.kms_key_ccc_unrefined_arn}",
+            "Sid": "KmsUsage"
+        }
+    ]
 }
 EOF
 }
@@ -591,4 +650,9 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_managed4" {
 resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.athena_crawler_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
+  policy_arn = aws_iam_policy.insights_assumed_role_policy.arn
+  role       = module.insights_assumed_role.name
 }

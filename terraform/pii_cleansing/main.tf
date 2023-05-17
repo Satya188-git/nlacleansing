@@ -148,6 +148,7 @@ module "iam" {
   ccc_piimetadata_bucket_arn         = module.s3.ccc_piimetadata_bucket_arn
   insights_account_id                = var.insights_account_id
   s3bucket_insights_replication_arn  = var.s3bucket_insights_replication_arn
+  kms_key_ccc_unrefined_arn          = module.kms.kms_key_ccc_unrefined_arn
 }
 
 module "kms" {
