@@ -53,16 +53,8 @@ module "ccc_unrefined_call_data_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
+
 resource "aws_s3_bucket_notification" "unrefined_call_data_bucket_notification" {
   bucket      = module.ccc_unrefined_call_data_bucket.s3_bucket_id
   eventbridge = true
@@ -87,7 +79,6 @@ module "ccc_initial_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        # kms_master_key_id = "alias/aws/s3"
         # kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
         kms_master_key_id = var.kms_key_ccc_initial_arn
         sse_algorithm     = "aws:kms"
@@ -104,15 +95,6 @@ module "ccc_initial_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_initial_bucket_notification" {
@@ -153,15 +135,6 @@ module "ccc_cleaned_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_cleaned_bucket_notification" {
@@ -204,15 +177,6 @@ module "ccc_verified_clean_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_verified_clean_bucket_notification" {
@@ -255,15 +219,6 @@ module "ccc_dirty_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_dirty_bucket_notification" {
@@ -306,14 +261,14 @@ module "ccc_maciefindings_bucket" {
   #   ]
   # }]
 
-  cors_rule = [
-    {
-      allowed_methods = ["GET", "PUT", "POST"]
-      allowed_origins = ["*"]
-      allowed_headers = ["*"]
-      expose_headers  = []
-    }
-  ]
+  # cors_rule = [
+  #   {
+  #     allowed_methods = ["GET", "PUT", "POST"]
+  #     allowed_origins = ["*"]
+  #     allowed_headers = ["*"]
+  #     expose_headers  = []
+  #   }
+  # ]
 
   additional_policy_statements = [
     {
@@ -398,15 +353,6 @@ module "ccc_piimetadata_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_piimetadata_bucket_notification" {
@@ -448,15 +394,6 @@ module "ccc_athenaresults_bucket" {
   #     },
   #   ]
   # }]
-
-  # cors_rule = [
-  #   {
-  #     allowed_methods = ["GET", "PUT", "POST"]
-  #     allowed_origins = ["*"]
-  #     allowed_headers = ["*"]
-  #     expose_headers  = []
-  #   }
-  # ]
 }
 
 resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
@@ -500,7 +437,77 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
         owner = "Destination"
       }
     }
+  }
+}
 
+module "ccc_insights_audio_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "5.3.2"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-audio"
+  create_bucket    = true
+  force_destroy    = true
+
+  versioning = false
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_s3_buckets_key_arn
+        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  # lifecycle_rule = [{
+  #   id      = "expiration-after-60-days"
+  #   enabled = true
+  #   expiration = [
+  #     {
+  #       days = 60
+  #     },
+  #   ]
+  # }]
+
+  tags = local.tags
+}
+
+
+resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication_rule" {
+  # Must have bucket versioning enabled first
+  depends_on = [module.ccc_unrefined_call_data_bucket.s3_bucket_id]
+
+  role   = var.nla_replication_role_arn
+  bucket = module.ccc_unrefined_call_data_bucket.s3_bucket_id
+
+  rule {
+    id = "unrefined_bucket_replication_rule"
+    delete_marker_replication {
+      status = "Disabled"
+    }
+
+    status = "Enabled"
+    source_selection_criteria {
+      sse_kms_encrypted_objects {
+        status = "Enabled"
+      }
+    }
+
+    destination {
+      #account = var.insights_account_id
+      bucket  = module.ccc_insights_audio_bucket.s3_bucket_arn
+      encryption_configuration {
+        replica_kms_key_id = var.kms_key_s3_buckets_key_arn
+      }
+      access_control_translation {
+        owner = "Destination"
+      }
+    }
   }
 }
 
@@ -637,4 +644,3 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
 #   ]
 # }
 # TODO add replication config
-
