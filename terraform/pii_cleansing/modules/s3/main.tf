@@ -498,6 +498,8 @@ resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication
       }
     }
 
+    filter {}
+
     destination {
       bucket  = module.ccc_insights_audio_bucket.s3_bucket_arn
       encryption_configuration {
