@@ -32,6 +32,7 @@ output "ccc_verified_clean_bucket_arn" {
   description = "ccc-verified-clean-bucket S3 bucket ARN"
   value       = module.ccc_verified_clean_bucket.s3_bucket_arn
 }
+
 output "ccc_verified_clean_bucket_id" {
   description = "ccc-verified-clean-bucket S3 bucket id"
   value       = module.ccc_verified_clean_bucket.s3_bucket_id
@@ -71,8 +72,13 @@ output "ccc_maciefindings_bucket_arn" {
   description = "ccc_maciefindings_bucket S3 bucket ARN"
   value       = module.ccc_maciefindings_bucket.s3_bucket_arn
 }
+
 output "ccc_maciefindings_bucket_id" {
   description = "ccc_maciefindings_bucket S3 bucket ID"
   value       = module.ccc_maciefindings_bucket.s3_bucket_id
 }
 
+output "ccc_insights_audio_bucket_arn" {
+  description = "ccc_insights_audio_bucket S3 bucket ARN"
+  value       = module.ccc_insights_audio_bucket.s3_bucket_arn
+}

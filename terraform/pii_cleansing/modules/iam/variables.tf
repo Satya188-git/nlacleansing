@@ -120,3 +120,8 @@ variable "s3bucket_insights_replication_arn" {
 variable "kms_key_ccc_unrefined_arn" {
   type = string
 }
+
+variable "ccc_insights_audio_bucket_arn" {
+  type        = string
+  description = "ccc_insights_audio_bucket_arn"
+}

@@ -271,7 +271,9 @@ resource "aws_iam_policy" "s3_replication_policy" {
         "Effect" : "Allow",
         "Resource" : [
           "${var.ccc_verified_clean_bucket_arn}",
-          "${var.ccc_verified_clean_bucket_arn}/*"
+          "${var.ccc_verified_clean_bucket_arn}/*",
+          "${var.ccc_unrefined_call_data_bucket_arn}",
+          "${var.ccc_unrefined_call_data_bucket_arn}/*"
         ]
       },
       {
@@ -283,25 +285,35 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "s3:ObjectOwnerOverrideToBucketOwner"
         ],
         "Effect" : "Allow",
-        "Resource" : "${var.s3bucket_insights_replication_arn}/*"
+        "Resource" : [
+          "${var.s3bucket_insights_replication_arn}/*",
+          "${var.ccc_insights_audio_bucket_arn}/*"
+        ]
       },
       {
         "Action" : [
           "kms:Decrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "${var.kms_key_ccc_verified_clean_arn}"
+        "Resource" : [
+          "${var.kms_key_ccc_verified_clean_arn}",
+          "${var.kms_key_ccc_unrefined_arn}"
+        ]
       },
       {
         "Action" : [
           "kms:Encrypt"
         ],
         "Effect" : "Allow",
-        "Resource" : "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*"
+        "Resource" : [
+          "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*",
+          "${var.kms_key_ccc_unrefined_arn}"
+        ]
       }
     ]
   })
 }
+
 resource "aws_iam_policy" "iam_pass_role_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-pass-role-policy"
   policy = jsonencode(

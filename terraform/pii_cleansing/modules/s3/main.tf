@@ -457,7 +457,7 @@ module "ccc_insights_audio_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_s3_buckets_key_arn
+        kms_master_key_id = var.kms_key_ccc_unrefined_arn
         # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
         sse_algorithm     = "aws:kms"
       }
@@ -502,7 +502,7 @@ resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication
       #account = var.insights_account_id
       bucket  = module.ccc_insights_audio_bucket.s3_bucket_arn
       encryption_configuration {
-        replica_kms_key_id = var.kms_key_s3_buckets_key_arn
+        replica_kms_key_id = var.kms_key_ccc_unrefined_arn
       }
       access_control_translation {
         owner = "Destination"
