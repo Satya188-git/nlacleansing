@@ -33,6 +33,7 @@ module "ccc_unrefined_call_data_bucket" {
   tags                           = local.tags
   acl                            = "private"
   force_destroy                  = true
+  versioning                     = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -451,8 +452,7 @@ module "ccc_insights_audio_bucket" {
   application_use  = "${local.application_use}-audio"
   create_bucket    = true
   force_destroy    = true
-
-  versioning = false
+  versioning       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
