@@ -499,13 +499,9 @@ resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication
     }
 
     destination {
-      #account = var.insights_account_id
       bucket  = module.ccc_insights_audio_bucket.s3_bucket_arn
       encryption_configuration {
         replica_kms_key_id = var.kms_key_ccc_unrefined_arn
-      }
-      access_control_translation {
-        owner = "Destination"
       }
     }
   }
