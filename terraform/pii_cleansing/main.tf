@@ -149,6 +149,7 @@ module "iam" {
   insights_account_id                = var.insights_account_id
   s3bucket_insights_replication_arn  = var.s3bucket_insights_replication_arn
   kms_key_ccc_unrefined_arn          = module.kms.kms_key_ccc_unrefined_arn
+  ccc_insights_audio_bucket_arn      = module.s3.ccc_insights_audio_bucket_arn
 }
 
 module "kms" {

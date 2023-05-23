@@ -56,7 +56,6 @@ module "ccc_transcribe_lambda" {
   }
 
   environment_variables = {
-
     CONF_API_MODE                   = "standard"
     CONF_DESTINATION_BUCKET_NAME    = var.ccc_initial_bucket_id
     CONF_FILTER_NAME                = "TestVocabFilter1"
