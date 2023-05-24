@@ -450,7 +450,10 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": "s3:GetObject",
+            "Action": [
+              "s3:GetObject",
+              "s3:GetObjectAttributes"
+            ],
             "Effect": "Allow",
             "Resource": [ 
               "${var.ccc_unrefined_call_data_bucket_arn}/*",

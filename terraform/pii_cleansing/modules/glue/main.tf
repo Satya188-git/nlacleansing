@@ -75,6 +75,7 @@ module "nla_glue_table" {
   tags             = local.tags
   # glue catalog database
   glue_database_name = var.athena_database_name
+  encrypt            = true
   # glue catalog tables 
   glue_catalog_map = {
     "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata" = {
