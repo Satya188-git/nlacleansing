@@ -97,6 +97,17 @@ module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.2"
   company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-cleaned"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags                           = local.tags
+  force_destroy                  = true
+  acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -125,6 +136,7 @@ module "ccc_verified_clean_bucket" {
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
+  region_code                    = local.region_code
   application_use                = "${local.application_use}-verified-clean"
   owner                          = "NLA Team"
   create_bucket                  = true
@@ -134,6 +146,16 @@ module "ccc_verified_clean_bucket" {
   tags                           = local.tags
   force_destroy                  = true
   acl                            = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_verified_clean_arn
+        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
