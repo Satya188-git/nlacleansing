@@ -27,7 +27,7 @@ else:
 def lambda_handler(event, context):
     logger.info("Event: " + json.dumps(event))
 
-    # Get bucket and file name
+    # Get bucket and file name details
     bucket = event['detail']['bucket']['name']
     key = event['detail']['object']['key']
 
