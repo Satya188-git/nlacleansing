@@ -7,12 +7,12 @@ name: $(Build.SourceBranchName)+$(BuildID)
 #Full syntax required for anything except branches
 trigger:
   - master
-  - main
-  - dev
+  # - main
+  # - dev
   - develop
-  - feature/*
-  - bundle/*
-  - release/*
+  # - feature/*
+  # - bundle/*
+  # - release/*
 
 #Reference to the repositories that contains all YAML files for this pattern
 resources:
@@ -117,7 +117,7 @@ parameters:
     default:
       - env: dev
       #- env: tst
-      - env: qa
+      #- env: qa
       #- env: prd
 
   #Base portion of service connection name, generally pipeline name

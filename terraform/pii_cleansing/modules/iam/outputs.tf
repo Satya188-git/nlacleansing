@@ -57,3 +57,7 @@ output "athena_crawler_role_id" {
 output "athena_crawler_role_arn" {
   value = module.athena_crawler_role.arn
 }
+
+output "audio_copy_lambda_role_arn" {
+  value = module.audio_copy_role.arn
+}

@@ -178,7 +178,12 @@ EOF
   tags = local.tags
 }
 
+resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
+  name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
+  description = "Activate lambda from CloudWatch every 15 minutes"
 
+  schedule_expression = "rate(15 minutes)"
+}
 
 
 # select lambda target for eventbridge rule
@@ -220,4 +225,9 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimacieinfo_lambda_ta
 resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
   arn  = var.macie_scan_trigger_arn
   rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "ccc_audio_copy_lambda_target" {
+  arn       = var.ccc_audio_copy_lambda_arn
+  rule      = aws_cloudwatch_event_rule.ccc_audio_copy_s3_event_rule.name
 }

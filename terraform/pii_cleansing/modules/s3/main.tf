@@ -300,6 +300,7 @@ module "ccc_piimetadata_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  versioning                     = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -396,6 +397,42 @@ module "ccc_insights_audio_bucket" {
 }
 
 
+module "ccc_callrecordings_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "5.3.2"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-callrecordings"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags             = local.tags
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  lifecycle_rule = [{
+    id      = "expiration-rule"
+    enabled = true
+    expiration = [
+      {
+        days = 2192
+      },
+    ]
+  }]
+}
+
+
 #source replication configuration
 resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
   # Must have bucket versioning enabled first
@@ -461,6 +498,38 @@ resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication
       bucket  = module.ccc_insights_audio_bucket.s3_bucket_arn
       encryption_configuration {
         replica_kms_key_id = var.kms_key_ccc_unrefined_arn
+      }
+    }
+  }
+}
+
+
+resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replication_rule" {
+  # Must have bucket versioning enabled first
+  depends_on = [module.ccc_callrecordings_bucket.s3_bucket_id, module.ccc_piimetadata_bucket.s3_bucket_id]
+
+  role   = var.nla_replication_role_arn
+  bucket = module.ccc_callrecordings_bucket.s3_bucket_id
+
+  rule {
+    id = "callrecordings_bucket_replication_rule"
+    delete_marker_replication {
+      status = "Disabled"
+    }
+
+    status = "Enabled"
+    source_selection_criteria {
+      sse_kms_encrypted_objects {
+        status = "Enabled"
+      }
+    }
+
+    filter {}
+
+    destination {
+      bucket  = module.ccc_piimetadata_bucket.s3_bucket_arn
+      encryption_configuration {
+        replica_kms_key_id = var.kms_key_ccc_piimetadata_arn
       }
     }
   }

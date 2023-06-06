@@ -219,6 +219,26 @@ module "athena_crawler_role" {
   )
 }
 
+// create IAM role for audio_copy lambda
+module "audio_copy_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-audio-copy-role"
+  description       = "IAM role for EDIX audio copy lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audio-copy-role"
+    },
+  )
+}
+
 #create role to be assumed by NLA Insights call-details lambda for S3 bucket
 module "insights_assumed_role" {
   source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
@@ -273,7 +293,9 @@ resource "aws_iam_policy" "s3_replication_policy" {
           "${var.ccc_verified_clean_bucket_arn}",
           "${var.ccc_verified_clean_bucket_arn}/*",
           "${var.ccc_unrefined_call_data_bucket_arn}",
-          "${var.ccc_unrefined_call_data_bucket_arn}/*"
+          "${var.ccc_unrefined_call_data_bucket_arn}/*",
+          "${var.ccc_callrecordings_bucket_arn}",
+          "${var.ccc_callrecordings_bucket_arn}/*"
         ]
       },
       {
@@ -287,7 +309,8 @@ resource "aws_iam_policy" "s3_replication_policy" {
         "Effect" : "Allow",
         "Resource" : [
           "${var.s3bucket_insights_replication_arn}/*",
-          "${var.ccc_insights_audio_bucket_arn}/*"
+          "${var.ccc_insights_audio_bucket_arn}/*",
+          "${var.ccc_piimetadata_bucket_arn}/*"
         ]
       },
       {
@@ -297,7 +320,8 @@ resource "aws_iam_policy" "s3_replication_policy" {
         "Effect" : "Allow",
         "Resource" : [
           "${var.kms_key_ccc_verified_clean_arn}",
-          "${var.kms_key_ccc_unrefined_arn}"
+          "${var.kms_key_ccc_unrefined_arn}",
+          "${var.kms_key_ccc_piimetadata_arn}"
         ]
       },
       {
@@ -307,7 +331,8 @@ resource "aws_iam_policy" "s3_replication_policy" {
         "Effect" : "Allow",
         "Resource" : [
           "arn:aws:kms:us-west-2:${var.insights_account_id}:key/*",
-          "${var.kms_key_ccc_unrefined_arn}"
+          "${var.kms_key_ccc_unrefined_arn}",
+          "${var.kms_key_ccc_piimetadata_arn}"
         ]
       }
     ]
@@ -541,6 +566,7 @@ resource "aws_iam_role_policy_attachment" "transcribe_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.transcribe_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "transcribe_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.transcribe_lambda_role.name
@@ -551,18 +577,22 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole3" {
   role       = module.informational_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
 resource "aws_iam_role_policy_attachment" "InfoMacieAmazonMacieFullAccess" {
   role       = module.informational_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
 }
+
 resource "aws_iam_role_policy_attachment" "InfoMacieAmazonS3FullAccess" {
   role       = module.informational_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
+
 resource "aws_iam_role_policy_attachment" "info_macie_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.informational_macie_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "info_macie_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.informational_macie_lambda_role.name
@@ -573,14 +603,17 @@ resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole5" {
   role       = module.trigger_macie_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
+
 resource "aws_iam_role_policy_attachment" "macie_trigger_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
   role       = module.trigger_macie_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "macie_trigger_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.trigger_macie_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonS3FullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
   role       = module.trigger_macie_lambda_role.name
@@ -589,6 +622,7 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonMacieFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
   role       = module.trigger_macie_lambda_role.name
 }
+
 #  audit call lambda
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
   role       = module.audit_call_lambda_role.name
@@ -614,6 +648,7 @@ resource "aws_iam_role_policy_attachment" "AmazonAthenaFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
   role       = module.athena_lambda_role.name
 }
+
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole7" {
   role       = module.athena_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -673,4 +708,19 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" 
 resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
   policy_arn = aws_iam_policy.insights_assumed_role_policy.arn
   role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "audio_copy_AWSLambdaBasicExecutionRole" {
+  role       = module.audio_copy_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "audio_copy_S3FullAccess" {
+  role       = module.audio_copy_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "audio_copy_kms_full_access" {
+  role       = module.audio_copy_role.name
+  policy_arn = aws_iam_policy.kms_full_access.arn
 }

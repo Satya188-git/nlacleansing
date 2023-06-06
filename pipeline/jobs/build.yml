@@ -92,6 +92,14 @@ jobs:
           archiveType: "zip"
           archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_transcribe_lambda.zip"
           replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_audio_copy_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_audio_copy_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_audio_copy.zip"
+          replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: "$(Build.ArtifactStagingDirectory)" # Required

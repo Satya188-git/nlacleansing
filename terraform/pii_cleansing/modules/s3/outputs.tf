@@ -82,3 +82,13 @@ output "ccc_insights_audio_bucket_arn" {
   description = "ccc_insights_audio_bucket S3 bucket ARN"
   value       = module.ccc_insights_audio_bucket.s3_bucket_arn
 }
+
+output "ccc_callrecordings_bucket_arn" {
+  description = "ccc_callrecordings_bucket S3 bucket ARN"
+  value       = module.ccc_callrecordings_bucket.s3_bucket_arn
+}
+
+output "ccc_callrecordings_bucket_id" {
+  description = "ccc_callrecordings_bucket S3 bucket ID"
+  value       = module.ccc_callrecordings_bucket.s3_bucket_id
+}

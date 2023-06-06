@@ -122,10 +122,14 @@ variable "ccc_maciefindings_bucket_id" {
 variable "macie_info_trigger_arn" {
   type        = string
   description = "macie_info_trigger_arn"
-
 }
+
 variable "macie_scan_trigger_arn" {
   type        = string
   description = "macie_scan_trigger_arn"
+}
 
+variable "ccc_audio_copy_lambda_arn" {
+  type        = string
+  description = "ccc_audio_copy_lambda_arn"
 }
