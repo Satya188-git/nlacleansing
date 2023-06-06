@@ -582,3 +582,19 @@ resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
   bucket      = module.ccc_athenaresults_bucket.s3_bucket_id
   eventbridge = true
 }
+
+
+resource "aws_s3_object" "edix_audio_prefix" {
+  key        = "EDIX_AUDIO/"
+  bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
+  source     = "/dev/null"
+  kms_key_id = var.kms_key_ccc_piimetadata_arn
+}
+
+
+resource "aws_s3_object" "edix_metadata_prefix" {
+  key        = "EDIX_METADATA/"
+  bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
+  source     = "/dev/null"
+  kms_key_id = var.kms_key_ccc_piimetadata_arn
+}
