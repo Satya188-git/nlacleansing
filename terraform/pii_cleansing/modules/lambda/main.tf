@@ -203,7 +203,6 @@ module "ccc_informational_macie_lambda" {
 }
 
 
-# aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
   depends_on                        = [var.sns_lambda_role_arn]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"

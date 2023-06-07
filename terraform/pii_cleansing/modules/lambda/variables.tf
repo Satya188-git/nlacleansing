@@ -2,9 +2,11 @@ variable "region" {
   type        = string
   description = "The AWS region where to deploy Terraform resources"
 }
+
 variable "environment" {
   type = string
 }
+
 variable "application_use" {
   type        = string
   description = "The application use for Terraform resources"

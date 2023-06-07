@@ -180,8 +180,7 @@ EOF
 
 resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
-  description = "Activate lambda from CloudWatch every 15 minutes"
-
+  description = "run lambda at 15 minute intervals"
   schedule_expression = "rate(15 minutes)"
 }
 

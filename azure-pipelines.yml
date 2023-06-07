@@ -6,7 +6,7 @@ name: $(Build.SourceBranchName)+$(BuildID)
 #Can be branches, tags, folders
 #Full syntax required for anything except branches
 trigger:
-  - master
+  # - master
   # - main
   # - dev
   - develop
