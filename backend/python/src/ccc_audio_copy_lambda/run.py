@@ -24,16 +24,16 @@ else:
 
 def lambda_handler(event, context):
     logger.info("Event: " + json.dumps(event))
-try:
-    audio_files = get_recent_files(call_recordings_bucket, edix_audio_dir)
-    for fileObjectKey in audio_files:
-        copy_file(call_recordings_bucket, fileObjectKey, audio_bucket, fileObjectKey)
-except Exception as e:
-    errorMessage = str(e)
-    logger.error(errorMessage)
-    return {
-        'errorMessage': errorMessage
-    } 
+    try:
+        audio_files = get_recent_files(call_recordings_bucket, edix_audio_dir)
+        for fileObjectKey in audio_files:
+            copy_file(call_recordings_bucket, fileObjectKey, audio_bucket, fileObjectKey)
+    except Exception as e:
+        errorMessage = str(e)
+        logger.error(errorMessage)
+        return {
+            'errorMessage': errorMessage
+        }
     
 def get_recent_files(bucket_name, folder_prefix):
     # Calculate the timestamp for x minutes ago
