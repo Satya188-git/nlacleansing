@@ -52,7 +52,7 @@ module "ccc_transcribe_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_transcribe_lambda.zip"
+    key    = "pipeline-artifact/ccc_transcribe_lambda.zip"
   }
 
   environment_variables = {
@@ -143,7 +143,7 @@ module "ccc_comprehend_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_comprehend_lambda.zip"
+    key    = "pipeline-artifact/ccc_comprehend_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -192,7 +192,7 @@ module "ccc_informational_macie_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_informational_macie_lambda.zip"
+    key    = "pipeline-artifact/ccc_informational_macie_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -203,7 +203,6 @@ module "ccc_informational_macie_lambda" {
 }
 
 
-# aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
   depends_on                        = [var.sns_lambda_role_arn]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"
@@ -232,7 +231,7 @@ module "ccc_notification_forwarder_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_notification_forwarder_lambda.zip"
+    key    = "pipeline-artifact/ccc_notification_forwarder_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -281,7 +280,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_macie_scan_trigger_lambda.zip"
+    key    = "pipeline-artifact/ccc_macie_scan_trigger_lambda.zip"
   }
 
   tags = merge(local.tags,
@@ -329,12 +328,57 @@ module "ccc_audit_call_lambda" {
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_audit_call_lambda.zip"
+    key    = "pipeline-artifact/ccc_audit_call_lambda.zip"
   }
 
   tags = merge(local.tags,
     {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
+    },
+  )
+}
+
+module "ccc_audio_copy_lambda" {
+  depends_on       = [var.audit_call_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "6.0.0-prerelease"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "audio-copy"
+
+  description                       = "nla audio copy lambda"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.9"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 10
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.audio_copy_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    AUDIO_BUCKET           = var.ccc_unrefined_call_data_bucket_id
+    CALL_RECORDINGS_BUCKET = var.ccc_callrecordings_bucket_id
+    EDIX_AUDIO_DIR         = "EDIX_AUDIO"
+    DEBUG                  = "disabled"
+    ENV                    = var.environment_code
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/ccc_audio_copy.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-copy"
     },
   )
 }
@@ -402,11 +446,20 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_info_lambda
   source_arn     = var.customercallcenterpiimacieinfo_s3_event_rule_arn
   source_account = var.account_id
 }
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_scan_lambda4" {
   statement_id   = "AllowExecutionFromCloudWatch4"
   action         = "lambda:InvokeFunction"
   function_name  = module.ccc_macie_scan_trigger_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.customercallcenterpiimaciescan_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_copy_lambda" {
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audio_copy_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.ccc_audio_copy_s3_event_rule_arn
   source_account = var.account_id
 }

@@ -51,5 +51,3 @@ module "athena" {
   db_kms_key_arn            = var.athena_kms_key_arn
   create_athena_named_query = false
 }
-
-

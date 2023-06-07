@@ -60,6 +60,12 @@ parameters:
   - name: lambdaFunctionName6
     type: string
     default: "lambda-transcribe"
+  - name: s3LambdaObjectKey7
+    type: string
+    default: "ccc_audio_copy.zip"
+  - name: lambdaFunctionName7
+    type: string
+    default: "lambda-audio-copy"
 
 steps:
   - template: ./lambda-deploy.yml
@@ -82,3 +88,5 @@ steps:
       lambdaFunctionName5: ${{ parameters.lambdaFunctionName5 }}
       s3LambdaObjectKey6: ${{ parameters.s3LambdaObjectKey6 }}
       lambdaFunctionName6: ${{ parameters.lambdaFunctionName6 }}
+      s3LambdaObjectKey7: ${{ parameters.s3LambdaObjectKey7 }}
+      lambdaFunctionName7: ${{ parameters.lambdaFunctionName7 }}
