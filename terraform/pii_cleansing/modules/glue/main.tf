@@ -47,7 +47,7 @@ module "glue-crawler" {
       database_name = var.athena_database_name
       s3_targets = {
         s3_target1 = {
-          path = "s3://${var.ccc_piimetadata_bucket_id}/"
+          path = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
         }
       }
       dynamodb_targets = {}
