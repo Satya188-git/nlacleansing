@@ -222,3 +222,18 @@ variable "athena_database_name" {
   type        = string
   description = "athena_database_name"
 }
+
+variable "audio_copy_lambda_role_arn" {
+  type        = string
+  description = "audio_copy_lambda_role_arn"
+}
+
+variable "ccc_audio_copy_s3_event_rule_arn" {
+  type        = string
+  description = "ccc_audio_copy_s3_event_rule_arn"
+}
+
+variable "ccc_callrecordings_bucket_id" {
+  type        = string
+  description = "ccc_callrecordings_bucket_id"
+}

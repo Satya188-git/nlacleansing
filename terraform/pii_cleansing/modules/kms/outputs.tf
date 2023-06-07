@@ -23,6 +23,7 @@ output "kms_key_ccc_maciefindings_arn" {
 output "kms_key_ccc_piimetadata_arn" {
   value = aws_kms_key.piimetadata_kms_key.arn
 }
+
 output "kms_key_ccc_athenaresults_arn" {
   value = aws_kms_key.athenaresults_kms_key.arn
 }

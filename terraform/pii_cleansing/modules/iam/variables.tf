@@ -118,10 +118,21 @@ variable "s3bucket_insights_replication_arn" {
 }
 
 variable "kms_key_ccc_unrefined_arn" {
-  type = string
+  type        = string
+  description = "kms_key_ccc_unrefined_arn"
 }
 
 variable "ccc_insights_audio_bucket_arn" {
   type        = string
   description = "ccc_insights_audio_bucket_arn"
+}
+
+variable "kms_key_ccc_piimetadata_arn" {
+  type        = string
+  description = "kms_key_ccc_piimetadata_arn"
+}
+
+variable "ccc_callrecordings_bucket_arn" {
+  type        = string
+  description = "ccc_callrecordings_bucket_arn"
 }

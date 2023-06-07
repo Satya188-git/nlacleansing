@@ -22,3 +22,8 @@ output "ccc_audit_call_lambda_arn" {
   description ="ccc_audit_call_lambda ARN"
   value       = module.ccc_audit_call_lambda.lambda_function_arn
 }
+
+output "ccc_audio_copy_lambda_arn" {
+  description ="ccc_audio_copy_lambda ARN"
+  value       = module.ccc_audio_copy_lambda.lambda_function_arn
+}
