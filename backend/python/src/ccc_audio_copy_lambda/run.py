@@ -58,8 +58,8 @@ def copy_file(source_bucket, source_key, destination_bucket, destination_key):
         'Bucket': source_bucket,
         'Key': source_key
     }
-    destFileObjectKey = os.path.basename(destination_key)
-    s3.copy(copy_source, destination_bucket, destFileObjectKey)
-    logger.info(f"File copied from '{source_bucket}/{source_key}' to '{destination_bucket}/{destFileObjectKey}'.")
+    #destFileObjectKey = os.path.basename(destination_key)
+    s3.copy(copy_source, destination_bucket, destination_key)
+    logger.info(f"File copied from '{source_bucket}/{source_key}' to '{destination_bucket}/{destination_key}'.")
 
 
