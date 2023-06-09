@@ -524,9 +524,13 @@ resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replic
       }
     }
 
+<<<<<<< HEAD
     filter {
       prefix = "EDIX_METADATA/"
     }
+=======
+    filter {}
+>>>>>>> 92b5b5fa4e5e2a604a746771a9a31e0a172ab1bd
 
     destination {
       bucket  = module.ccc_piimetadata_bucket.s3_bucket_arn
