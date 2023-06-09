@@ -38,9 +38,10 @@ module "ccc_unrefined_call_data_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        # kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround 
-        kms_master_key_id = var.kms_key_ccc_unrefined_arn
-        sse_algorithm     = "aws:kms"
+        # # kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround 
+        # kms_master_key_id = var.kms_key_ccc_unrefined_arn
+        # sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -75,9 +76,10 @@ module "ccc_initial_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        # kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
-        kms_master_key_id = var.kms_key_ccc_initial_arn
-        sse_algorithm     = "aws:kms"
+        # # kms_master_key_id = "alias/aws/kms" # revert to aws s3 managed key after provider bug workaround
+        # kms_master_key_id = var.kms_key_ccc_initial_arn
+        # sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -112,9 +114,10 @@ module "ccc_cleaned_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_clean_arn
-        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_clean_arn
+        # # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -150,9 +153,10 @@ module "ccc_verified_clean_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_verified_clean_arn
-        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_verified_clean_arn
+        # # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -188,9 +192,10 @@ module "ccc_dirty_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_dirty_arn
-        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_dirty_arn
+        # # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -225,9 +230,10 @@ module "ccc_maciefindings_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_maciefindings_arn
-        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_maciefindings_arn
+        # # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -306,9 +312,10 @@ module "ccc_piimetadata_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_piimetadata_arn
-        # kms_master_key_id = "alias/aws/kms"
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+        # # kms_master_key_id = "alias/aws/kms"
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -343,9 +350,10 @@ module "ccc_athenaresults_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_athenaresults_arn
-        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
-        sse_algorithm = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_athenaresults_arn
+        # # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        # sse_algorithm = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -378,9 +386,10 @@ module "ccc_insights_audio_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_unrefined_arn
-        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_unrefined_arn
+        # # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
+        # sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -414,9 +423,10 @@ module "ccc_callrecordings_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_piimetadata_arn
-        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        # kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+        # # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
+        # sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256"
       }
     }
   }
