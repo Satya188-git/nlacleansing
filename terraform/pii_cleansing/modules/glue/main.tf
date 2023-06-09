@@ -97,7 +97,7 @@ module "nla_glue_table" {
         "typeOfData"             = "file"
       }
 
-      location                  = "s3://${var.ccc_piimetadata_bucket_id}/"
+      location                  = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
       input_format              = "org.apache.hadoop.mapred.TextInputFormat"
       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
       compressed                = false
