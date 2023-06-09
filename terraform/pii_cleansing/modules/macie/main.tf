@@ -15,7 +15,7 @@ resource "aws_macie2_account" "nla_macie" {
 }
 
 resource "aws_macie2_classification_export_configuration" "macie_s3_bucket" {
-  depends_on = [aws_macie2_account.nla_macie]
+  depends_on = [aws_macie2_account.nla_macie, var.ccc_maciefindings_bucket_id, var.kms_key_ccc_maciefindings_arn]
   s3_destination {
     bucket_name = var.ccc_maciefindings_bucket_id
     kms_key_arn = var.kms_key_ccc_maciefindings_arn
