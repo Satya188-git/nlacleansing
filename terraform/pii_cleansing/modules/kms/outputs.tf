@@ -1,6 +1,7 @@
 output "kms_key_ccc_unrefined_arn" {
   value = aws_kms_key.unrefined_kms_key.arn
 }
+
 output "kms_key_ccc_initial_arn" {
   value = aws_kms_key.initial_kms_key.arn
 }
@@ -8,6 +9,7 @@ output "kms_key_ccc_initial_arn" {
 output "kms_key_ccc_clean_arn" {
   value = aws_kms_key.clean_kms_key.arn
 }
+
 output "kms_key_ccc_verified_clean_arn" {
   value = aws_kms_key.verified_clean_kms_key.arn
 }
@@ -35,8 +37,3 @@ output "kms_key_ccc_sns_lambda_arn" {
 output "athena_kms_key_arn" {
   value = module.athena_kms_key.key_arn
 }
-
-# output "kms_key_ccc_verified_clean_insights_arn" {
-#   value = module.ccc_verified_clean_insights_kms_key.key_arn
-
-# }

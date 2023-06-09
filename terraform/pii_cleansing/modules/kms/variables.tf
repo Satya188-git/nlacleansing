@@ -76,6 +76,7 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
 variable "transcribe_lambda_role_arn" {
   type = string
 }

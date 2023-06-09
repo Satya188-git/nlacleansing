@@ -113,7 +113,6 @@ module "ccc_comprehend_lambda" {
   update_role                       = false
 
   environment_variables = {
-    Athena_Database                       = var.athena_database_name
     Athena_Output_Location                = "s3://${var.ccc_athenaresults_bucket_id}/"
     Athena_Table                          = var.nla_glue_table_name
     Table_Name                            = var.nla_glue_table_name
@@ -203,7 +202,6 @@ module "ccc_informational_macie_lambda" {
 }
 
 
-# aws-controltower-NotificationForwarder
 module "ccc_notification_forwarder_lambda" {
   depends_on                        = [var.sns_lambda_role_arn]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"

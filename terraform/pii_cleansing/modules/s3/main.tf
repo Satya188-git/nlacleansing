@@ -524,7 +524,9 @@ resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replic
       }
     }
 
-    filter {}
+    filter {
+      prefix = "EDIX_METADATA/"
+    }
 
     destination {
       bucket  = module.ccc_piimetadata_bucket.s3_bucket_arn
@@ -597,4 +599,138 @@ resource "aws_s3_object" "edix_metadata_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
+}
+
+
+# Encryption configuration
+# This is needed vs. using the S3 module ssl configuration because there is a bug in the Terraform Cloud Sentinel that will fail a new account deployment if we are using aws:kms encryption
+# This is a solution to get around that bug
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_unrefined_call_data_bucket_encryption" {
+  depends_on = [module.ccc_unrefined_call_data_bucket.s3_ssl_policy]
+  bucket = module.ccc_unrefined_call_data_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_unrefined_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_initial_bucket_encryption" {
+  depends_on = [module.ccc_initial_bucket.s3_ssl_policy]
+  bucket = module.ccc_initial_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_initial_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_cleaned_bucket_encryption" {
+  depends_on = [module.ccc_cleaned_bucket.s3_ssl_policy]
+  bucket = module.ccc_cleaned_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_clean_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_verified_clean_bucket_encryption" {
+  depends_on = [module.ccc_verified_clean_bucket.s3_ssl_policy]
+  bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_verified_clean_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_dirty_bucket_encryption" {
+  depends_on = [module.ccc_dirty_bucket.s3_ssl_policy]
+  bucket = module.ccc_dirty_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_dirty_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_maciefindings_bucket_encryption" {
+  depends_on = [module.ccc_maciefindings_bucket.s3_ssl_policy]
+  bucket = module.ccc_maciefindings_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_maciefindings_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_piimetadata_bucket_encryption" {
+  depends_on = [module.ccc_piimetadata_bucket.s3_ssl_policy]
+  bucket = module.ccc_piimetadata_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_athenaresults_bucket_encryption" {
+  depends_on = [module.ccc_athenaresults_bucket.s3_ssl_policy]
+  bucket = module.ccc_athenaresults_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_athenaresults_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_insights_audio_bucket_encryption" {
+  depends_on = [module.ccc_insights_audio_bucket.s3_ssl_policy]
+  bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_unrefined_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_callrecordings_bucket_encryption" {
+  depends_on = [module.ccc_callrecordings_bucket.s3_ssl_policy]
+  bucket = module.ccc_callrecordings_bucket.s3_bucket_id
+
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = var.kms_key_ccc_piimetadata_arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
 }

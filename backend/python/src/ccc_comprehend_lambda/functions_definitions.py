@@ -39,7 +39,6 @@ EBMove_VECTOR_ID = os.environ["EBMove_VECTOR_ID"]
 ERMove_NAME = os.environ["ERMove_NAME"]
 ERMove_VECTOR_ID = os.environ["ERMove_VECTOR_ID"]
 
-Athena_Database = os.environ["Athena_Database"]
 Athena_Table = os.environ["Athena_Table"]
 Retry_Count = os.environ["Retry_Count"]
 Athena_Output_Location = os.environ["Athena_Output_Location"]
@@ -263,7 +262,7 @@ def capture_file_metdadata(s3filename):
     "segment vector number" as segmentVectorNumber, \
     "internal segment client start time" as internalSegmentClientStartTime, \
     "internal segment client stop time" as internalSegmentClientStopTime FROM ' + '"' + DB_Name + '"' + "." + Table_Name + ' WHERE "file Name" = ' + "'" + s3filename + "'" + ";"
-    DATABASE = Athena_Database
+    DATABASE = DB_Name
 
     output = Athena_Output_Location
 

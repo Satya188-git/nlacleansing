@@ -47,7 +47,7 @@ module "glue-crawler" {
       database_name = var.athena_database_name
       s3_targets = {
         s3_target1 = {
-          path = "s3://${var.ccc_piimetadata_bucket_id}/"
+          path = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
         }
       }
       dynamodb_targets = {}
@@ -79,14 +79,14 @@ module "nla_glue_table" {
   # glue catalog tables 
   glue_catalog_map = {
     "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata" = {
-      name                           = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata" # "sdge_dtdes_dev_wus2_glue_nla_s3_crawler_pii_metadata"
+      name                           = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata"
       glue_catalog_table_description = local.glue_catalog_table_description
       glue_catalog_table_table_type  = local.glue_catalog_table_table_type
       glue_catalog_table_parameters = {
         "skip.header.line.count" = 1
         "sizeKey"                = 3487703
         "objectCount"            = 62
-        "UPDATED_BY_CRAWLER"     = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-glue-nla-s3-crawler-pii" #"sdge-dtdes-dev-wus2-glue-nla-s3-crawler-pii"
+        "UPDATED_BY_CRAWLER"     = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-glue-nla-s3-crawler-pii"
         "recordCount"            = 10389
         "averageRecordSize"      = 333
         "compressionType"        = "none"
@@ -97,7 +97,7 @@ module "nla_glue_table" {
         "typeOfData"             = "file"
       }
 
-      location                  = "s3://${var.ccc_piimetadata_bucket_id}/"
+      location                  = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
       input_format              = "org.apache.hadoop.mapred.TextInputFormat"
       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
       compressed                = false
