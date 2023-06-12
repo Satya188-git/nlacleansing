@@ -137,6 +137,10 @@ module "ccc_comprehend_lambda" {
     ERCSR_VECTOR_ID                       = "1245602"
     ERMove_NAME                           = "ERMove"
     ERMove_VECTOR_ID                      = "1245668"
+    EBHighBill_NAME                       = "EBHighBill"
+    EBHighBill_VECTOR_ID                  = "1245656"
+    ERHighBill_NAME                       = "ERHighBill"
+    ERHighBill_VECTOR_ID                  = "1245640"
     Retry_Count                           = 10
   }
 

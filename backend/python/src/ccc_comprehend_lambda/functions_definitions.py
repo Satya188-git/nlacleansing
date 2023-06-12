@@ -23,6 +23,13 @@ EBCSR_VECTOR_ID = os.environ["EBCSR_VECTOR_ID"]
 
 ERCSR_NAME = os.environ["ERCSR_NAME"]
 ERCSR_VECTOR_ID = os.environ["ERCSR_VECTOR_ID"]
+#HighBill Details
+ERHighBill_NAME = os.environ["ERHighBill_NAME"]
+ERHighBill_VECTOR_ID = os.environ["ERHighBill_VECTOR_ID"]
+EBHighBill_NAME = os.environ["EBHighBill_NAME"]
+EBHighBill_VECTOR_ID = os.environ["EBHighBill_VECTOR_ID"]
+
+
 # Billing Details
 EBBilling_NAME = os.environ["EBBilling_NAME"]
 EBBilling_VECTOR_ID = os.environ["EBBilling_VECTOR_ID"]
@@ -360,6 +367,10 @@ def capture_file_metdadata(s3filename):
         call_type = ERMove_NAME
     elif call_pattern == EBMove_VECTOR_ID:
         call_type = EBMove_NAME
+    elif call_pattern == ERHighBill_VECTOR_ID:
+        call_type = ERHighBill_NAME
+    elif call_pattern == EBHighBill_VECTOR_ID:
+        call_type = EBHighBill_NAME    
     else:
         print("Invalid Segment Vector Number / Invalid Call Type")
 
