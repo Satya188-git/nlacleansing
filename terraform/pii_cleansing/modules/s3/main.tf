@@ -18,6 +18,18 @@ locals {
 }
 
 
+# Enable tfartifacts bucket versioning
+data "aws_s3_bucket" "tfartifacts" {
+  bucket = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-tf-artifacts"
+}
+
+resource "aws_s3_bucket_versioning" "tfartifacts_versioning" {
+  bucket = data.aws_s3_bucket.tfartifacts.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 module "ccc_unrefined_call_data_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "5.3.2"
