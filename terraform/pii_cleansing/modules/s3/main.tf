@@ -442,6 +442,21 @@ module "ccc_callrecordings_bucket" {
       },
     ]
   }]
+
+  additional_policy_statements = [
+    {
+      Sid    = "Allow EDIX user access"
+      Effect = "Allow"
+      Principal = {
+        AWS = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+      }
+      Action   = ["s3:*"],
+      Resource = [
+        "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
+        "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
+      ]
+    }
+  ]
 }
 
 
