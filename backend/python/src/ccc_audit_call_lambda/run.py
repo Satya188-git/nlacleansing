@@ -49,13 +49,17 @@ def lambda_handler(event, context):
     # Create random UUID
     id = str(uuid.uuid4())
 
-    call_type = "0"
-    file_id = "0"
+
 
     split_file = file.split('_')
+    # handling a typical NLA file
     if len(split_file) > 1:
         call_type = split_file[1]
         file_id = split_file[2]
+    # handling a metadata file
+    else:
+        call_type = "0"
+        file_id = "0"
 
     status = ""
 
@@ -89,6 +93,9 @@ def lambda_handler(event, context):
         status = status_list.METADATA_FILE_UPLOADED
     elif path == buckets.AUDIO:
         status = status_list.AUDIO_FILE_UPLOADED
+    else:
+        logger.info("Not a valid bucket to audit")
+        return
 
     now = datetime.now()
     # dd/mm/YY H:M:S
