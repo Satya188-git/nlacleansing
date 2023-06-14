@@ -326,6 +326,9 @@ module "ccc_audit_call_lambda" {
     TABLE_NAME                   = var.dynamodb_audit_table_name
     TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
+    AUDIO_BUCKET_NAME            = var.ccc_insights_audio_bucket_id
+    CALL_RECORDINGS_BUCKET_NAME  = var.ccc_callrecordings_bucket_id
+    METADATA_BUCKET_NAME         = var.ccc_piimetadata_bucket_id
     DEBUG                        = "disabled"
     ENV                          = var.environment_code
   }
@@ -438,6 +441,42 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda
   function_name  = module.ccc_audit_call_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.customercallcenterpiicleaned_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda5" {
+  statement_id   = "AllowExecutionFromCloudWatch5"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.callrecordings_audio_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda6" {
+  statement_id   = "AllowExecutionFromCloudWatch6"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.callrecordings_metadata_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda7" {
+  statement_id   = "AllowExecutionFromCloudWatch7"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.pii_metadata_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audit_call_lambda8" {
+  statement_id   = "AllowExecutionFromCloudWatch8"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audit_call_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.audio_s3_event_rule_arn
   source_account = var.account_id
 }
 

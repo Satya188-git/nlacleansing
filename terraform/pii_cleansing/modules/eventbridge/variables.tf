@@ -133,3 +133,18 @@ variable "ccc_audio_copy_lambda_arn" {
   type        = string
   description = "ccc_audio_copy_lambda_arn"
 }
+
+variable "ccc_callrecordings_bucket_id" {
+  type        = string
+  description = "ccc_callrecordings_bucket_id"
+}
+
+variable "ccc_piimetadata_bucket_id" {
+  type        = string
+  description = "ccc_piimetadata_bucket_id"
+}
+
+variable "ccc_insights_audio_bucket_id" {
+  type        = string
+  description = "ccc_insights_audio_bucket_id"
+}
