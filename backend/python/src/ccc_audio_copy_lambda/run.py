@@ -25,9 +25,20 @@ else:
 def lambda_handler(event, context):
     logger.info("Event: " + json.dumps(event))
     try:
-        audio_files = get_recent_files(call_recordings_bucket, edix_audio_dir)
-        for fileObjectKey in audio_files:
-            copy_file(call_recordings_bucket, fileObjectKey, audio_bucket, fileObjectKey)
+        recent_audio_files = get_recent_files(call_recordings_bucket, edix_audio_dir)
+        for fileObject in recent_audio_files:
+            if( check_file_exists(  audio_bucket,  fileObject['object_name']  ) ):
+                s3_object = s3.get_object(Bucket=audio_bucket, Key=fileObject['object_name'])
+                source_key = edix_audio_dir+'/'+fileObject['object_name']
+                # Compate the size of the object in bytes.
+                if( fileObject['object_size'] > s3_object['ContentLength']) :
+                    move_file(call_recordings_bucket, source_key, audio_bucket, fileObject['object_name'])
+                else:
+                    logger.info(f"File '{fileObject['object_name']}' with same or larger size already exist in bucket '{audio_bucket}'.")     
+                    s3.delete_object(Bucket=call_recordings_bucket, Key=source_key)
+                    logger.info(f"File deleted from '{call_recordings_bucket}/{source_key}'.")
+            else:
+                move_file(call_recordings_bucket, edix_audio_dir+'/'+fileObject['object_name'], audio_bucket, fileObject['object_name'])                
     except Exception as e:
         errorMessage = str(e)
         logger.error(errorMessage)
@@ -39,27 +50,38 @@ def get_recent_files(bucket_name, folder_prefix):
     # Calculate the timestamp for x minutes ago
     minutes_ago = datetime.now(tz.UTC) - timedelta(minutes=5)
 
-    # Get bucket and file name
-    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=folder_prefix)
-    logger.info(response)
+    # Generate file_list
+    paginator = s3.get_paginator('list_objects_v2')
+    page_iterator = paginator.paginate(Bucket=bucket_name,Prefix=folder_prefix)
 
+    all_objects = []
+    for page in page_iterator:
+        if 'Contents' in page:
+            all_objects.extend(page['Contents'])
     # Filter files based on the LastModified timestamp
     recent_files = []
-    for obj in response['Contents']:
+    for obj in all_objects:
         last_modified = obj['LastModified'].astimezone(tz.UTC)
         if last_modified > minutes_ago:
-            recent_files.append(obj['Key'])
-
+            recentobject = '{"object_name":"' + obj['Key'].split(folder_prefix+'/')[1] +'" , "object_size" : ' + str(obj['Size']) + "}"
+            recent_files.append(json.loads(recentobject))  
     logger.info(recent_files)
     return recent_files
 
-def copy_file(source_bucket, source_key, destination_bucket, destination_key):
+def check_file_exists(target_bucket, target_key):
+    try:
+        s3.head_object(Bucket=target_bucket, Key=target_key)
+        return True
+    except Exception as e:
+        return False
+
+def move_file(source_bucket, source_key, destination_bucket, destination_key):
     copy_source = {
         'Bucket': source_bucket,
         'Key': source_key
     }
-    destFileObjectKey = os.path.basename(destination_key)
-    s3.copy(copy_source, destination_bucket, destFileObjectKey)
-    logger.info(f"File copied from '{source_bucket}/{source_key}' to '{destination_bucket}/{destFileObjectKey}'.")
-
-
+    s3.copy(copy_source, destination_bucket, destination_key)
+    logger.info(f"File copied from '{source_bucket}/{source_key}' to '{destination_bucket}/{destination_key}'.")
+    # Delete the original object
+    s3.delete_object(Bucket=source_bucket, Key=source_key)
+    logger.info(f"File deleted from '{source_bucket}/{source_key}'.")
