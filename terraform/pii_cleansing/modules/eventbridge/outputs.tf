@@ -32,3 +32,23 @@ output "ccc_audio_copy_s3_event_rule_arn" {
   description = "ccc_audio_copy_s3_event_rule_arn"
   value       = aws_cloudwatch_event_rule.ccc_audio_copy_s3_event_rule.arn
 }
+
+output "callrecordings_audio_s3_event_rule_arn" {
+  description = "callrecordings_audio_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.callrecordings_audio_s3_event_rule.arn
+}
+
+output "callrecordings_metadata_s3_event_rule_arn" {
+  description = "callrecordings_metadata_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.callrecordings_metadata_s3_event_rule.arn
+}
+
+output "pii_metadata_s3_event_rule_arn" {
+  description = "pii_metadata_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.pii_metadata_s3_event_rule.arn
+}
+
+output "audio_s3_event_rule_arn" {
+  description = "audio_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.audio_s3_event_rule.arn
+}

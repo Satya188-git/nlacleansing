@@ -8,3 +8,7 @@ STANDARD_FULL_TRANSCRIPT_CLEANED_VERIFIED = 'Standard_full_transcript_cleaned_ve
 STANDARD_FULL_TRANSCRIPT_DIRTY_VERIFIED = 'Standard_full_transcript_dirty_verified'
 FINAL_VERIFIED_INDENTED_OUTPUT_GENERATED = 'Final_Verified_Indented_Output_Generated'
 FINAL_VERIFIED_NONINDENTED_OUTPUT_GENERATED = 'Final_Verified_NonIndented_Output_Generated'
+AUDIO_RECORDINGS_FILE_UPLOADED = 'Audio_recordings_file_uploaded'
+METADATA_RECORDINGS_FILE_UPLOADED = 'Metadata_recordings_file_uploaded'
+METADATA_FILE_UPLOADED = 'Metadata_file_uploaded'
+AUDIO_FILE_UPLOADED = 'Audio_file_uploaded'
