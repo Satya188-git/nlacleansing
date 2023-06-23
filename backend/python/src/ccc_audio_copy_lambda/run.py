@@ -26,19 +26,34 @@ def lambda_handler(event, context):
     logger.info("Event: " + json.dumps(event))
     try:
         recent_audio_files = get_recent_files(call_recordings_bucket, edix_audio_dir)
+        copycount=0
+        existingdeletecount=0
+        
         for fileObject in recent_audio_files:
-            if( check_file_exists(  audio_bucket,  fileObject['object_name']  ) ):
-                s3_object = s3.get_object(Bucket=audio_bucket, Key=fileObject['object_name'])
-                source_key = edix_audio_dir+'/'+fileObject['object_name']
-                # Compate the size of the object in bytes.
-                if( fileObject['object_size'] > s3_object['ContentLength']) :
-                    move_file(call_recordings_bucket, source_key, audio_bucket, fileObject['object_name'])
+            try:
+                if( check_file_exists(  audio_bucket,  fileObject['object_name']  ) ):
+                    s3_object = s3.get_object(Bucket=audio_bucket, Key=fileObject['object_name'])
+                    source_key = edix_audio_dir+'/'+fileObject['object_name']
+                    
+                    # Compare the size of the object in bytes.
+                    if( fileObject['object_size'] > s3_object['ContentLength']) :
+                        copycount=copycount + 1
+                        logger.info("File copy count : " + str(copycount))
+                        move_file(call_recordings_bucket, source_key, audio_bucket, fileObject['object_name'])
+                    else:
+                        existingdeletecount = existingdeletecount + 1
+                        logger.info("File existing delete count : "+  str(existingdeletecount))
+                        logger.info(f"File '{fileObject['object_name']}' with same or larger size already exist in bucket '{audio_bucket}'.")     
+                        s3.delete_object(Bucket=call_recordings_bucket, Key=source_key)
+                        logger.info(f"File deleted from '{call_recordings_bucket}/{source_key}'.")
                 else:
-                    logger.info(f"File '{fileObject['object_name']}' with same or larger size already exist in bucket '{audio_bucket}'.")     
-                    s3.delete_object(Bucket=call_recordings_bucket, Key=source_key)
-                    logger.info(f"File deleted from '{call_recordings_bucket}/{source_key}'.")
-            else:
-                move_file(call_recordings_bucket, edix_audio_dir+'/'+fileObject['object_name'], audio_bucket, fileObject['object_name'])                
+                    copycount=copycount + 1
+                    logger.info("File copy count : " + str(copycount))
+                    move_file(call_recordings_bucket, edix_audio_dir+'/'+fileObject['object_name'], audio_bucket, fileObject['object_name'])
+            except Exception as e:
+                errorMessage = str(e)
+                logger.error(fileObject)
+                logger.error(errorMessage)        
     except Exception as e:
         errorMessage = str(e)
         logger.error(errorMessage)
@@ -47,9 +62,6 @@ def lambda_handler(event, context):
         }
     
 def get_recent_files(bucket_name, folder_prefix):
-    # Calculate the timestamp for x minutes ago
-    minutes_ago = datetime.now(tz.UTC) - timedelta(minutes=5)
-
     # Generate file_list
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(Bucket=bucket_name,Prefix=folder_prefix)
@@ -58,14 +70,13 @@ def get_recent_files(bucket_name, folder_prefix):
     for page in page_iterator:
         if 'Contents' in page:
             all_objects.extend(page['Contents'])
-    # Filter files based on the LastModified timestamp
     recent_files = []
     for obj in all_objects:
-        last_modified = obj['LastModified'].astimezone(tz.UTC)
-        if last_modified > minutes_ago:
+        if len(obj['Key'].split(folder_prefix+'/')[1]) > 0: # Ignoring subfolder item
             recentobject = '{"object_name":"' + obj['Key'].split(folder_prefix+'/')[1] +'" , "object_size" : ' + str(obj['Size']) + "}"
-            recent_files.append(json.loads(recentobject))  
+            recent_files.append(json.loads(recentobject))    
     logger.info(recent_files)
+    logger.info('current file count : ' + str(len(recent_files)))
     return recent_files
 
 def check_file_exists(target_bucket, target_key):
