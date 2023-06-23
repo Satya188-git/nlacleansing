@@ -75,6 +75,9 @@ module "eventbridge" {
   macie_scan_trigger_arn            = module.lambda.macie_scan_trigger_arn
   macie_info_trigger_arn            = module.lambda.macie_info_trigger_arn
   ccc_audio_copy_lambda_arn         = module.lambda.ccc_audio_copy_lambda_arn
+  ccc_callrecordings_bucket_id      = module.s3.ccc_callrecordings_bucket_id
+  ccc_piimetadata_bucket_id         = module.s3.ccc_piimetadata_bucket_id
+  ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
 }
 
 module "dynamodb" {
@@ -231,9 +234,15 @@ module "lambda" {
   customercallcenterpiimaciescan_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimaciescan_s3_event_rule_arn
   customercallcenterpiimacieinfo_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimacieinfo_s3_event_rule_arn
   ccc_audio_copy_s3_event_rule_arn                       = module.eventbridge.ccc_audio_copy_s3_event_rule_arn
+  callrecordings_audio_s3_event_rule_arn                 = module.eventbridge.callrecordings_audio_s3_event_rule_arn
+  callrecordings_metadata_s3_event_rule_arn              = module.eventbridge.callrecordings_metadata_s3_event_rule_arn
+  pii_metadata_s3_event_rule_arn                         = module.eventbridge.pii_metadata_s3_event_rule_arn
+  audio_s3_event_rule_arn                                = module.eventbridge.audio_s3_event_rule_arn
   athena_database_name                                   = module.athena.athena_database_name
   nla_glue_table_name                                    = module.glue.nla_glue_table_name[local.glue_table_name]
   nla_glue_database_name                                 = module.glue.nla_glue_database_name
+  ccc_insights_audio_bucket_id                           = module.s3.ccc_insights_audio_bucket_id
+  ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
 }
 
 module "macie" {

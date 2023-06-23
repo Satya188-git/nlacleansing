@@ -178,6 +178,117 @@ EOF
   tags = local.tags
 }
 
+
+resource "aws_cloudwatch_event_rule" "callrecordings_audio_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-audio-rule"
+  description   = "activate lambda when object is created into bucket callrecordings prefix EDIX_AUDIO"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_callrecordings_bucket_id}"
+      ]
+    },
+    "object": {
+        "key": [{
+          "prefix": "EDIX_AUDIO/"
+        }]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+
+resource "aws_cloudwatch_event_rule" "callrecordings_metadata_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-metadata-rule"
+  description   = "activate lambda when object is created into bucket callrecordings prefix EDIX_METADATA"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_callrecordings_bucket_id}"
+      ]
+    },
+    "object": {
+        "key": [{
+          "prefix": "EDIX_METADATA/"
+        }]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+
+resource "aws_cloudwatch_event_rule" "pii_metadata_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-pii-metadata-rule"
+  description   = "activate lambda when object is created into bucket piimetadata"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_piimetadata_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+
+resource "aws_cloudwatch_event_rule" "audio_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-audio-rule"
+  description   = "activate lambda when object is created into bucket nla-audio"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_insights_audio_bucket_id}"
+      ]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
+
 resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
   description = "run lambda at 5 minute intervals"
@@ -229,4 +340,24 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
 resource "aws_cloudwatch_event_target" "ccc_audio_copy_lambda_target" {
   arn       = var.ccc_audio_copy_lambda_arn
   rule      = aws_cloudwatch_event_rule.ccc_audio_copy_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "callrecordings_audio_lambda_target" {
+  arn  = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.callrecordings_audio_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "callrecordings_metadata_lambda_target" {
+  arn  = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.callrecordings_metadata_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "pii_metadata_lambda_target" {
+  arn  = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.pii_metadata_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "audio_lambda_target" {
+  arn  = var.ccc_audit_call_lambda_arn
+  rule = aws_cloudwatch_event_rule.audio_s3_event_rule.name
 }

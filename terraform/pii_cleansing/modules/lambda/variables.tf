@@ -239,3 +239,33 @@ variable "ccc_callrecordings_bucket_id" {
   type        = string
   description = "ccc_callrecordings_bucket_id"
 }
+
+variable "ccc_insights_audio_bucket_id" {
+  type        = string
+  description = "ccc_insights_audio_bucket_id"
+}
+
+variable "ccc_piimetadata_bucket_id" {
+  type        = string
+  description = "ccc_piimetadata_bucket_id"
+}
+
+variable "audio_s3_event_rule_arn" {
+  type        = string
+  description = "audio_s3_event_rule_arn"
+}
+
+variable "pii_metadata_s3_event_rule_arn" {
+  type        = string
+  description = "pii_metadata_s3_event_rule_arn"
+}
+
+variable "callrecordings_metadata_s3_event_rule_arn" {
+  type        = string
+  description = "callrecordings_metadata_s3_event_rule_arn"
+}
+
+variable "callrecordings_audio_s3_event_rule_arn" {
+  type        = string
+  description = "callrecordings_audio_s3_event_rule_arn"
+}
