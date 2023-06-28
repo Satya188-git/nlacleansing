@@ -612,6 +612,17 @@ resource "aws_s3_bucket_notification" "ccc_athenaresults_bucket_notification" {
   eventbridge = true
 }
 
+resource "aws_s3_bucket_notification" "ccc_insights_audio_bucket_notification" {
+  bucket      = module.ccc_insights_audio_bucket.s3_bucket_id
+  eventbridge = true
+}
+
+
+resource "aws_s3_bucket_notification" "ccc_callrecordings_bucket_notification" {
+  bucket      = module.ccc_callrecordings_bucket.s3_bucket_id
+  eventbridge = true
+}
+
 
 resource "aws_s3_object" "edix_audio_prefix" {
   key        = "EDIX_AUDIO/"
