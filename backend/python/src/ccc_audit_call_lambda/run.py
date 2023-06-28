@@ -35,6 +35,8 @@ def lambda_handler(event, context):
 
     folder = os.path.dirname(key)
     file = os.path.basename(key)
+    file_ext = os.path.splitext(file)[1]
+
 
     if folder:
         path = bucket + '/' + folder + '/'
@@ -49,17 +51,26 @@ def lambda_handler(event, context):
     # Create random UUID
     id = str(uuid.uuid4())
 
-
-
     split_file = file.split('_')
-    # handling a typical NLA file
-    if len(split_file) > 1:
-        call_type = split_file[1]
-        file_id = split_file[2]
-    # handling a metadata file
+    if file_ext not in ('.wav', '.txt', '.json'):
+        if len(split_file) > 1:
+            # handling a typical metadata file
+            split_file = file.split('_')
+            call_type = split_file[1]
+            file_id = "0"
+        else:
+            # handling a non-typical metadata file
+            call_type = "0"
+            file_id = "0"            
     else:
-        call_type = "0"
-        file_id = "0"
+        # handling a typical NLA file
+        if len(split_file) > 1:
+            call_type = split_file[1]
+            file_id = split_file[2]
+        else:
+            # handling a non-typical NLA file
+            call_type = "0"
+            file_id = "0"
 
     status = ""
 
@@ -96,10 +107,12 @@ def lambda_handler(event, context):
     else:
         logger.info("Not a valid bucket to audit")
         return
-
+    
     now = datetime.now()
     # dd/mm/YY H:M:S
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    
+    logger.info("Auditing status -" + status + " for file - " + file + " at  - " + dt_string)
 
     response = table.put_item(
         Item={"UUID": id, "CallType": call_type, "FileID": file_id, "Path": path, "FileName": file, "Status": status,

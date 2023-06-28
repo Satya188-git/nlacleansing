@@ -365,7 +365,7 @@ module "ccc_audio_copy_lambda" {
   cloudwatch_logs_retention_in_days = 30
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
-  timeout                           = 10
+  timeout                           = 180
   tracing_mode                      = "PassThrough"
   lambda_role                       = var.audio_copy_lambda_role_arn
   update_role                       = false
