@@ -397,7 +397,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "audio-s3-logs-to-cw"
+  application_use  = "audio-access-logs-to-cw"
 
   description                       = "forwarding call audio s3 access logs to CW logs"
   handler                           = "run.lambda_handler"
