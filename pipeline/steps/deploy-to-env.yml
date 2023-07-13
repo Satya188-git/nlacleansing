@@ -66,6 +66,12 @@ parameters:
   - name: lambdaFunctionName7
     type: string
     default: "lambda-audio-copy"
+  - name: s3LambdaObjectKey8
+    type: string
+    default: "ccc_audio_access_logs_to_cw.zip"
+  - name: lambdaFunctionName8
+    type: string
+    default: "lambda-audio-access-logs-to-cw"    
 
 steps:
   - template: ./lambda-deploy.yml
@@ -90,3 +96,5 @@ steps:
       lambdaFunctionName6: ${{ parameters.lambdaFunctionName6 }}
       s3LambdaObjectKey7: ${{ parameters.s3LambdaObjectKey7 }}
       lambdaFunctionName7: ${{ parameters.lambdaFunctionName7 }}
+      s3LambdaObjectKey8: ${{ parameters.s3LambdaObjectKey8 }}
+      lambdaFunctionName8: ${{ parameters.lambdaFunctionName8 }}      

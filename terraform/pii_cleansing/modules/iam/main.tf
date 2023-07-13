@@ -272,6 +272,26 @@ module "insights_assumed_role" {
   )
 }
 
+# create IAM role for ccc_audio_access_logs_to_cw lambda
+module "ccc_audio_access_logs_to_cw_lambda_role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+  description       = "IAM role for transfering audio_access_logs_to_cw lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+    },
+  )
+}
+
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
@@ -723,4 +743,13 @@ resource "aws_iam_role_policy_attachment" "audio_copy_S3FullAccess" {
 resource "aws_iam_role_policy_attachment" "audio_copy_kms_full_access" {
   role       = module.audio_copy_role.name
   policy_arn = aws_iam_policy.kms_full_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_AWSLambdaBasicExecutionRole" {
+  role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_read" {
+  role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
+  policy_arn = aws_iam_policy.s3_put_read.arn
 }

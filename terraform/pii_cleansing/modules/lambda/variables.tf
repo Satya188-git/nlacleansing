@@ -269,3 +269,13 @@ variable "callrecordings_audio_s3_event_rule_arn" {
   type        = string
   description = "callrecordings_audio_s3_event_rule_arn"
 }
+
+variable "callaudioaccess_log_group_name" {
+  type        = string
+  description = "callaudioaccess_log_group_name"
+}
+
+variable "ccc_audio_access_logs_to_cw_lambda_role_arn" {
+  type        = string
+  description = "ccc_audio_access_logs_to_cw_lambda_role_arn"
+}

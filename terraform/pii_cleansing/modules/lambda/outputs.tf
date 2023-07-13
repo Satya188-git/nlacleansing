@@ -27,3 +27,9 @@ output "ccc_audio_copy_lambda_arn" {
   description ="ccc_audio_copy_lambda ARN"
   value       = module.ccc_audio_copy_lambda.lambda_function_arn
 }
+
+output "ccc_audio_access_logs_to_cw_lambda_arn" {
+  description ="ccc_audio_access_logs_to_cw_lambda ARN"
+  value       = module.cccc_audio_access_logs_to_cw_lambda.lambda_function_arn
+}
+
