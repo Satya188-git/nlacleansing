@@ -262,3 +262,20 @@ resource "aws_kms_grant" "ccc_macie_scan_trigger_lambda" {
   grantee_principal = var.trigger_macie_lambda_role_arn
   operations        = ["Encrypt", "Decrypt", "GenerateDataKey"]
 }
+
+module "sns_kms_key" {
+  source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
+  version          = "4.0.2"
+  description      = local.description
+  aws_region       = local.region
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_name = local.application_name
+  tags = merge(local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-sns-key"
+    },
+  )
+}

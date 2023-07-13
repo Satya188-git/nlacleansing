@@ -459,6 +459,42 @@ module "ccc_callrecordings_bucket" {
   ]
 }
 
+module "ccc_callaudioaccesslogs_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "5.3.2"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-callaudioaccesslogs"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags             = local.tags
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_unrefined_arn
+        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
+
+  lifecycle_rule = [{
+    id      = "expiration-rule"
+    enabled = true
+    expiration = [
+      {
+        days = 2192
+      },
+    ]
+  }]
+}
+
+
 
 #source replication configuration
 resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
@@ -639,6 +675,12 @@ resource "aws_s3_object" "edix_metadata_prefix" {
   kms_key_id = var.kms_key_ccc_piimetadata_arn
 }
 
+resource "aws_s3_object" "access_logs_prefix" {
+  key        = "access-logs/"
+  bucket     = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  source     = "/dev/null"
+  kms_key_id = var.kms_key_ccc_unrefined_arn
+}
 
 # Encryption configuration
 # This is needed vs. using the S3 module ssl configuration because there is a bug in the Terraform Cloud Sentinel that will fail a new account deployment if we are using aws:kms encryption
@@ -771,4 +813,18 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_callrecording
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+# Below Part added for S3-Presigned-URL
+resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
+  bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  acl    = "log-delivery-write"
+}
+
+ 
+
+resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
+  bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  target_bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  target_prefix = "log/"
 }

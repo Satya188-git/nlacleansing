@@ -388,6 +388,50 @@ module "ccc_audio_copy_lambda" {
     },
   )
 }
+# Lambda for forwarding call audio s3 access logs to CW logs
+module "ccc_audio_access_logs_to_cw_lambda" {
+  depends_on       = [var.audit_call_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "6.0.0-prerelease"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "audio-s3-logs-to-cw"
+
+  description                       = "forwarding call audio s3 access logs to CW logs"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.9"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.audio_copy_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    LOG_GROUP           = var.callaudioaccess_log_group_name
+    LOG_STREAM 			= "logstream"
+    DEBUG               = "disabled"
+    ENV                 = var.environment_code
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/ccc_audio_access_logs_to_cw.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-access-logs-to-cw"
+    },
+  )
+}
 
 # Permissions for EventBridge
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_comprehend_lambda" {
@@ -503,5 +547,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_copy_lambda
   function_name  = module.ccc_audio_copy_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.ccc_audio_copy_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_access_logs_to_cw_lambda" {
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_audio_access_logs_to_cw_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.ccc_audio_access_logs_s3_event_rule_arn
   source_account = var.account_id
 }

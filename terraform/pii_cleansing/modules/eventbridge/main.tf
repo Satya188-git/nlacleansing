@@ -288,6 +288,35 @@ EOF
   tags = local.tags
 }
 
+# Rule to trigger ccc_audio_access_logs_to_cw_lambda for S3 access logs generation
+resource "aws_cloudwatch_event_rule" "ccc_audio_access_logs_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-access-logs-s3-event-rule"
+  description   = "activate ccc_audio_access_logs_to_cw_lambda when s3 access log object is created into bucket ccallaudioaccesslogs"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_callaudioaccesslogs_bucket_id}"
+      ]
+    },
+    "object": {
+        "key": [{
+          "prefix": "access-logs/"
+        }]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
 
 resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"

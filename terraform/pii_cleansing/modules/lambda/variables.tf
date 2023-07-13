@@ -269,3 +269,8 @@ variable "callrecordings_audio_s3_event_rule_arn" {
   type        = string
   description = "callrecordings_audio_s3_event_rule_arn"
 }
+
+variable "callaudioaccess_log_group_name" {
+  type        = string
+  description = "callaudioaccess_log_group_name"
+}
