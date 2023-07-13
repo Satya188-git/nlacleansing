@@ -390,7 +390,7 @@ module "ccc_audio_copy_lambda" {
 }
 # Lambda for forwarding call audio s3 access logs to CW logs
 module "ccc_audio_access_logs_to_cw_lambda" {
-  depends_on       = [var.audit_call_lambda_role_arn]
+  depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "6.0.0-prerelease"
   company_code     = local.company_code
@@ -412,7 +412,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
-  lambda_role                       = var.audio_copy_lambda_role_arn
+  lambda_role                       = var.ccc_audio_access_logs_to_cw_lambda_role_arn
   update_role                       = false
 
   environment_variables = {

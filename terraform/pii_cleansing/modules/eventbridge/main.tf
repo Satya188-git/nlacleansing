@@ -390,3 +390,8 @@ resource "aws_cloudwatch_event_target" "audio_lambda_target" {
   arn  = var.ccc_audit_call_lambda_arn
   rule = aws_cloudwatch_event_rule.audio_s3_event_rule.name
 }
+
+resource "aws_cloudwatch_event_target" "audio_access_logs_to_cw_lambda_target" {
+  arn  = var.ccc_audio_access_logs_to_cw_lambda_arn
+  rule = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule.name
+}

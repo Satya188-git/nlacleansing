@@ -153,3 +153,9 @@ variable "ccc_callaudioaccesslogs_bucket_id" {
   type        = string
   description = "ccc_callaudioaccesslogs_bucket_id"
 }
+
+variable "ccc_audio_access_logs_to_cw_lambda_arn" {
+  type        = string
+  description = "ccc_audio_access_logs_to_cw_lambda_arn"
+}
+
