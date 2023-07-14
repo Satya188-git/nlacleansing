@@ -829,7 +829,7 @@ resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
  
 
 resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
-  bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
-  target_bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  target_bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
   target_prefix = "log/"
 }
