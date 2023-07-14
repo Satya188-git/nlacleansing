@@ -56,7 +56,7 @@ resource "aws_cloudwatch_log_metric_filter" "callaudioaccess-metrics" {
 }
 
 module "nla_audio_access_alarm" {
-  depends_on = [aws_cloudwatch_log_metric_filter.callaudioaccess-metrics.id]
+  depends_on = [aws_cloudwatch_log_metric_filter.callaudioaccess-metrics]
   source  = "app.terraform.io/SempraUtilities/seu-cloudwatch-alarms/aws"
   version = "4.0.3"
   company_code     = local.company_code

@@ -281,13 +281,13 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+  application_use   = "${local.application_use}-ccc-audio-access-logs-to-cw"
   description       = "IAM role for transfering audio_access_logs_to_cw lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw"
     },
   )
 }
@@ -754,7 +754,7 @@ resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_re
   policy_arn = aws_iam_policy.s3_put_read.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_audio_copy_kms_full_access" {
+resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_kms_full_access" {
   role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
   policy_arn = aws_iam_policy.kms_full_access.arn
 }

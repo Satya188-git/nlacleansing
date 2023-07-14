@@ -79,6 +79,7 @@ module "eventbridge" {
   ccc_piimetadata_bucket_id         = module.s3.ccc_piimetadata_bucket_id
   ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
+  ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
 }
 
 module "dynamodb" {
@@ -246,6 +247,7 @@ module "lambda" {
   ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
   callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
   ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
+  ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
 }
 
 module "macie" {
@@ -304,12 +306,9 @@ module "sns" {
   company_code                      = var.company_code
   application_code                  = var.application_code
   environment_code                  = var.environment_code
-  owner                             = var.owner
-  namespace                         = var.namespace
   region_code                       = var.region_code
   tag-version                       = var.tag-version
   billing-guid                      = var.billing-guid
-  unit                              = var.unit
   portfolio                         = var.portfolio
   support-group                     = var.support-group
   cmdb-ci-id                        = var.cmdb-ci-id
@@ -337,5 +336,5 @@ module "cloudwatch" {
   support-group                     = var.support-group
   cmdb-ci-id                        = var.cmdb-ci-id
   data-classification               = var.data-classification
-  sns-topic-arn			            = module.sns.sns_topic_arn
+  sns-topic-arn                     = one(module.sns.sns-topic-arn)
 }
