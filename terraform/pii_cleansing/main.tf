@@ -305,12 +305,9 @@ module "sns" {
   company_code                      = var.company_code
   application_code                  = var.application_code
   environment_code                  = var.environment_code
-  owner                             = var.owner
-  namespace                         = var.namespace
   region_code                       = var.region_code
   tag-version                       = var.tag-version
   billing-guid                      = var.billing-guid
-  unit                              = var.unit
   portfolio                         = var.portfolio
   support-group                     = var.support-group
   cmdb-ci-id                        = var.cmdb-ci-id
