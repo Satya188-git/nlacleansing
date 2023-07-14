@@ -336,5 +336,5 @@ module "cloudwatch" {
   support-group                     = var.support-group
   cmdb-ci-id                        = var.cmdb-ci-id
   data-classification               = var.data-classification
-  sns-topic-arn			            = module.sns.sns_topic_arn
+  sns_topic_arn                     = one(module.sns.sns_topic_arn)
 }

@@ -281,13 +281,13 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+  application_use   = "${local.application_use}-ccc-audio-access-logs-to-cw"
   description       = "IAM role for transfering audio_access_logs_to_cw lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw-lambda-role"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw"
     },
   )
 }
