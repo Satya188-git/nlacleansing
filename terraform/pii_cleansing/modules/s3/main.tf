@@ -375,7 +375,7 @@ module "ccc_athenaresults_bucket" {
 
 module "ccc_insights_audio_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "5.3.2"
+  version = "6.0.1"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -386,6 +386,8 @@ module "ccc_insights_audio_bucket" {
   force_destroy    = true
   versioning       = true
   tags             = local.tags
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
