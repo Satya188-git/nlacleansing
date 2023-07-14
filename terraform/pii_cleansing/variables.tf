@@ -127,7 +127,4 @@ variable "audioaccessnotificationemail" {
   description = "NLA Audio access notification email id"
 }
 
-variable "ccc_callaudioaccesslogs_bucket_id" {
-  type        = string
-  description = "ccc_callaudioaccesslogs_bucket_id"
-}
+
