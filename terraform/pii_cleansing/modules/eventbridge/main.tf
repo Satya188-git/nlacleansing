@@ -308,7 +308,7 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_access_logs_s3_event_rule" {
     },
     "object": {
         "key": [{
-          "prefix": "access-logs/"
+          "prefix": "log/"
         }]
     }
   }
