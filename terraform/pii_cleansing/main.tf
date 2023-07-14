@@ -79,6 +79,7 @@ module "eventbridge" {
   ccc_piimetadata_bucket_id         = module.s3.ccc_piimetadata_bucket_id
   ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
+  ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
 }
 
 module "dynamodb" {
