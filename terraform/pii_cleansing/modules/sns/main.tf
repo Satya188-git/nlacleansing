@@ -24,10 +24,5 @@ module "sns" {
   email_subscriber_list = ["${var.audioaccessnotificationemail}"]
 }
 
-resource "aws_sns_topic_subscription" "email_subscription1" {
-  depends_on = [ module.sns.sns_topic_arn ]
-  topic_arn = "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-audio-access-notifications-topic"
-  protocol  = "email"
-  endpoint  = var.audioaccessnotificationemail
-}
+
 
