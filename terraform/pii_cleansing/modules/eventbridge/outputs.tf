@@ -55,5 +55,5 @@ output "audio_s3_event_rule_arn" {
 
 output "ccc_audio_access_logs_s3_event_rule_arn" {
   description = "ccc_audio_access_logs_s3_event_rule_arn"
-  value       = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule_arn.arn
+  value       = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule.arn
 }
