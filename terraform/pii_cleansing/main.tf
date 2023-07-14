@@ -247,6 +247,7 @@ module "lambda" {
   ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
   callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
   ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
+  ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
 }
 
 module "macie" {
