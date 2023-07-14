@@ -680,7 +680,7 @@ resource "aws_s3_object" "edix_metadata_prefix" {
 }
 
 resource "aws_s3_object" "access_logs_prefix" {
-  key        = "access-logs/"
+  key        = "log/"
   bucket     = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_unrefined_arn
