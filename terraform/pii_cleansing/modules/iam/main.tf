@@ -754,7 +754,7 @@ resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_re
   policy_arn = aws_iam_policy.s3_put_read.arn
 }
 
-resource "aws_iam_role_policy_attachment" "audio_copy_kms_full_access" {
+resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_audio_copy_kms_full_access" {
   role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
   policy_arn = aws_iam_policy.kms_full_access.arn
 }
