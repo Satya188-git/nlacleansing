@@ -821,8 +821,9 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_callrecording
 
 # Below Part added for S3-Presigned-URL
 resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
+  depends_on = [ module.ccc_insights_audio_bucket.s3_bucket_id ]
   bucket = module.ccc_insights_audio_bucket.s3_bucket_id
-  acl    = "log-delivery-write"
+  acl    = "log-delivery-write"  
 }
 
  
