@@ -42,37 +42,6 @@ resource "aws_kms_key" "unrefined_kms_key" {
   deletion_window_in_days = 10
   enable_key_rotation     = true
   tags                    = local.tags
-
-  policy = <<EOT
-      {
-        "Version": "2012-10-17",
-        "Id": "S3-Key-Policy",
-        "Statement": [
-            {
-              "Sid": "Enable IAM User Permissions",
-              "Effect": "Allow",
-              "Principal": {
-                  "AWS": "arn:aws:iam::${var.account_id}:root"
-              },
-              "Action": "kms:*",
-              "Resource": "*"
-            },
-            {
-              "Sid": "Allow S3 for CMK",
-              "Effect": "Allow",
-              "Principal": {
-                  "Service":[
-                      "s3.amazonaws.com"
-                  ]
-              },
-              "Action": [
-                  "kms:Decrypt","kms:GenerateDataKey"
-              ],
-              "Resource": "*"
-            }
-        ]
-      }
-  EOT
 }
 
 resource "aws_kms_alias" "unrefined_kms_key" {
@@ -309,4 +278,33 @@ module "sns_kms_key" {
       name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sns"
     },
   )
+  policy = <<EOT
+      {
+        "Version": "2012-10-17",
+        "Id": "KMS-Key-Policy",
+        "Statement": [
+            {
+              "Sid": "Enable IAM User Permissions",
+              "Effect": "Allow",
+              "Principal": {
+                  "AWS": "arn:aws:iam::${var.account_id}:root"
+              },
+              "Action": "kms:*",
+              "Resource": "*"
+            },
+            {
+              "Sid": "Allow Cloudwatch access for CMK",
+              "Effect": "Allow",
+              "Principal": {
+                  "Service":[ "cloudwatch.amazonaws.com" ]
+              },
+              "Action": [
+				  "kms:Decrypt",
+				  "kms:GenerateDataKey"
+              ],
+              "Resource": "*"
+            }
+        ]
+      }
+  EOT  
 }
