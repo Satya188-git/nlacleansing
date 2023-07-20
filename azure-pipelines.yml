@@ -49,10 +49,10 @@ parameters:
       - GCP
 
   #Below Parameter to enable Terraform container.
-  - name: IncludeContainer
-    default: false
-    displayName: "Enable Terraform Container"
-    type: boolean
+  #- name: IncludeContainer
+  #  default: false
+  #  displayName: "Enable Terraform Container"
+  #  type: boolean
 
   # Pattern specific parameter
   # Edit parameter values as needed, do not change parameter names
@@ -277,7 +277,7 @@ extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
     DestinationCloud: ${{ parameters.DestinationCloud }}
-    IncludeContainer: ${{ parameters.IncludeContainer }}
+    # IncludeContainer: ${{ parameters.IncludeContainer }}
     # ContainerInfo: ${{ parameters.ContainerInfo }}
     S3Info: ${{ parameters.S3Info }}
     # AzureInfo: ${{ parameters.AzureInfo }}
