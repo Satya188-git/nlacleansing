@@ -214,7 +214,7 @@ parameters:
 
   #Enable Service Now Functionality
   - name: EnableSNOW
-    default: false
+    default: true
     displayName: "Enable Service Now Functionality"
     type: boolean
 
@@ -296,7 +296,7 @@ extends:
     LocalBuildYAML: ${{ parameters.LocalBuildYAML }}
     LocalPreTFYAML: ${{ parameters.LocalPreTFYAML }}
     LocalReleaseYAML: ${{ parameters.LocalReleaseYAML }}
-    UseNewCheckmarx: ${{ parameters.UseNewCheckmarx }}
+    UseNewCheckmarx: true
     EnableSNOW: ${{ parameters.EnableSNOW }}
     AssignmentGroup: ${{ parameters.AssignmentGroup }}
     ChangeWindow: ${{ parameters.ChangeWindow }}
