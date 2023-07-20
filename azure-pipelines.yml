@@ -20,7 +20,7 @@ resources:
     - repository: TemplateRepo
       type: git
       name: shared-it-iac-pipeline-templates
-      ref: refs/tags/0.0.48
+      ref: refs/tags/0.0.50
     - repository: DevSecOpsYAML
       type: git
       name: shared-it-devsecops-yaml
