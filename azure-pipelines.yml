@@ -24,7 +24,7 @@ resources:
     - repository: DevSecOpsYAML
       type: git
       name: shared-it-devsecops-yaml
-      ref: refs/heads/release/2023-01-23
+      ref: refs/heads/release/2023-07-03
 
 #References variables file located within repository that is native to the pipeline
 #Can be changed to any location with repositroy
@@ -206,7 +206,7 @@ parameters:
 
   #Toggle between on-prem checkmarx and cloud-based CheckmarxOne functionality
   - name: UseNewCheckmarx
-    default: false
+    default: true
     displayName: "Use CheckmarxOne instead of Checkmarx"
     type: boolean
 
