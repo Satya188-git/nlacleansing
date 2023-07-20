@@ -480,9 +480,7 @@ module "ccc_callaudioaccesslogs_bucket" {
     rule = {
       bucket_key_enabled = true
       apply_server_side_encryption_by_default = {
-        kms_master_key_id = var.kms_key_ccc_unrefined_arn
-        # kms_master_key_id = "alias/aws/s3" # revert to customer managed key after provider bug workaround
-        sse_algorithm     = "aws:kms"
+        sse_algorithm = "AES256" 
       }
     }
   }
@@ -688,7 +686,6 @@ resource "aws_s3_object" "access_logs_prefix" {
   key        = "log/"
   bucket     = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
   source     = "/dev/null"
-  kms_key_id = var.kms_key_ccc_unrefined_arn
 }
 
 # Encryption configuration
