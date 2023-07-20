@@ -97,3 +97,7 @@ output "ccc_callrecordings_bucket_id" {
   description = "ccc_callrecordings_bucket S3 bucket ID"
   value       = module.ccc_callrecordings_bucket.s3_bucket_id
 }
+output "ccc_callaudioaccesslogs_bucket_id" {
+  description = "ccc_callaudioaccesslogs_bucket S3 bucket ID"
+  value       = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+}

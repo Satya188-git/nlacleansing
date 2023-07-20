@@ -78,6 +78,8 @@ module "eventbridge" {
   ccc_callrecordings_bucket_id      = module.s3.ccc_callrecordings_bucket_id
   ccc_piimetadata_bucket_id         = module.s3.ccc_piimetadata_bucket_id
   ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
+  ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
+  ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
 }
 
 module "dynamodb" {
@@ -243,6 +245,9 @@ module "lambda" {
   nla_glue_database_name                                 = module.glue.nla_glue_database_name
   ccc_insights_audio_bucket_id                           = module.s3.ccc_insights_audio_bucket_id
   ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
+  callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
+  ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
+  ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
 }
 
 module "macie" {
@@ -290,4 +295,46 @@ module "s3" {
   account_id                        = local.account_id
   insights_account_id               = var.insights_account_id
   insights_s3kms_arn                = var.insights_s3kms_arn
+}
+
+
+module "sns" {
+  source                            = "./modules/sns"
+  region                            = var.region
+  environment                       = var.environment
+  application_use                   = var.application_use
+  company_code                      = var.company_code
+  application_code                  = var.application_code
+  environment_code                  = var.environment_code
+  region_code                       = var.region_code
+  tag-version                       = var.tag-version
+  billing-guid                      = var.billing-guid
+  portfolio                         = var.portfolio
+  support-group                     = var.support-group
+  cmdb-ci-id                        = var.cmdb-ci-id
+  data-classification               = var.data-classification
+  sns_kms_key_id			        = module.kms.sns_kms_key_id
+  account_id                        = local.account_id
+  audioaccessnotificationemail		= var.audioaccessnotificationemail
+}
+
+module "cloudwatch" {
+  source                            = "./modules/cloudwatch"
+  region                            = var.region
+  environment                       = var.environment
+  application_use                   = var.application_use
+  company_code                      = var.company_code
+  application_code                  = var.application_code
+  environment_code                  = var.environment_code
+  owner                             = var.owner
+  namespace                         = var.namespace
+  region_code                       = var.region_code
+  tag-version                       = var.tag-version
+  billing-guid                      = var.billing-guid
+  unit                              = var.unit
+  portfolio                         = var.portfolio
+  support-group                     = var.support-group
+  cmdb-ci-id                        = var.cmdb-ci-id
+  data-classification               = var.data-classification
+  sns-topic-arn                     = one(module.sns.sns-topic-arn)
 }

@@ -100,8 +100,17 @@ jobs:
           archiveType: "zip"
           archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_audio_copy.zip"
           replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_audio_access_logs_to_cw files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_audio_access_logs_to_cw"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_audio_access_logs_to_cw.zip"
+          replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: "$(Build.ArtifactStagingDirectory)" # Required
           artifactName: "$(Build.SourceBranchName)" # Optional
           artifactType: "pipeline" # Required. Options: pipeline, filepath. Default value: pipeline
+          
