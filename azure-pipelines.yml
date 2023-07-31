@@ -20,11 +20,11 @@ resources:
     - repository: TemplateRepo
       type: git
       name: shared-it-iac-pipeline-templates
-      ref: refs/tags/0.0.48
+      ref: refs/tags/0.0.50
     - repository: DevSecOpsYAML
       type: git
       name: shared-it-devsecops-yaml
-      ref: refs/heads/release/2023-01-23
+      ref: refs/heads/release/2023-07-03
 
 #References variables file located within repository that is native to the pipeline
 #Can be changed to any location with repositroy
@@ -49,10 +49,10 @@ parameters:
       - GCP
 
   #Below Parameter to enable Terraform container.
-  - name: IncludeContainer
-    default: false
-    displayName: "Enable Terraform Container"
-    type: boolean
+  #- name: IncludeContainer
+  #  default: false
+  #  displayName: "Enable Terraform Container"
+  #  type: boolean
 
   # Pattern specific parameter
   # Edit parameter values as needed, do not change parameter names
@@ -206,7 +206,7 @@ parameters:
 
   #Toggle between on-prem checkmarx and cloud-based CheckmarxOne functionality
   - name: UseNewCheckmarx
-    default: false
+    default: true
     displayName: "Use CheckmarxOne instead of Checkmarx"
     type: boolean
 
@@ -277,7 +277,7 @@ extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
     DestinationCloud: ${{ parameters.DestinationCloud }}
-    IncludeContainer: ${{ parameters.IncludeContainer }}
+    #IncludeContainer: ${{ parameters.IncludeContainer }}
     # ContainerInfo: ${{ parameters.ContainerInfo }}
     S3Info: ${{ parameters.S3Info }}
     # AzureInfo: ${{ parameters.AzureInfo }}
@@ -296,7 +296,7 @@ extends:
     LocalBuildYAML: ${{ parameters.LocalBuildYAML }}
     LocalPreTFYAML: ${{ parameters.LocalPreTFYAML }}
     LocalReleaseYAML: ${{ parameters.LocalReleaseYAML }}
-    UseNewCheckmarx: ${{ parameters.UseNewCheckmarx }}
+    UseNewCheckmarx: true
     EnableSNOW: ${{ parameters.EnableSNOW }}
     AssignmentGroup: ${{ parameters.AssignmentGroup }}
     ChangeWindow: ${{ parameters.ChangeWindow }}
