@@ -41,7 +41,7 @@ module "ccc_transcribe_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -103,7 +103,7 @@ module "ccc_comprehend_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -175,7 +175,7 @@ module "ccc_informational_macie_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -224,7 +224,7 @@ module "ccc_notification_forwarder_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -263,7 +263,7 @@ module "ccc_macie_scan_trigger_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -311,7 +311,7 @@ module "ccc_audit_call_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -362,7 +362,7 @@ module "ccc_audio_copy_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
@@ -407,7 +407,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   attach_tracing_policy             = true
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
-  cloudwatch_logs_retention_in_days = 30
+  cloudwatch_logs_retention_in_days = 180
   cloudwatch_logs_tags              = local.tags
   memory_size                       = 128
   timeout                           = 180
