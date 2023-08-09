@@ -214,7 +214,7 @@ parameters:
 
   #Enable Service Now Functionality
   - name: EnableSNOW
-    default: false
+    default: true
     displayName: "Enable Service Now Functionality"
     type: boolean
 
@@ -277,7 +277,7 @@ extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
     DestinationCloud: ${{ parameters.DestinationCloud }}
-    #IncludeContainer: ${{ parameters.IncludeContainer }}
+    # IncludeContainer: ${{ parameters.IncludeContainer }}
     # ContainerInfo: ${{ parameters.ContainerInfo }}
     S3Info: ${{ parameters.S3Info }}
     # AzureInfo: ${{ parameters.AzureInfo }}

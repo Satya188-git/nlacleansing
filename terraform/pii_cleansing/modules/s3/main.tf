@@ -375,7 +375,7 @@ module "ccc_athenaresults_bucket" {
 
 module "ccc_insights_audio_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "5.3.2"
+  version = "6.0.1"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -386,6 +386,8 @@ module "ccc_insights_audio_bucket" {
   force_destroy    = true
   versioning       = true
   tags             = local.tags
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -458,6 +460,42 @@ module "ccc_callrecordings_bucket" {
     }
   ]
 }
+
+module "ccc_callaudioaccesslogs_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "6.0.1"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-callaudioaccesslogs"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags             = local.tags
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256" 
+      }
+    }
+  }
+
+  lifecycle_rule = [{
+    id      = "expiration-rule"
+    enabled = true
+    expiration = [
+      {
+        days = 2192
+      },
+    ]
+  }]
+}
+
 
 
 #source replication configuration
@@ -623,6 +661,11 @@ resource "aws_s3_bucket_notification" "ccc_callrecordings_bucket_notification" {
   eventbridge = true
 }
 
+resource "aws_s3_bucket_notification" "ccc_callaudioaccesslogs_bucket_notification" {
+  bucket      = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  eventbridge = true
+}
+
 
 resource "aws_s3_object" "edix_audio_prefix" {
   key        = "EDIX_AUDIO/"
@@ -639,6 +682,11 @@ resource "aws_s3_object" "edix_metadata_prefix" {
   kms_key_id = var.kms_key_ccc_piimetadata_arn
 }
 
+resource "aws_s3_object" "access_logs_prefix" {
+  key        = "log/"
+  bucket     = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
 
 # Encryption configuration
 # This is needed vs. using the S3 module ssl configuration because there is a bug in the Terraform Cloud Sentinel that will fail a new account deployment if we are using aws:kms encryption
@@ -771,4 +819,19 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "ccc_callrecording
       sse_algorithm     = "aws:kms"
     }
   }
+}
+
+# Below Part added for S3-Presigned-URL
+resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
+  depends_on = [ module.ccc_insights_audio_bucket.s3_bucket_id ]
+  bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  acl    = "log-delivery-write"  
+}
+
+ 
+
+resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
+  bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+  target_bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  target_prefix = "log/"
 }

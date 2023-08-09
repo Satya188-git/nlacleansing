@@ -121,3 +121,10 @@ variable "insights_s3kms_arn" {
   type        = string
   description = "NLA Insights account KMS key to encrypt replicated S3 objects"
 }
+
+variable "audioaccessnotificationemail" {
+  type        = string
+  description = "NLA Audio access notification email id"
+}
+
+
