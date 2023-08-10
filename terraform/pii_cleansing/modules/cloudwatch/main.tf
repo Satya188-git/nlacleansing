@@ -72,7 +72,7 @@ module "nla_audio_access_alarm" {
     },
   )
 
-  alarm_description   = "Multiple downloads has been detected for call audio files"
+  alarm_description   = "Detected multiple call audios accessed/played"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "GetAudio"
