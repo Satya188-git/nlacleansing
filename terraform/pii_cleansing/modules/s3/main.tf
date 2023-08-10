@@ -828,6 +828,13 @@ resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
   acl    = "log-delivery-write"  
 }
 
+# Below Part added for S3-Presigned-URL
+resource "aws_s3_bucket_acl" "ccc_callaudioaccesslogs_bucket_acl" {
+  depends_on = [ module.ccc_callaudioaccesslogs_bucket.s3_bucket_id ]
+  bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  acl    = "log-delivery-write"  
+}
+
  
 
 resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
