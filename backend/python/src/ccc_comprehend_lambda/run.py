@@ -62,4 +62,4 @@ def lambda_handler(event, context):
     elif "_callanalytics" in s3filename:
         print("Do not support Analytics")
 
-    return response
+    
