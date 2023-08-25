@@ -220,7 +220,7 @@ parameters:
 
   #Edit to ServiceNow assignment group assigned to application/team
   - name: AssignmentGroup
-    default: "CM-TOA:APPL GENERAL"
+    default: "SRE-CIS-CLOUD-AI"
     displayName: "Assignment Group Name"
     type: string
 
