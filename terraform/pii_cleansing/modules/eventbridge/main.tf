@@ -37,9 +37,6 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_even
     "object": {
       "key": [{
         "prefix": "standard/NLA"
-      },
-      { 
-        "prefix": "standard_full_transcripts/NLA"
       }]
     }
    }
