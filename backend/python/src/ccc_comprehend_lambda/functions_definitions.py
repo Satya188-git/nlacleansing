@@ -46,6 +46,9 @@ EBMove_VECTOR_ID = os.environ["EBMove_VECTOR_ID"]
 ERMove_NAME = os.environ["ERMove_NAME"]
 ERMove_VECTOR_ID = os.environ["ERMove_VECTOR_ID"]
 
+Outage_NAME= os.environ["Outage_NAME"]
+Outage_VECTOR_ID = os.environ["Outage_VECTOR_ID"]
+
 Athena_Table = os.environ["Athena_Table"]
 Retry_Count = os.environ["Retry_Count"]
 Athena_Output_Location = os.environ["Athena_Output_Location"]
@@ -370,7 +373,9 @@ def capture_file_metdadata(s3filename):
     elif call_pattern == ERHighBill_VECTOR_ID:
         call_type = ERHighBill_NAME
     elif call_pattern == EBHighBill_VECTOR_ID:
-        call_type = EBHighBill_NAME    
+        call_type = EBHighBill_NAME
+    elif call_pattern == Outage_VECTOR_ID:
+        call_type = Outage_NAME
     else:
         print("Invalid Segment Vector Number / Invalid Call Type")
 
@@ -379,6 +384,7 @@ def capture_file_metdadata(s3filename):
         call_languauge = 'English'
     elif call_type[0] == 'S':
         call_languauge = 'Spanish'
+ 
     else:
         call_languauge == call_type[0]
 
@@ -388,8 +394,9 @@ def capture_file_metdadata(s3filename):
     elif call_type[1] == "R":
         customer_type = "Residential"
     else:
-        customer_type = call_type[1]
-
+        #customer_type = call_type[1]
+        customer_type = 'None'
+    
     # Capturing the Call Category
     call_category = call_type[2:]
 
