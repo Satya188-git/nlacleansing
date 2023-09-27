@@ -141,6 +141,8 @@ module "ccc_comprehend_lambda" {
     EBHighBill_VECTOR_ID                  = "1245656"
     ERHighBill_NAME                       = "ERHighBill"
     ERHighBill_VECTOR_ID                  = "1245640"
+    Outage_NAME                           = "EnOutage"
+    Outage_VECTOR_ID                      = "1245645"
     Retry_Count                           = 10
   }
 
