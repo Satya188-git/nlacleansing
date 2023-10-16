@@ -491,8 +491,6 @@ module "ccc_callaudioaccesslogs_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  object_ownership               = "BucketOwnerPreferred"
-  control_object_ownership       = true
   tags             = local.tags
   object_ownership               = "BucketOwnerPreferred"
   control_object_ownership       = true
