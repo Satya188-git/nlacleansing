@@ -285,8 +285,8 @@ module "ccc_maciefindings_bucket" {
           ]
         }
       }
-    },
-    {
+    }),
+    jsonencode({
       Sid    = "Allow Macie to use the getBucketLocation operation"
       Effect = "Allow"
       Principal = {
