@@ -32,7 +32,7 @@ resource "aws_s3_bucket_versioning" "tfartifacts_versioning" {
 
 module "ccc_unrefined_call_data_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -46,6 +46,8 @@ module "ccc_unrefined_call_data_bucket" {
   acl                            = "private"
   force_destroy                  = true
   versioning                     = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -70,7 +72,7 @@ module "ccc_unrefined_call_data_bucket" {
 
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -83,6 +85,8 @@ module "ccc_initial_bucket" {
   tags                           = local.tags
   acl                            = "private"
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -107,7 +111,7 @@ module "ccc_initial_bucket" {
 
 module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -119,6 +123,8 @@ module "ccc_cleaned_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -144,7 +150,7 @@ module "ccc_cleaned_bucket" {
 
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -157,6 +163,8 @@ module "ccc_verified_clean_bucket" {
   versioning                     = true
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -182,7 +190,7 @@ module "ccc_verified_clean_bucket" {
 
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -194,6 +202,8 @@ module "ccc_dirty_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   acl                            = "private"
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true 
   force_destroy                  = true
 
   server_side_encryption_configuration = {
@@ -220,7 +230,7 @@ module "ccc_dirty_bucket" {
 
 module "ccc_maciefindings_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -232,6 +242,8 @@ module "ccc_maciefindings_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -300,7 +312,7 @@ module "ccc_maciefindings_bucket" {
 
 module "ccc_piimetadata_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -312,6 +324,8 @@ module "ccc_piimetadata_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   versioning                     = true
   acl                            = "private"
   server_side_encryption_configuration = {
@@ -338,7 +352,7 @@ module "ccc_piimetadata_bucket" {
 
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -350,6 +364,8 @@ module "ccc_athenaresults_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -375,7 +391,7 @@ module "ccc_athenaresults_bucket" {
 
 module "ccc_insights_audio_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "6.0.1"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -413,7 +429,7 @@ module "ccc_insights_audio_bucket" {
 
 module "ccc_callrecordings_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "5.3.2"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -424,6 +440,8 @@ module "ccc_callrecordings_bucket" {
   force_destroy    = true
   versioning       = true
   tags             = local.tags
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -463,7 +481,7 @@ module "ccc_callrecordings_bucket" {
 
 module "ccc_callaudioaccesslogs_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "6.0.1"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -473,6 +491,8 @@ module "ccc_callaudioaccesslogs_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   tags             = local.tags
   object_ownership               = "BucketOwnerPreferred"
   control_object_ownership       = true
