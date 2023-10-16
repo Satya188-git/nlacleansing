@@ -266,7 +266,7 @@ module "ccc_maciefindings_bucket" {
   }]
 
   additional_policy_statements = [
-    {
+    jsonencode({
       Sid    = "Allow Macie to upload objects to the bucket"
       Effect = "Allow"
       Principal = {
@@ -305,7 +305,7 @@ module "ccc_maciefindings_bucket" {
           ]
         }
       }
-    }
+    })
   ]
 }
 
@@ -464,7 +464,7 @@ module "ccc_callrecordings_bucket" {
   }]
 
   additional_policy_statements = [
-    {
+    jsonencode({
       Sid    = "Allow EDIX user access"
       Effect = "Allow"
       Principal = {
@@ -475,7 +475,7 @@ module "ccc_callrecordings_bucket" {
         "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
         "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
       ]
-    }
+    })
   ]
 }
 
