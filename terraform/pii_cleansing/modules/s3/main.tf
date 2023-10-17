@@ -490,20 +490,24 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements = [
-    jsonencode({
-      Sid    = "Allow EDIX user access"
-      Effect = "Allow"
-      Principal = {
-        AWS = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
-      }
-      Action   = ["s3:*"],
-      Resource = [
-        "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
-        "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
-      ]
-    })
-  ]
+additional_policy_statements   = [data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json]
+}
+
+data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
+	statement {
+		effect = "Allow"
+		principals {
+			  type        = "AWS"
+			  identifiers = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+		}
+		actions = [
+					"s3:*"
+				]
+		resources = [        
+					"${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
+					"${module.ccc_callrecordings_bucket.s3_bucket_arn}"
+				]
+	}
 }
 
 module "ccc_callaudioaccesslogs_bucket" {
