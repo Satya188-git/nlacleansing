@@ -265,48 +265,62 @@ module "ccc_maciefindings_bucket" {
     ]
   }]
 
-  additional_policy_statements = [
-    jsonencode({
-      Sid    = "Allow Macie to upload objects to the bucket"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:PutObject"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    }),
-    jsonencode({
-      Sid    = "Allow Macie to use the getBucketLocation operation"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:GetBucketLocation"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    })
-  ]
+  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_upload_additional_policies.json]
+
+  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_getBucketLocation_additional_policies.json] 
+
+}
+
+data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
+	statement {
+		effect = "Allow"
+		principals {
+			  service = ["macie.amazonaws.com"]
+		}
+		actions = [
+					"s3:PutObject"
+				]
+		resources = [        
+					"${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"
+				]
+		conditions = {
+			stringEquals = {
+			  "aws:SourceAccount" : "${var.account_id}"
+			}
+			srnLike = {
+			  "aws:SourceArn" = [
+				"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+				"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+			  ]
+			}
+		}		
+	}
+}
+
+data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_policies" {
+	statement {
+		effect = "Allow"
+		principals {
+			  service = ["macie.amazonaws.com"]
+		}
+		actions = [
+					"s3:GetBucketLocation"
+				]
+		resources = [        
+					"${module.ccc_maciefindings_bucket.s3_bucket_arn}"
+				]
+		Condition = {
+			stringEquals = {
+			  "aws:SourceAccount" : "${var.account_id}"
+			}
+			arnLike = {
+			  "aws:SourceArn" = [
+				"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+				"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+			  ]
+			}
+		}		
+	}
 }
 
 
