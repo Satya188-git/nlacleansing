@@ -283,17 +283,15 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 		resources = [        
 					"${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"
 				]
-		conditions = {
-			stringEquals = {
-			  "aws:SourceAccount" : "${var.account_id}"
-			}
-			arnLike = {
-			  "aws:SourceArn" = [
-          "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-          "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-			  ]
-			}
-		}		
+		condition {
+
+                    test = "aws:SourceAccount" : "ForAnyValue:StringEquals"
+                    value = "aws:SourceAccount" : "${var.account_id}"
+                    "values" = [
+                                "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+                                "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
 	}
 }
 
@@ -310,17 +308,15 @@ data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_polic
 		resources = [        
 					"${module.ccc_maciefindings_bucket.s3_bucket_arn}"
 				]
-		conditions = {
-			stringEquals = {
-			  "aws:SourceAccount" : "${var.account_id}"
-			}
-			arnLike = {
-			  "aws:SourceArn" = [
-				"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-				"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-			  ]
-			}
-		}		
+		condition {
+
+                    test = "aws:SourceAccount" : "ForAnyValue:StringEquals"
+                    value = "aws:SourceAccount" : "${var.account_id}"
+                    "values" = [
+                                "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+                                "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
 	}
 }
 
