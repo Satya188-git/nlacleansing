@@ -265,9 +265,8 @@ module "ccc_maciefindings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_upload_additional_policies.json]
-
-  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_getBucketLocation_additional_policies.json] 
+  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_upload_additional_policies.json,
+   data.aws_iam_policy_document.maciefindings_getBucketLocation_additional_policies.json] 
 
 }
 
