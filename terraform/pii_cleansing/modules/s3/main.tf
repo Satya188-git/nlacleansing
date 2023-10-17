@@ -286,7 +286,7 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 		condition {
 
                     test = "aws:SourceAccount" : "ForAnyValue:StringEquals"
-                    value = "aws:SourceAccount" : "${var.account_id}"
+                    variable = "aws:SourceAccount" : "${var.account_id}"
                     "values" = [
                                 "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
                                 "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
@@ -311,7 +311,7 @@ data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_polic
 		condition {
 
                     test = "aws:SourceAccount" : "ForAnyValue:StringEquals"
-                    value = "aws:SourceAccount" : "${var.account_id}"
+                    variable = "aws:SourceAccount" : "${var.account_id}"
                     "values" = [
                                 "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
                                 "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
