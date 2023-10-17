@@ -274,7 +274,8 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 	statement {
 		effect = "Allow"
 		principals {
-			  service = ["macie.amazonaws.com"]
+			  type = "Service"
+        identifiers = ["macie.amazonaws.com"]
 		}
 		actions = [
 					"s3:PutObject"
@@ -286,10 +287,10 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 			stringEquals = {
 			  "aws:SourceAccount" : "${var.account_id}"
 			}
-			srnLike = {
+			arnLike = {
 			  "aws:SourceArn" = [
-				"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-				"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+          "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+          "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
 			  ]
 			}
 		}		
@@ -300,7 +301,8 @@ data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_polic
 	statement {
 		effect = "Allow"
 		principals {
-			  service = ["macie.amazonaws.com"]
+			  type = "Service"
+        identifiers = ["macie.amazonaws.com"]
 		}
 		actions = [
 					"s3:GetBucketLocation"
