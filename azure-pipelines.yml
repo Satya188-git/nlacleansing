@@ -24,7 +24,7 @@ resources:
     - repository: DevSecOpsYAML
       type: git
       name: shared-it-devsecops-yaml
-      ref: refs/heads/release/2023-07-03
+      ref: refs/heads/release/2023-10-04
 
 #References variables file located within repository that is native to the pipeline
 #Can be changed to any location with repositroy
