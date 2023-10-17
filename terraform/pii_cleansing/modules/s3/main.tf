@@ -295,7 +295,7 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 
                     test = "aws_SourceArn-Like-macie-configs"
                     variable = "aws:SourceArn"
-                    "values" = [
+                    values = [
 							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
 							"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
                     ]
@@ -320,7 +320,7 @@ data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_polic
 
                     test = "aws_SourceAccount-Equals-var-account_id"
                     variable = "aws:SourceAccount"
-                    "values" = [
+                    values = [
 							"${var.account_id}"
                     ]
             }
