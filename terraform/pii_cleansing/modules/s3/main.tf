@@ -308,7 +308,7 @@ data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_polic
 		resources = [        
 					"${module.ccc_maciefindings_bucket.s3_bucket_arn}"
 				]
-		Condition = {
+		conditions = {
 			stringEquals = {
 			  "aws:SourceAccount" : "${var.account_id}"
 			}
