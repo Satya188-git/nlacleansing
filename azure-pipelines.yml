@@ -24,7 +24,7 @@ resources:
     - repository: DevSecOpsYAML
       type: git
       name: shared-it-devsecops-yaml
-      ref: refs/heads/release/2023-07-03
+      ref: refs/heads/release/2023-10-04
 
 #References variables file located within repository that is native to the pipeline
 #Can be changed to any location with repositroy
@@ -202,13 +202,12 @@ parameters:
     displayName: "Use Release Step YAML From Local Repo"
     type: boolean
 
-  #Checkmarx parameters
-
-  #Toggle between on-prem checkmarx and cloud-based CheckmarxOne functionality
-  - name: UseNewCheckmarx
-    default: true
-    displayName: "Use CheckmarxOne instead of Checkmarx"
-    type: boolean
+#  #Checkmarx parameters
+#  #Toggle between on-prem checkmarx and cloud-based CheckmarxOne functionality
+#  - name: UseNewCheckmarx
+#    default: true
+#    displayName: "Use CheckmarxOne instead of Checkmarx"
+#    type: boolean
 
   #Service Now parameters
 
@@ -296,7 +295,7 @@ extends:
     LocalBuildYAML: ${{ parameters.LocalBuildYAML }}
     LocalPreTFYAML: ${{ parameters.LocalPreTFYAML }}
     LocalReleaseYAML: ${{ parameters.LocalReleaseYAML }}
-    UseNewCheckmarx: true
+#   UseNewCheckmarx: true
     EnableSNOW: ${{ parameters.EnableSNOW }}
     AssignmentGroup: ${{ parameters.AssignmentGroup }}
     ChangeWindow: ${{ parameters.ChangeWindow }}

@@ -32,7 +32,7 @@ resource "aws_s3_bucket_versioning" "tfartifacts_versioning" {
 
 module "ccc_unrefined_call_data_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -46,6 +46,8 @@ module "ccc_unrefined_call_data_bucket" {
   acl                            = "private"
   force_destroy                  = true
   versioning                     = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -70,7 +72,7 @@ module "ccc_unrefined_call_data_bucket" {
 
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -83,6 +85,8 @@ module "ccc_initial_bucket" {
   tags                           = local.tags
   acl                            = "private"
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -107,7 +111,7 @@ module "ccc_initial_bucket" {
 
 module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -119,6 +123,8 @@ module "ccc_cleaned_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -144,7 +150,7 @@ module "ccc_cleaned_bucket" {
 
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -157,6 +163,8 @@ module "ccc_verified_clean_bucket" {
   versioning                     = true
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -182,7 +190,7 @@ module "ccc_verified_clean_bucket" {
 
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -194,6 +202,8 @@ module "ccc_dirty_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   acl                            = "private"
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true 
   force_destroy                  = true
 
   server_side_encryption_configuration = {
@@ -220,7 +230,7 @@ module "ccc_dirty_bucket" {
 
 module "ccc_maciefindings_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -232,6 +242,8 @@ module "ccc_maciefindings_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -253,54 +265,67 @@ module "ccc_maciefindings_bucket" {
     ]
   }]
 
-  additional_policy_statements = [
-    {
-      Sid    = "Allow Macie to upload objects to the bucket"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:PutObject"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}/*",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    },
-    {
-      Sid    = "Allow Macie to use the getBucketLocation operation"
-      Effect = "Allow"
-      Principal = {
-        Service = ["macie.amazonaws.com"]
-      }
-      Action   = ["s3:GetBucketLocation"],
-      Resource = "${module.ccc_maciefindings_bucket.s3_bucket_arn}",
-      Condition = {
-        StringEquals = {
-          "aws:SourceAccount" : "${var.account_id}"
-        }
-        ArnLike = {
-          "aws:SourceArn" = [
-            "arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
-            "arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
-          ]
-        }
-      }
-    }
-  ]
+  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_upload_additional_policies.json,
+   data.aws_iam_policy_document.maciefindings_getBucketLocation_additional_policies.json] 
+
+}
+
+data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
+	statement {
+	    sid       	= "Allow Macie to upload objects to the bucket"
+		effect 		= "Allow"
+		principals {
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
+		}
+		actions 	= ["s3:PutObject"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"]
+		condition {
+                    test = "StringEquals"
+                    variable = "aws:SourceAccount"
+                    values = ["${var.account_id}"]
+            }
+		condition {
+                    test = "ArnLike"
+                    variable = "aws:SourceArn"
+                    values = [
+							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+							"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
+	}
+}
+
+data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_policies" {
+	statement {
+		sid       	= "Allow Macie to use the getBucketLocation operation"
+		effect 		= "Allow"
+		principals {
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
+		}
+		actions 	= ["s3:GetBucketLocation"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}"]
+		condition {
+                    test = "StringEquals"
+                    variable = "aws:SourceAccount"
+                    values = ["${var.account_id}"]
+            }
+		condition {
+                    test = "ArnLike"
+                    variable = "aws:SourceArn"
+                    values = [
+							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+							"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
+	}
 }
 
 
 module "ccc_piimetadata_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -312,6 +337,8 @@ module "ccc_piimetadata_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   versioning                     = true
   acl                            = "private"
   server_side_encryption_configuration = {
@@ -338,7 +365,7 @@ module "ccc_piimetadata_bucket" {
 
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version                        = "5.3.2"
+  version                        = "7.0.0"
   company_code                   = local.company_code
   application_code               = local.application_code
   environment_code               = local.environment_code
@@ -350,6 +377,8 @@ module "ccc_athenaresults_bucket" {
   attach_alb_log_delivery_policy = false
   tags                           = local.tags
   force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   acl                            = "private"
   server_side_encryption_configuration = {
     rule = {
@@ -375,7 +404,7 @@ module "ccc_athenaresults_bucket" {
 
 module "ccc_insights_audio_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "6.0.1"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -413,7 +442,7 @@ module "ccc_insights_audio_bucket" {
 
 module "ccc_callrecordings_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "5.3.2"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
@@ -424,6 +453,8 @@ module "ccc_callrecordings_bucket" {
   force_destroy    = true
   versioning       = true
   tags             = local.tags
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
   server_side_encryption_configuration = {
     rule = {
       bucket_key_enabled = true
@@ -445,25 +476,29 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements = [
-    {
-      Sid    = "Allow EDIX user access"
-      Effect = "Allow"
-      Principal = {
-        AWS = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
-      }
-      Action   = ["s3:*"],
-      Resource = [
-        "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
-        "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
-      ]
-    }
-  ]
+  additional_policy_statements   = [data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json]
+}
+
+data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
+	statement {
+		effect = "Allow"
+		principals {
+			  type        = "AWS"
+			  identifiers = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+		}
+		actions = [
+					"s3:*"
+				]
+		resources = [        
+					"${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
+					"${module.ccc_callrecordings_bucket.s3_bucket_arn}"
+				]
+	}
 }
 
 module "ccc_callaudioaccesslogs_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
-  version = "6.0.1"
+  version = "7.0.0"
 
   company_code     = local.company_code
   application_code = local.application_code
