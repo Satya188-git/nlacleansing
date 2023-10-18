@@ -272,28 +272,21 @@ module "ccc_maciefindings_bucket" {
 
 data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 	statement {
-		effect = "Allow"
+	    sid       	= "Allow Macie to upload objects to the bucket"
+		effect 		= "Allow"
 		principals {
-			  type = "Service"
-        identifiers = ["macie.amazonaws.com"]
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
 		}
-		actions = [
-					"s3:PutObject"
-				]
-		resources = [        
-					"${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"
-				]
+		actions 	= ["s3:PutObject"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"]
 		condition {
-
-                    test = "StringLike"
+                    test = "StringEquals"
                     variable = "aws:SourceAccount"
-                    values = [
-							"${var.account_id}"
-                    ]
+                    values = ["${var.account_id}"]
             }
 		condition {
-
-                    test = "ForAnyValue:StringEquals"
+                    test = "ArnLike"
                     variable = "aws:SourceArn"
                     values = [
 							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
@@ -305,28 +298,21 @@ data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
 
 data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_policies" {
 	statement {
-		effect = "Allow"
+		sid       	= "Allow Macie to use the getBucketLocation operation"
+		effect 		= "Allow"
 		principals {
-			  type = "Service"
-        identifiers = ["macie.amazonaws.com"]
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
 		}
-		actions = [
-					"s3:GetBucketLocation"
-				]
-		resources = [        
-					"${module.ccc_maciefindings_bucket.s3_bucket_arn}"
-				]
+		actions 	= ["s3:GetBucketLocation"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}"]
 		condition {
-
-                    test = "StringLike"
+                    test = "StringEquals"
                     variable = "aws:SourceAccount"
-                    values = [
-							"${var.account_id}"
-                    ]
+                    values = ["${var.account_id}"]
             }
 		condition {
-
-                    test = "ForAnyValue:StringEquals"
+                    test = "ArnLike"
                     variable = "aws:SourceArn"
                     values = [
 							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
@@ -490,7 +476,7 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-additional_policy_statements   = [data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json]
+  additional_policy_statements   = [data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json]
 }
 
 data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
