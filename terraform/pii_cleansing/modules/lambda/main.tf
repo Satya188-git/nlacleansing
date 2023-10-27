@@ -143,6 +143,10 @@ module "ccc_comprehend_lambda" {
     ERHighBill_VECTOR_ID                  = "1245640"
     Outage_NAME                           = "EnOutage"
     Outage_VECTOR_ID                      = "1245645"
+    ERMyAccount_NAME	                    = "ERMy Account"
+    ERMyAccount_VECTOR_ID	                = "1245153"
+    ERSolar_NAME	                        = "ERSolar"
+    ERSolar_VECTOR_ID	                    = "1245670"  
     Retry_Count                           = 10
   }
 
