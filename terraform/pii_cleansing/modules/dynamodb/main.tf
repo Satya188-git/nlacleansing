@@ -105,15 +105,9 @@ module "dynamodb_nla_audit_table" {
   table_name  = "ccc-call-processing-audit"
   hash_key    = "callType"
   range_key   = "datetimeStamp"
+  hash_key_type = "N"
+  range_key_type = "N
   dynamodb_attributes = [
-    {
-      name = "callType"
-      type = "N"
-    },
-    {
-      name = "datetimeStamp"
-      type = "N"
-    },
     {
       name = "callId"
       type = "S"
