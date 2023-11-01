@@ -106,7 +106,7 @@ module "dynamodb_nla_audit_table" {
   hash_key    = "callType"
   range_key   = "datetimeStamp"
   hash_key_type = "N"
-  range_key_type = "N
+  range_key_type = "N"
   dynamodb_attributes = [
     {
       name = "callId"
