@@ -329,7 +329,7 @@ module "ccc_audit_call_lambda" {
     CLEANED_BUCKET_NAME          = var.ccc_cleaned_bucket_id
     CLEANED_VERIFIED_BUCKET_NAME = var.ccc_verified_clean_bucket_id
     DIRTY_BUCKET_NAME            = var.ccc_dirty_bucket_id
-    TABLE_NAME                   = var.dynamodb_audit_table_name
+    TABLE_NAME                   = var.dynamodb_nla_audit_table_name
     TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
     AUDIO_BUCKET_NAME            = var.ccc_insights_audio_bucket_id

@@ -171,9 +171,14 @@ variable "nla_glue_database_name" {
 
 }
 
-variable "dynamodb_audit_table_name" {
+#variable "dynamodb_audit_table_name" {
+#  type        = string
+#  description = "dynamodb_audit_table_name"
+#}
+
+variable "dynamodb_nla_audit_table_name" {
   type        = string
-  description = "dynamodb_audit_table_name"
+  description = "dynamodb_nla_audit_table_name"
 }
 
 variable "tf_artifact_s3" {
