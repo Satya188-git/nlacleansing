@@ -123,10 +123,6 @@ module "dynamodb_nla_audit_table" {
       type = "S"
     },
     {
-      name = "path"
-      type = "S"
-    },
-    {
       name = "status"
       type = "S"
     }
