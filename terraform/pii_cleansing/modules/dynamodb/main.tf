@@ -110,7 +110,7 @@ module "dynamodb_nla_audit_table" {
   dynamodb_attributes = [
     {
       name = "callId"
-      type = "S"
+      type = "N"
     },
     {
       name = "fileName"
