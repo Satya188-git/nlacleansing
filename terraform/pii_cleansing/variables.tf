@@ -77,7 +77,7 @@ variable "portfolio" {
 variable "support-group" {
   default     = "agile-iac@sdge.com"
   type        = string
-  description = "Distribution list in email format"d
+  description = "Distribution list in email format"
 }
 
 variable "cmdb-ci-id" {
