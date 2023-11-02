@@ -228,7 +228,8 @@ module "lambda" {
   ccc_athenaresults_bucket_id                            = module.s3.ccc_athenaresults_bucket_id
   ccc_callrecordings_bucket_id                           = module.s3.ccc_callrecordings_bucket_id
   kms_key_ccc_sns_lambda_arn                             = module.kms.kms_key_ccc_sns_lambda_arn
-  dynamodb_audit_table_name                              = module.dynamodb.dynamodb_audit_table_name
+  #dynamodb_audit_table_name                             = module.dynamodb.dynamodb_audit_table_name
+  dynamodb_nla_audit_table_name                          = module.dynamodb.dynamodb_nla_audit_table_name  
   customercallcenterpiitranscription_s3_event_rule_arn   = module.eventbridge.customercallcenterpiitranscription_s3_event_rule_arn
   customercallcenterpiicleanedverified_s3_event_rule_arn = module.eventbridge.customercallcenterpiicleanedverified_s3_event_rule_arn
   customercallcenterpiiunrefined_s3_event_rule_arn       = module.eventbridge.customercallcenterpiiunrefined_s3_event_rule_arn

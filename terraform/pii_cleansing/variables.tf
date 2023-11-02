@@ -69,7 +69,7 @@ variable "unit" {
 }
 
 variable "portfolio" {
-  default     = "Portfolio associated with the application"
+  default     = "dtdes"
   type        = string
   description = "Portfolio associated with the application"
 }
