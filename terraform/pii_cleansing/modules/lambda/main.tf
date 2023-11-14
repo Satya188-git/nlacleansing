@@ -544,7 +544,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_scan_lambda
   action         = "lambda:InvokeFunction"
   function_name  = module.ccc_macie_scan_trigger_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
-  source_arn     = var.customercallcenterpiimaciescan_s3_event_rule_arn
+  source_arn     = var.customercallcenterpiimaciescanscheduler_s3_event_rule_arn
   source_account = var.account_id
 }
 
