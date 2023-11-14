@@ -215,10 +215,10 @@ variable "customercallcenterpiicleaned_s3_event_rule_arn" {
   description = "customercallcenterpiicleaned_s3_event_rule_arn"
 }
 
-variable "customercallcenterpiimaciescan_s3_event_rule_arn" {
-  type        = string
-  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
-}
+#variable "customercallcenterpiimaciescan_s3_event_rule_arn" {
+#  type        = string
+#  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
+#}
 
 variable "customercallcenterpiimacieinfo_s3_event_rule_arn" {
   type        = string
@@ -288,4 +288,9 @@ variable "ccc_audio_access_logs_to_cw_lambda_role_arn" {
 variable "ccc_audio_access_logs_s3_event_rule_arn" {
   type        = string
   description = "ccc_audio_access_logs_s3_event_rule_arn"
+}
+
+variable "customercallcenterpiimaciescanscheduler_s3_event_rule_arn" {
+  type        = string
+  description = "customercallcenterpiimaciescanscheduler_s3_event_rule_arn"
 }

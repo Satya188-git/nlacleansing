@@ -19,6 +19,7 @@ locals {
   }
 }
 module "dynamodb_audit_table" {
+  version     = "5.0.5"
   region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
@@ -99,6 +100,7 @@ module "dynamodb_audit_table" {
 }
 
 module "dynamodb_nla_audit_table" {
+  version     = "5.0.5"
   region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
