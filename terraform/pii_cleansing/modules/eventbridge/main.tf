@@ -364,10 +364,10 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimacieinfo_lambda_ta
   rule = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.name
 }
 
-resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
-  arn  = var.macie_scan_trigger_arn
-  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
-}
+#resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
+#  arn  = var.macie_scan_trigger_arn
+#  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
+#}
 
 resource "aws_cloudwatch_event_target" "ccc_audio_copy_lambda_target" {
   arn       = var.ccc_audio_copy_lambda_arn
@@ -397,4 +397,9 @@ resource "aws_cloudwatch_event_target" "audio_lambda_target" {
 resource "aws_cloudwatch_event_target" "audio_access_logs_to_cw_lambda_target" {
   arn  = var.ccc_audio_access_logs_to_cw_lambda_arn
   rule = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
+  arn  = var.macie_scan_trigger_arn
+  rule = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.name
 }
