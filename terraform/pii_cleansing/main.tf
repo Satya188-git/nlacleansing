@@ -234,7 +234,8 @@ module "lambda" {
   customercallcenterpiicleanedverified_s3_event_rule_arn = module.eventbridge.customercallcenterpiicleanedverified_s3_event_rule_arn
   customercallcenterpiiunrefined_s3_event_rule_arn       = module.eventbridge.customercallcenterpiiunrefined_s3_event_rule_arn
   customercallcenterpiicleaned_s3_event_rule_arn         = module.eventbridge.customercallcenterpiicleaned_s3_event_rule_arn
-  customercallcenterpiimaciescan_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimaciescan_s3_event_rule_arn
+  #customercallcenterpiimaciescan_s3_event_rule_arn      = module.eventbridge.customercallcenterpiimaciescan_s3_event_rule_arn
+  customercallcenterpiimaciescanscheduler_s3_event_rule_arn  = module.eventbridge.customercallcenterpiimaciescanscheduler_s3_event_rule_arn
   customercallcenterpiimacieinfo_s3_event_rule_arn       = module.eventbridge.customercallcenterpiimacieinfo_s3_event_rule_arn
   ccc_audio_copy_s3_event_rule_arn                       = module.eventbridge.ccc_audio_copy_s3_event_rule_arn
   callrecordings_audio_s3_event_rule_arn                 = module.eventbridge.callrecordings_audio_s3_event_rule_arn
