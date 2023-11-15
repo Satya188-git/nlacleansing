@@ -319,12 +319,14 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
   description = "run lambda at 5 minute intervals"
   schedule_expression = "rate(5 minutes)"
+  tags = local.tags  
 }
 
 resource "aws_cloudwatch_event_rule" "ccc_pii_maciescan_scheduler_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-scheduler-rule"
   description = "run lambda at 5 minute intervals"
   schedule_expression = "rate(5 minutes)"
+  tags = local.tags  
 }
 
 
