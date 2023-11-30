@@ -23,10 +23,10 @@ output "customercallcenterpiimacieinfo_s3_event_rule_arn" {
   value       = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.arn
 }
 
-output "customercallcenterpiimaciescan_s3_event_rule_arn" {
-  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
-  value       = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.arn
-}
+#output "customercallcenterpiimaciescan_s3_event_rule_arn" {
+#  description = "customercallcenterpiimaciescan_s3_event_rule_arn"
+#  value       = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.arn
+#}
 
 output "ccc_audio_copy_s3_event_rule_arn" {
   description = "ccc_audio_copy_s3_event_rule_arn"
@@ -56,4 +56,9 @@ output "audio_s3_event_rule_arn" {
 output "ccc_audio_access_logs_s3_event_rule_arn" {
   description = "ccc_audio_access_logs_s3_event_rule_arn"
   value       = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule.arn
+}
+
+output "customercallcenterpiimaciescanscheduler_s3_event_rule_arn" {
+  description = "customercallcenterpiimaciescanscheduler_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.arn
 }

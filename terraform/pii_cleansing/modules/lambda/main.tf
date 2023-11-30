@@ -143,6 +143,10 @@ module "ccc_comprehend_lambda" {
     ERHighBill_VECTOR_ID                  = "1245640"
     Outage_NAME                           = "EnOutage"
     Outage_VECTOR_ID                      = "1245645"
+    ERMyAccount_NAME	                    = "ERMy Account"
+    ERMyAccount_VECTOR_ID	                = "1245153"
+    ERSolar_NAME	                        = "ERSolar"
+    ERSolar_VECTOR_ID	                    = "1245670"  
     Retry_Count                           = 10
   }
 
@@ -325,7 +329,7 @@ module "ccc_audit_call_lambda" {
     CLEANED_BUCKET_NAME          = var.ccc_cleaned_bucket_id
     CLEANED_VERIFIED_BUCKET_NAME = var.ccc_verified_clean_bucket_id
     DIRTY_BUCKET_NAME            = var.ccc_dirty_bucket_id
-    TABLE_NAME                   = var.dynamodb_audit_table_name
+    TABLE_NAME                   = var.dynamodb_nla_audit_table_name
     TRANSCRIPTION_BUCKET_NAME    = var.ccc_initial_bucket_id
     UNREFINED_BUCKET_NAME        = var.ccc_unrefined_call_data_bucket_id
     AUDIO_BUCKET_NAME            = var.ccc_insights_audio_bucket_id
@@ -540,7 +544,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_macie_scan_lambda
   action         = "lambda:InvokeFunction"
   function_name  = module.ccc_macie_scan_trigger_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
-  source_arn     = var.customercallcenterpiimaciescan_s3_event_rule_arn
+  source_arn     = var.customercallcenterpiimaciescanscheduler_s3_event_rule_arn
   source_account = var.account_id
 }
 

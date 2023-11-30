@@ -118,32 +118,32 @@ EOF
   tags = local.tags
 }
 
-resource "aws_cloudwatch_event_rule" "customercallcenterpiimaciescan_s3_event_rule" {
-  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-rule"
-  description   = "activate lambda when object is created into bucket cleaned"
-  event_pattern = <<EOF
-  {
-    "detail-type": [
-      "Object Created"
-    ],
-    "source": [
-      "aws.s3"
-    ],
-    "detail": {
-      "bucket": {
-        "name": ["${var.ccc_cleaned_bucket_id}"]
-      },
-    "object": {
-      "key": [{
-        "prefix": "standard_full_transcripts/"
-      }]
-    }
-   }
-  }
-EOF
-
-  tags = local.tags
-}
+#resource "aws_cloudwatch_event_rule" "customercallcenterpiimaciescan_s3_event_rule" {
+#  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-rule"
+#  description   = "activate lambda when object is created into bucket cleaned"
+#  event_pattern = <<EOF
+#  {
+#    "detail-type": [
+#      "Object Created"
+#    ],
+#    "source": [
+#      "aws.s3"
+#    ],
+#    "detail": {
+#      "bucket": {
+#        "name": ["${var.ccc_cleaned_bucket_id}"]
+#      },
+#    "object": {
+#      "key": [{
+#        "prefix": "standard_full_transcripts/"
+#      }]
+#    }
+#   }
+#  }
+#EOF
+#
+#  tags = local.tags
+#}
 
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiimacieinfo_s3_event_rule" {
@@ -319,6 +319,14 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
   description = "run lambda at 5 minute intervals"
   schedule_expression = "rate(5 minutes)"
+  tags = local.tags  
+}
+
+resource "aws_cloudwatch_event_rule" "ccc_pii_maciescan_scheduler_rule" {
+  name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-scheduler-rule"
+  description = "run lambda at 5 minute intervals"
+  schedule_expression = "rate(5 minutes)"
+  tags = local.tags  
 }
 
 
@@ -358,10 +366,10 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimacieinfo_lambda_ta
   rule = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.name
 }
 
-resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
-  arn  = var.macie_scan_trigger_arn
-  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
-}
+#resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
+#  arn  = var.macie_scan_trigger_arn
+#  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
+#}
 
 resource "aws_cloudwatch_event_target" "ccc_audio_copy_lambda_target" {
   arn       = var.ccc_audio_copy_lambda_arn
@@ -391,4 +399,9 @@ resource "aws_cloudwatch_event_target" "audio_lambda_target" {
 resource "aws_cloudwatch_event_target" "audio_access_logs_to_cw_lambda_target" {
   arn  = var.ccc_audio_access_logs_to_cw_lambda_arn
   rule = aws_cloudwatch_event_rule.ccc_audio_access_logs_s3_event_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
+  arn  = var.macie_scan_trigger_arn
+  rule = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.name
 }
