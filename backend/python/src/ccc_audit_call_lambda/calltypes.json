@@ -13,5 +13,6 @@
   "EnOutage"		:	1245645,
   "EngOutage"		:   1245645,
   "ERMyAcctInq"     :   1245153,
-  "EnEmergency"		:	1245624
+  "EnEmergency"		:	1245624,
+  "EngEmer"			:	1245624
 }
