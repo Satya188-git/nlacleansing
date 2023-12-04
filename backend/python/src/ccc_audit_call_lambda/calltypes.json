@@ -10,5 +10,8 @@
   "ERMove"			:	1245668,
   "ERMy Account"	:	1245153,
   "ERSolar"			:	1245670,
-  "EnOutage"		:	1245645
+  "EnOutage"		:	1245645,
+  "EngOutage"		:   1245645,
+  "ERMyAcctInq"     :   1245153,
+  "EnEmergency"		:	1245624
 }
