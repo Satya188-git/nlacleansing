@@ -55,6 +55,8 @@ ERMyAccount_VECTOR_ID = os.environ['ERMyAccount_VECTOR_ID']
 ERSolar_NAME = os.environ['ERSolar_NAME']
 ERSolar_VECTOR_ID = os.environ['ERSolar_VECTOR_ID']
 
+Emergency_NAME= os.environ["Emergency_NAME"]
+Emergency_VECTOR_ID = os.environ["Emergency_VECTOR_ID"]
 
 Athena_Table = os.environ["Athena_Table"]
 Retry_Count = os.environ["Retry_Count"]
@@ -387,6 +389,8 @@ def capture_file_metdadata(s3filename):
         call_type = ERMyAccount_NAME
     elif call_pattern == ERSolar_VECTOR_ID:
         call_type=ERSolar_NAME
+    elif call_pattern == Emergency_VECTOR_ID:
+        call_type=Emergency_NAME
     else:
         print("Invalid Segment Vector Number / Invalid Call Type")
 
