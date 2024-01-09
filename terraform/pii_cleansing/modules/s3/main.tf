@@ -587,7 +587,7 @@ resource "aws_s3_bucket_replication_configuration" "supervisor_data_replication_
     filter {
       prefix = "EDIX_SUPERVISOR/"
     }
-
+    priority = 1
     status = "Enabled"
     source_selection_criteria {
       sse_kms_encrypted_objects {
@@ -664,6 +664,7 @@ resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replic
     filter {
       prefix = "EDIX_METADATA/"
     }
+    priority = 0
 
     destination {
       bucket  = module.ccc_piimetadata_bucket.s3_bucket_arn
