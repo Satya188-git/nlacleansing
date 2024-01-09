@@ -571,44 +571,6 @@ resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_
   }
 }
 
-resource "aws_s3_bucket_replication_configuration" "supervisor_data_replication_rule" {
-  # Must have bucket versioning enabled first
-  depends_on = [module.ccc_callrecordings_bucket.s3_bucket_id, var.nla_replication_role_arn]
-
-  role   = var.nla_replication_role_arn
-  bucket = module.ccc_callrecordings_bucket.s3_bucket_id
-
-  rule {
-    id = "supervisor_data_replication_rule"
-    delete_marker_replication {
-      status = "Disabled"
-    }
-
-    filter {
-      prefix = "EDIX_SUPERVISOR/"
-    }
-    priority = 1
-    status = "Enabled"
-    source_selection_criteria {
-      sse_kms_encrypted_objects {
-        status = "Enabled"
-      }
-    }
-
-    destination {
-      account = var.insights_account_id
-      bucket  = var.s3bucket_insights_replication_arn
-      encryption_configuration {
-        replica_kms_key_id = var.insights_s3kms_arn
-      }
-      access_control_translation {
-        owner = "Destination"
-      }
-    }
-  }
-}
-
-
 resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication_rule" {
   # Must have bucket versioning enabled first
   depends_on = [module.ccc_unrefined_call_data_bucket.s3_bucket_id]
@@ -643,13 +605,13 @@ resource "aws_s3_bucket_replication_configuration" "unrefined_bucket_replication
 
 resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replication_rule" {
   # Must have bucket versioning enabled first
-  depends_on = [module.ccc_callrecordings_bucket.s3_bucket_id, module.ccc_piimetadata_bucket.s3_bucket_id]
+  depends_on = [module.ccc_callrecordings_bucket.s3_bucket_id, module.ccc_piimetadata_bucket.s3_bucket_id, var.nla_replication_role_arn]
 
   role   = var.nla_replication_role_arn
   bucket = module.ccc_callrecordings_bucket.s3_bucket_id
 
   rule {
-    id = "callrecordings_bucket_replication_rule"
+    id = "callrecordings_metadata_replication_rule"
     delete_marker_replication {
       status = "Disabled"
     }
@@ -673,7 +635,39 @@ resource "aws_s3_bucket_replication_configuration" "callrecordings_bucket_replic
       }
     }
   }
+
+  rule {
+    id = "supervisor_data_replication_rule"
+    delete_marker_replication {
+      status = "Disabled"
+    }
+
+    filter {
+      prefix = "EDIX_SUPERVISOR/"
+    }
+    
+    priority = 1
+    
+    status = "Enabled"
+    source_selection_criteria {
+      sse_kms_encrypted_objects {
+        status = "Enabled"
+      }
+    }
+    
+    destination {
+      account = var.insights_account_id
+      bucket  = var.s3bucket_insights_replication_arn
+      encryption_configuration {
+        replica_kms_key_id = var.insights_s3kms_arn
+      }
+      access_control_translation {
+        owner = "Destination"
+      }
+    }
+  }  
 }
+
 
 
 resource "aws_s3_bucket_notification" "unrefined_call_data_bucket_notification" {
