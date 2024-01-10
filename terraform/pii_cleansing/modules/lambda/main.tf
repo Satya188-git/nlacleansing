@@ -147,6 +147,8 @@ module "ccc_comprehend_lambda" {
     ERMyAccount_VECTOR_ID	                = "1245153"
     ERSolar_NAME	                        = "ERSolar"
     ERSolar_VECTOR_ID	                    = "1245670"  
+    Emergency_NAME                        = "EnEmergency"
+    Emergency_VECTOR_ID                   = "1245624"
     Retry_Count                           = 10
   }
 
