@@ -750,7 +750,7 @@ resource "aws_s3_object" "edix_metadata_prefix" {
 }
 
 resource "aws_s3_object" "edix_supervisor_prefix" {
-  key        = "EDIX_SUPERVISOR//"
+  key        = "EDIX_SUPERVISOR/"
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
