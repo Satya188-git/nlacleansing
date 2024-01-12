@@ -158,6 +158,7 @@ module "iam" {
   kms_key_ccc_unrefined_arn          = module.kms.kms_key_ccc_unrefined_arn
   ccc_insights_audio_bucket_arn      = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn      = module.s3.ccc_callrecordings_bucket_arn
+  audit_lambda_arn      			       = module.lambda.ccc_audit_call_lambda_arn
 }
 
 module "kms" {
