@@ -315,6 +315,34 @@ EOF
   tags = local.tags
 }
 
+# Rule to send SNS notification for WFM Spervisor data is uploaded to Callrecordings S3 bucket
+resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_data_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-supervisor-data-notification-rule"
+  description   = "Sends SNS notification for WFM Spervisor data is uploaded to Callrecordings S3 bucket"
+  event_pattern = <<EOF
+{
+  "source": ["aws.s3"],
+  "detail-type": ["Object Created"],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_callrecordings_bucket_id}"
+      ]
+    },
+    "object": {
+      "key": [
+		{"suffix": ".xlsx"},
+        {"suffix": ".XSLX"}, 
+		{"prefix": "EDIX_SUPERVISOR/"}
+		]
+    }
+  }
+}
+EOF
+
+  tags = local.tags
+}
+
 resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
   description = "run lambda at 5 minute intervals"
@@ -404,4 +432,10 @@ resource "aws_cloudwatch_event_target" "audio_access_logs_to_cw_lambda_target" {
 resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
   arn  = var.macie_scan_trigger_arn
   rule = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.name
+}
+
+# select SNS target for eventbridge rule
+resource "aws_cloudwatch_event_target" "callrecordings_supervisor_data_notification_rule_sns_target" {
+  arn  = var.sns_supervisor_data_notification_topic_arn
+  rule = aws_cloudwatch_event_rule.callrecordings_supervisor_data_s3_event_rule.name
 }
