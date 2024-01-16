@@ -74,38 +74,41 @@ def lambda_handler(event, context):
     status = ""
 
     logger.info("Path : " + path)
-
-    if path == buckets.UNREFINED:
-        status = status_list.AUDIO_FILE_RECEIVED
-    elif path == buckets.TRANSCRIPTION + "/" + folders.STANDARD + "/":
-        status = status_list.AUDIO_TRANSCRIPT_WITHSPEAKERLABEL_GENERATED
-    elif path == buckets.TRANSCRIPTION + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
-        status = status_list.TRANSCRIPT_SIMPLETEXT_WITHPII_GENERATED
-    elif path == buckets.CLEANED + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
-        status = status_list.TRANSCRIPT_SIMPLETEXT_NOPII_GENERATED
-    elif path == buckets.CLEANED + "/" + folders.FINAL_OUTPUTS + "/":
-        status = status_list.FINAL_INDENTED_OUTPUT_GENERATED
-    elif path == buckets.CLEANED + "/" + folders.FINAL_OUTPUTS2 + "/":
-        status = status_list.FINAL_NONINDENTED_OUTPUT_GENERATED
-    elif path == buckets.CLEANED_VERIFIED + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
-        status = status_list.STANDARD_FULL_TRANSCRIPT_CLEANED_VERIFIED
-    elif path == buckets.CLEANED_VERIFIED + "/" + folders.FINAL_OUTPUTS + "/":
-        status = status_list.FINAL_VERIFIED_INDENTED_OUTPUT_GENERATED
-    elif path == buckets.CLEANED_VERIFIED + "/" + folders.FINAL_OUTPUTS2 + "/":
-        status = status_list.FINAL_VERIFIED_NONINDENTED_OUTPUT_GENERATED
-    elif path == buckets.DIRTY:
-        status = status_list.STANDARD_FULL_TRANSCRIPT_DIRTY_VERIFIED
-    elif path == buckets.RECORDINGS + "/" + folders.EDIX_AUDIO + "/":
-        status = status_list.AUDIO_RECORDINGS_FILE_UPLOADED
-    elif path == buckets.RECORDINGS + "/" + folders.EDIX_METADATA + "/":
-        status = status_list.METADATA_RECORDINGS_FILE_UPLOADED
-    elif path == buckets.METADATA + "/" + folders.EDIX_METADATA + "/":
-        status = status_list.METADATA_FILE_UPLOADED
-    elif path == buckets.AUDIO:
-        status = status_list.AUDIO_FILE_UPLOADED
+    
+    if event['source']=='aws.lambda':
+        status = event['detail']['status']    
     else:
-        logger.info("Not a valid bucket to audit")
-        return
+        if path == buckets.UNREFINED:
+            status = status_list.AUDIO_FILE_RECEIVED
+        elif path == buckets.TRANSCRIPTION + "/" + folders.STANDARD + "/":
+            status = status_list.AUDIO_TRANSCRIPT_WITHSPEAKERLABEL_GENERATED
+        elif path == buckets.TRANSCRIPTION + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
+            status = status_list.TRANSCRIPT_SIMPLETEXT_WITHPII_GENERATED
+        elif path == buckets.CLEANED + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
+            status = status_list.TRANSCRIPT_SIMPLETEXT_NOPII_GENERATED
+        elif path == buckets.CLEANED + "/" + folders.FINAL_OUTPUTS + "/":
+            status = status_list.FINAL_INDENTED_OUTPUT_GENERATED
+        elif path == buckets.CLEANED + "/" + folders.FINAL_OUTPUTS2 + "/":
+            status = status_list.FINAL_NONINDENTED_OUTPUT_GENERATED
+        elif path == buckets.CLEANED_VERIFIED + "/" + folders.STANDARD_FULL_TRANSCRIPTS + "/":
+            status = status_list.STANDARD_FULL_TRANSCRIPT_CLEANED_VERIFIED
+        elif path == buckets.CLEANED_VERIFIED + "/" + folders.FINAL_OUTPUTS + "/":
+            status = status_list.FINAL_VERIFIED_INDENTED_OUTPUT_GENERATED
+        elif path == buckets.CLEANED_VERIFIED + "/" + folders.FINAL_OUTPUTS2 + "/":
+            status = status_list.FINAL_VERIFIED_NONINDENTED_OUTPUT_GENERATED
+        elif path == buckets.DIRTY:
+            status = status_list.STANDARD_FULL_TRANSCRIPT_DIRTY_VERIFIED
+        elif path == buckets.RECORDINGS + "/" + folders.EDIX_AUDIO + "/":
+            status = status_list.AUDIO_RECORDINGS_FILE_UPLOADED
+        elif path == buckets.RECORDINGS + "/" + folders.EDIX_METADATA + "/":
+            status = status_list.METADATA_RECORDINGS_FILE_UPLOADED
+        elif path == buckets.METADATA + "/" + folders.EDIX_METADATA + "/":
+            status = status_list.METADATA_FILE_UPLOADED
+        elif path == buckets.AUDIO:
+            status = status_list.AUDIO_FILE_UPLOADED
+        else:
+            logger.info("Not a valid bucket to audit")
+            return
     
     now = datetime.now() 
     dt_number=int(now.strftime("%Y%m%d%H%M%S%f"))

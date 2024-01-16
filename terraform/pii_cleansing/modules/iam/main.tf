@@ -389,6 +389,23 @@ resource "aws_iam_policy" "kms_full_access" {
   })
 }
 
+resource "aws_iam_policy" "audit_lambda_access_policy" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audit-lambda-access-policy"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": var.audit_lambda_arn
+        }
+    ]
+  })
+}
+
 resource "aws_iam_policy" "s3_put_read" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
   policy = jsonencode(
@@ -561,6 +578,10 @@ resource "aws_iam_role_policy_attachment" "ComprehendAmazonS3ReadOnlyAccess" {
   role       = module.comprehend_lambda_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "ComprehendAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
+  role       = module.comprehend_lambda_role.name
+}
 # transribe lambda permissions
 resource "aws_iam_role_policy_attachment" "TranscribeAmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
@@ -589,6 +610,11 @@ resource "aws_iam_role_policy_attachment" "transcribe_kms_full_access" {
 
 resource "aws_iam_role_policy_attachment" "transcribe_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
+  role       = module.transcribe_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "transcribeAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
   role       = module.transcribe_lambda_role.name
 }
 
@@ -640,6 +666,11 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonS3FullAccess" {
 }
 resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonMacieFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
+  role       = module.trigger_macie_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "MacieTriggerAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
   role       = module.trigger_macie_lambda_role.name
 }
 
