@@ -1,4 +1,4 @@
-variable "sns_supervisor_data_notification_topic_arn" {
+variable "sns-supervisor-data-notifications-topic-arn" {
   type        = string
   description = "sns supervisor data notification topic arn"
 }
