@@ -340,8 +340,7 @@ resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_data_s3_event_ru
 }
 EOF
 
-  event_pattern {
-    input_transformer {
+  input_transformer {
       input_paths = {
         event      = "$.detail-type",
         time       = "$.time",
@@ -349,16 +348,9 @@ EOF
         key        = "$.detail.object.key"
       }
 
-      input_template = <<TEMPLATE
-{
-  "event": "<event>",
-  "time": "<time>",
-  "bucketname": "<bucketname>",
-  "key": "<key>"
-}
-TEMPLATE
+      input_template = "Supervisor data '<event>' at '<time>' on '<bucketname>/<key>'"
     }
-  }
+
   tags = local.tags
 }
 
