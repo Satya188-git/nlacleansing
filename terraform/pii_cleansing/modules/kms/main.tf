@@ -303,7 +303,16 @@ module "sns_kms_key" {
 				  "kms:GenerateDataKey"
               ],
               "Resource": "*"
-            }
+            },
+            {
+              "Sid": "Allow Eventbridge access for SNS Key",
+              "Effect": "Allow",
+              "Principal": {
+                  "Service":[ "events.amazonaws.com" ]
+              },
+              "Action": "kms:*",
+              "Resource": "*"
+            }			
         ]
       }
   EOT  
