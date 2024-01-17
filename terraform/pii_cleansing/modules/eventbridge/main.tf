@@ -340,17 +340,6 @@ resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_data_s3_event_ru
 }
 EOF
 
-  input_transformer {
-      input_paths = {
-        event      = "$.detail-type",
-        time       = "$.time",
-        bucketname = "$.detail.bucket.name",
-        key        = "$.detail.object.key"
-      }
-
-      input_template = "Supervisor data '<event>' at '<time>' on '<bucketname>/<key>'"
-    }
-
   tags = local.tags
 }
 
@@ -449,4 +438,15 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
 resource "aws_cloudwatch_event_target" "callrecordings_supervisor_data_notification_rule_sns_target" {
   arn  = var.sns-supervisor-data-notifications-topic-arn
   rule = aws_cloudwatch_event_rule.callrecordings_supervisor_data_s3_event_rule.name
+  
+  input_transformer {
+      input_paths = {
+        event      = "$.detail-type",
+        time       = "$.time",
+        bucketname = "$.detail.bucket.name",
+        key        = "$.detail.object.key"
+      }
+
+      input_template = "Supervisor data '<event>' at '<time>' on '<bucketname>/<key>'"
+    }  
 }
