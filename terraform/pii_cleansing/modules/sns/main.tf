@@ -52,10 +52,10 @@ module "supervisor-data-notifications-sns" {
   policy = <<EOF
 {
   "Version": "2008-10-17",
-  "Id": "supervisor_email_notification_policy",
+  "Id": "supervisor_data_email_notification_policy",
   "Statement": [
     {
-      "Sid": "EventBridgePublish",
+      "Sid": "EventBridgePublishNotification",
       "Effect": "Allow",
       "Principal": {
         "Service": "events.amazonaws.com"
