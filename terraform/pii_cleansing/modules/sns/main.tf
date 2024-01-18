@@ -27,14 +27,14 @@ module "sns" {
 module "supervisor-data-notifications-sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
   version          = "4.0.6-prerelease"
-  application_use  = "${var.application_use}-supervisor-data-notifications-topic"
+  application_use  = "${var.application_use}-supervisor-data-notification-topic"
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
   region_code      = var.region_code
 
   tags = {
-    name                = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+    name                = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
     tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
@@ -44,7 +44,7 @@ module "supervisor-data-notifications-sns" {
     data-classification = var.data-classification
   }
 
-  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
   kms_master_key_id     = var.sns_kms_key_id
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = ["${var.supervisordatanotificationemail}"]
@@ -61,7 +61,7 @@ module "supervisor-data-notifications-sns" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sns:Publish",
-      "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+      "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
     }
   ]
 }
@@ -70,7 +70,7 @@ EOF
 
 resource "aws_sns_topic_subscription" "supervisor_email_subscription" {
   depends_on = [ module.supervisor-data-notifications-sns.sns_topic_arn ]
-  topic_arn = "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+  topic_arn = "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
   protocol  = "email"
   endpoint  = var.supervisordatanotificationemail
 }
