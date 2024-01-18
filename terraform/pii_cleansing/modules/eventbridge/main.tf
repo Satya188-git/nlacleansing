@@ -289,7 +289,7 @@ EOF
 }
 
 # Rule to send SNS notification for WFM Spervisor data is uploaded to Callrecordings S3 bucket
-resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_data_s3_event_rule" {
+resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_s3_event_rule" {
   name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-supervisor-notification-rule"
   description   = "Sends SNS notification for WFM Spervisor data is uploaded to Callrecordings S3 bucket"
   event_pattern = <<EOF
