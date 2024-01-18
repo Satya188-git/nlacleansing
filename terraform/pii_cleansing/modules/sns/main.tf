@@ -1,6 +1,6 @@
 module "sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
-  version          = "4.0.6-prerelease"
+  version          = "4.0.9"
   application_use  = "${var.application_use}-audio-access-notifications-topic"
   company_code     = var.company_code
   application_code = var.application_code
@@ -26,7 +26,7 @@ module "sns" {
 
 module "supervisor-data-notifications-sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
-  version          = "4.0.6-prerelease"
+  version          = "4.0.9"
   application_use  = "${var.application_use}-supervisor-data-notification-topic"
   company_code     = var.company_code
   application_code = var.application_code
