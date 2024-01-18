@@ -118,33 +118,6 @@ EOF
   tags = local.tags
 }
 
-#resource "aws_cloudwatch_event_rule" "customercallcenterpiimaciescan_s3_event_rule" {
-#  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-rule"
-#  description   = "activate lambda when object is created into bucket cleaned"
-#  event_pattern = <<EOF
-#  {
-#    "detail-type": [
-#      "Object Created"
-#    ],
-#    "source": [
-#      "aws.s3"
-#    ],
-#    "detail": {
-#      "bucket": {
-#        "name": ["${var.ccc_cleaned_bucket_id}"]
-#      },
-#    "object": {
-#      "key": [{
-#        "prefix": "standard_full_transcripts/"
-#      }]
-#    }
-#   }
-#  }
-#EOF
-#
-#  tags = local.tags
-#}
-
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiimacieinfo_s3_event_rule" {
   name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-macie-info-rule"
@@ -394,11 +367,6 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimacieinfo_lambda_ta
   rule = aws_cloudwatch_event_rule.customercallcenterpiimacieinfo_s3_event_rule.name
 }
 
-#resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
-#  arn  = var.macie_scan_trigger_arn
-#  rule = aws_cloudwatch_event_rule.customercallcenterpiimaciescan_s3_event_rule.name
-#}
-
 resource "aws_cloudwatch_event_target" "ccc_audio_copy_lambda_target" {
   arn       = var.ccc_audio_copy_lambda_arn
   rule      = aws_cloudwatch_event_rule.ccc_audio_copy_s3_event_rule.name
@@ -435,9 +403,9 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
 }
 
 # select SNS target for eventbridge rule
-resource "aws_cloudwatch_event_target" "callrecordings_supervisor_data_notification_rule_sns_target" {
-  arn  = var.sns-supervisor-data-notification-topic-subscription-arn
-  rule = aws_cloudwatch_event_rule.callrecordings_supervisor_data_s3_event_rule.name
+resource "aws_cloudwatch_event_target" "callrecordings_supervisor_notification_rule_sns_target" {
+  arn  = var.sns-supervisor-data-notifications-topic-arn
+  rule = aws_cloudwatch_event_rule.callrecordings_supervisor_s3_event_rule.name
   
   input_transformer {
       input_paths = {
