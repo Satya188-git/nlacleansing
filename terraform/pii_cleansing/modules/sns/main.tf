@@ -61,7 +61,7 @@ module "supervisor-data-notifications-sns" {
         "Service": "events.amazonaws.com"
       },
       "Action": "sns:Publish",
-      "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
+      "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
     }
   ]
 }
