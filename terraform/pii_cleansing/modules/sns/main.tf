@@ -49,7 +49,7 @@ module "supervisor-data-notifications-sns" {
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = ["${var.supervisordatanotificationemail}"]
 
-  policy = <<EOF
+  policy = jsonencode(
 {
   "Version": "2008-10-17",
   "Id": "supervisor_data_email_notification_policy",
@@ -65,7 +65,7 @@ module "supervisor-data-notifications-sns" {
     }
   ]
 }
-EOF
+  )
 }
 
 resource "aws_sns_topic_subscription" "supervisor_email_subscription" {
