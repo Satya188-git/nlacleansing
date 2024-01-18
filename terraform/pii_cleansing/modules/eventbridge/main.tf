@@ -404,7 +404,7 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
 
 # select SNS target for eventbridge rule
 resource "aws_cloudwatch_event_target" "callrecordings_supervisor_notification_rule_sns_target" {
-  arn  = var.sns-supervisor-data-notifications-topic-arn
+  arn  = var.sns-supervisor-data-notification-topic-subscription-arn
   rule = aws_cloudwatch_event_rule.callrecordings_supervisor_s3_event_rule.name
   
   input_transformer {
