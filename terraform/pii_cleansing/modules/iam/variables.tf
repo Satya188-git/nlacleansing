@@ -136,3 +136,8 @@ variable "ccc_callrecordings_bucket_arn" {
   type        = string
   description = "ccc_callrecordings_bucket_arn"
 }
+
+variable "audit_lambda_arn" {
+  type        = string
+  description = "audit_lambda_arn"
+}
