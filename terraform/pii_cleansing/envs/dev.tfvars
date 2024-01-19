@@ -7,3 +7,4 @@ aws_assume_role_pii               = "arn:aws:iam::183095018968:role/fondo/sdge-d
 aws_assume_role_insights          = "arn:aws:iam::713342716921:role/fondo/sdge-dmeti-dev-iam-role-ado-beta"
 insights_s3kms_arn                = "arn:aws:kms:us-west-2:713342716921:key/789c07aa-352b-49ed-ae62-f6960eb451da"
 audioaccessnotificationemail	  = "Ksaha@sdgecontractor.com"
+supervisordatanotificationemail	  = "Ksaha@sdgecontractor.com"
