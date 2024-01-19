@@ -49,23 +49,23 @@ module "supervisor-data-notifications-sns" {
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = ["${var.supervisordatanotificationemail}"]
 
-  policy = jsonencode(
+  policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Id": "supervisor_data_email_notification_policy",
+  "Statement": [
     {
-      "Version": "2008-10-17",
-      "Id": "supervisor_data_email_notification_policy",
-      "Statement": [
-        {
-          "Sid": "EventBridgePublishNotification",
-          "Effect": "Allow",
-          "Principal": {
-            "Service": "events.amazonaws.com"
-          },
-          "Action": "sns:Publish",
-          "Resource": "arn:aws:sns:us-west-2:183095018968:sdge-dtdes-dev-wus2-sns-nla-supervisor-data-notifications-topic"
-        }
-      ]
+      "Sid": "EventBridgePublishNotification",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "events.amazonaws.com"
+      },
+      "Action": "sns:Publish",
+      "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
     }
-  )
+  ]
+}
+EOF
 }
 
 resource "aws_sns_topic_subscription" "supervisor_data_notifications_email_subscription" {
