@@ -80,7 +80,7 @@ module "eventbridge" {
   ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
   ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
-  sns-supervisor-data-notifications-topic-subscription-arn = one(module.sns.sns-supervisor-data-notifications-topic-subscription-arn)
+  # sns-supervisor-data-notifications-topic-subscription-arn = one(module.sns.sns-supervisor-data-notifications-topic-subscription-arn)
 }
 
 module "dynamodb" {
@@ -320,7 +320,7 @@ module "sns" {
   sns_kms_key_id			        = module.kms.sns_kms_key_id
   account_id                        = local.account_id
   audioaccessnotificationemail		= var.audioaccessnotificationemail
-  supervisordatanotificationemail	= var.supervisordatanotificationemail  
+  # supervisordatanotificationemail	= var.supervisordatanotificationemail  
 }
 
 module "cloudwatch" {
