@@ -77,7 +77,7 @@ variable "audioaccessnotificationemail" {
   description = "NLA Audio access notification email id"
 }
 
-#variable "supervisordatanotificationemail" {
-#  type        = string
-#  description = "WFM Supervisor data upload notification email id"
-#}
+variable "supervisordatanotificationemail" {
+ type        = string
+ description = "WFM Supervisor data upload notification email id"
+}
