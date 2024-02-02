@@ -175,3 +175,56 @@ module "dynamodb_nla_audit_table" {
 }
 
 
+module "dynamodb_calltype_table" {
+  version     = "5.0.5"
+  region      = local.region
+  region_code = local.region_code
+  source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
+  table_name  = "ccc-call-type"
+  hash_key    = "callType"
+  range_key   = "c"
+  hash_key_type = "N"
+  range_key_type = "N"
+  dynamodb_attributes = [
+    {
+      name = "callCategory"
+      type = "S"
+    }
+  ]
+
+  global_secondary_index_map = [
+    { name               = "callCategory-createdDate-index"
+      hash_key           = "callCategory"
+      non_key_attributes = []
+      projection_type    = "ALL"
+      range_key          = "createdDate"
+
+    }
+  ]  
+  
+  enable_autoscaler      = true
+  company_code           = local.company_code
+  application_code       = local.application_code
+  application_use        = local.application_use
+  environment_code       = local.environment_code
+  autoscaler_iam_role_id = var.autoscaler_iam_role_id
+  read_capacity          = var.read_capacity
+  write_capacity         = var.write_capacity
+
+
+  autoscaling_read = {
+    "max_capacity" : 5,
+    "min_capacity" : 1
+  }
+  autoscaling_write = {
+    "max_capacity" : 5,
+    "min_capacity" : 1
+  }
+
+  tags = merge(
+    local.tags,
+    {
+      name = "DynamoDb calltype table"
+    },
+  )
+}
