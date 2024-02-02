@@ -301,7 +301,7 @@ module "pii-daily-monitoring-role" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-pii-daily-monitoring-role"
+  application_use   = "${local.application_use}-pii-daily-monitoring"
   description       = "IAM role for Insights daily-monitoring-lambda to access PII AWS resources (DDB table)"
   service_resources = ["lambda.amazonaws.com"]
   
