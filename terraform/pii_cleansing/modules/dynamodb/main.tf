@@ -103,7 +103,7 @@ module "dynamodb_nla_audit_table" {
   version     = "5.0.5"
   region      = local.region
   region_code = local.region_code
-  source      = "app.terraform.io/XXXXXXX/XXXXXXX-dynamodb/aws"
+  source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
   table_name  = "ccc-call-processing-audit"
   hash_key    = "callType"
   range_key   = "datetimeStamp"
