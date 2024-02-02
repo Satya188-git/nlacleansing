@@ -103,7 +103,7 @@ module "dynamodb_nla_audit_table" {
   version     = "5.0.5"
   region      = local.region
   region_code = local.region_code
-  source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
+  source      = "app.terraform.io/XXXXXXX/XXXXXXX-dynamodb/aws"
   table_name  = "ccc-call-processing-audit"
   hash_key    = "callType"
   range_key   = "datetimeStamp"
@@ -147,24 +147,24 @@ module "dynamodb_nla_audit_table" {
 
     }
   ]
-  enable_autoscaler      = true
+  #enable_autoscaler      = true
   company_code           = local.company_code
   application_code       = local.application_code
   application_use        = local.application_use
   environment_code       = local.environment_code
-  autoscaler_iam_role_id = var.autoscaler_iam_role_id
-  read_capacity          = var.read_capacity
-  write_capacity         = var.write_capacity
+  #autoscaler_iam_role_id = var.autoscaler_iam_role_id
+  #read_capacity          = var.read_capacity
+  #write_capacity         = var.write_capacity
+  billing_mode = "PAY_PER_REQUEST"
 
-
-  autoscaling_read = {
-    "max_capacity" : 5,
-    "min_capacity" : 1
-  }
-  autoscaling_write = {
-    "max_capacity" : 5,
-    "min_capacity" : 1
-  }
+  #autoscaling_read = {
+  #  "max_capacity" : 5,
+  #  "min_capacity" : 1
+  #}
+  #autoscaling_write = {
+  #  "max_capacity" : 5,
+  #  "min_capacity" : 1
+  #}
 
   tags = merge(
     local.tags,
