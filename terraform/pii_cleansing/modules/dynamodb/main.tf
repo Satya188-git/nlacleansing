@@ -193,12 +193,12 @@ module "dynamodb_calltype_table" {
   ]
 
   global_secondary_index_map = [
-    { name               = "callCategory-createdDate-index"
+    { 
+      name               = "callCategory-createdDate-index"
       hash_key           = "callCategory"
       non_key_attributes = []
       projection_type    = "ALL"
       range_key          = "createdDate"
-
     }
   ]  
   
