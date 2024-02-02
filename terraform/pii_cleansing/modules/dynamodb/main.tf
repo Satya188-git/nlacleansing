@@ -182,7 +182,7 @@ module "dynamodb_calltype_table" {
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
   table_name  = "ccc-call-type"
   hash_key    = "callType"
-  range_key   = "c"
+  range_key   = "createdDate"
   hash_key_type = "N"
   range_key_type = "N"
   dynamodb_attributes = [
@@ -196,9 +196,9 @@ module "dynamodb_calltype_table" {
     { 
       name               = "callCategory-createdDate-index"
       hash_key           = "callCategory"
+      range_key          = "createdDate"
       non_key_attributes = []
       projection_type    = "ALL"
-      range_key          = "createdDate"
       read_capacity          = var.read_capacity
       write_capacity         = var.write_capacity      
     }
