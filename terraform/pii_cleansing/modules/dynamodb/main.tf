@@ -199,6 +199,8 @@ module "dynamodb_calltype_table" {
       non_key_attributes = []
       projection_type    = "ALL"
       range_key          = "createdDate"
+      read_capacity          = var.read_capacity
+      write_capacity         = var.write_capacity      
     }
   ]  
   
