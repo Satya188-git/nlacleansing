@@ -301,7 +301,7 @@ module "pii-daily-monitoring-role" {
   application_code  = local.application_code
   environment_code  = local.environment_code
   region_code       = local.region_code
-  application_use   = "${local.application_use}-daily-monitoring-lambda"
+  application_use   = "${local.application_use}-pii-daily-monitoring-role"
   description       = "IAM role for Insights daily-monitoring-lambda to access PII AWS resources (DDB table)"
   service_resources = ["lambda.amazonaws.com"]
   
@@ -320,7 +320,7 @@ module "pii-daily-monitoring-role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-pii-daily-monitoring-role"
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}"
     },
   )
 }

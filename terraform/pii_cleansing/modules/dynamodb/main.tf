@@ -95,7 +95,7 @@ module "dynamodb_audit_table" {
     local.tags,
     {
       name = "DynamoDb audit table"
-    },
+    }
   )
 }
 
@@ -170,7 +170,7 @@ module "dynamodb_nla_audit_table" {
     local.tags,
     {
       name = "DynamoDb nla audit table"
-    },
+    }
   )
 }
 
@@ -200,7 +200,9 @@ module "dynamodb_calltype_table" {
       non_key_attributes = []
       projection_type    = "ALL"
       read_capacity          = var.read_capacity
-      write_capacity         = var.write_capacity      
+      write_capacity         = var.write_capacity  
+      enable_autoscaler      = true 
+      autoscaler_iam_role_id = var.autoscaler_iam_role_id      
     }
   ]  
   
@@ -227,6 +229,6 @@ module "dynamodb_calltype_table" {
     local.tags,
     {
       name = "DynamoDb calltype table"
-    },
+    }
   )
 }
