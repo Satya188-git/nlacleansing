@@ -395,7 +395,7 @@ module "ccc_athenaresults_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 180
       },
     ]
   }]
@@ -523,11 +523,17 @@ module "ccc_callaudioaccesslogs_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    expiration = [
-      {
-        days = 2192
-      },
-    ]
+    # -----
+    # expiration = [
+    #   {
+    #     days = 2192
+    #   },
+    # ]
+    # -----
+    transition {
+      days          = 90
+      storage_class = "GLACIER"
+    }
   }]
 }
 
