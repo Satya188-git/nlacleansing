@@ -530,10 +530,11 @@ module "ccc_callaudioaccesslogs_bucket" {
     #   },
     # ]
     # -----
-    transition {
+    transition = [{
       days          = 90
       storage_class = "GLACIER"
-    }
+    },
+    ]
   }]
 }
 
