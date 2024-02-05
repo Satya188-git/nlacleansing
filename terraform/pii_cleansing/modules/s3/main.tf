@@ -63,7 +63,7 @@ module "ccc_unrefined_call_data_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 90
       },
     ]
   }]
@@ -100,10 +100,10 @@ module "ccc_initial_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    expiration = [
-      {
-        days = 2192
-      },
+    transition = [{
+      days          = 180
+      storage_class = "GLACIER"
+    },
     ]
   }]
 }
@@ -141,7 +141,7 @@ module "ccc_cleaned_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 90
       },
     ]
   }]
@@ -181,7 +181,7 @@ module "ccc_verified_clean_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 730
       },
     ]
   }]
@@ -221,7 +221,7 @@ module "ccc_dirty_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 365
       },
     ]
   }]
@@ -260,7 +260,7 @@ module "ccc_maciefindings_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 180
       },
     ]
   }]
@@ -354,10 +354,10 @@ module "ccc_piimetadata_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    expiration = [
-      {
-        days = 2192
-      },
+    transition = [{
+      days          = 180
+      storage_class = "GLACIER"
+    },
     ]
   }]
 }
@@ -431,10 +431,10 @@ module "ccc_insights_audio_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    expiration = [
-      {
-        days = 2192
-      },
+    transition = [{
+      days          = 180
+      storage_class = "GLACIER"
+    },
     ]
   }]
 }
@@ -471,7 +471,7 @@ module "ccc_callrecordings_bucket" {
     enabled = true
     expiration = [
       {
-        days = 2192
+        days = 90
       },
     ]
   }]
@@ -523,15 +523,8 @@ module "ccc_callaudioaccesslogs_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    # -----
-    # expiration = [
-    #   {
-    #     days = 2192
-    #   },
-    # ]
-    # -----
     transition = [{
-      days          = 90
+      days          = 180
       storage_class = "GLACIER"
     },
     ]
