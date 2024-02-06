@@ -100,11 +100,22 @@ module "ccc_initial_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
-    transition = [{
-      days          = 180
-      storage_class = "GLACIER"
-    },
+    prefix  = "standard_full_transcripts/"
+    expiration = [
+      {
+        days = 90
+      },
     ]
+  },
+  { id      = "expiration-rule-standard"
+    enabled = true
+    prefix  = "standard/"
+    expiration = [
+      {
+        days = 90
+      },
+    ]
+
   }]
 }
 
@@ -139,6 +150,17 @@ module "ccc_cleaned_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
+    prefix  = "final_outputs/"
+    expiration = [
+      {
+        days = 90
+      },
+    ]
+  },
+  {
+    id      = "expiration-rule-standard"
+    enabled = true
+    prefix  = "standard_full_transcripts/"
     expiration = [
       {
         days = 90
@@ -219,6 +241,7 @@ module "ccc_dirty_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
+    prefix="standard/"
     expiration = [
       {
         days = 365
@@ -352,8 +375,9 @@ module "ccc_piimetadata_bucket" {
     }
   }
   lifecycle_rule = [{
-    id      = "expiration-rule"
+    id      = "transition-rule"
     enabled = true
+    prefix  = "EDIX_METADATA/"
     transition = [{
       days          = 180
       storage_class = "GLACIER"
@@ -429,7 +453,7 @@ module "ccc_insights_audio_bucket" {
   }
 
   lifecycle_rule = [{
-    id      = "expiration-rule"
+    id      = "transition-rule"
     enabled = true
     transition = [{
       days          = 180
@@ -469,6 +493,7 @@ module "ccc_callrecordings_bucket" {
   lifecycle_rule = [{
     id      = "expiration-rule"
     enabled = true
+    prefix  = "EDIX_METADATA/"
     expiration = [
       {
         days = 90
@@ -521,8 +546,9 @@ module "ccc_callaudioaccesslogs_bucket" {
   }
 
   lifecycle_rule = [{
-    id      = "expiration-rule"
+    id      = "transition-rule"
     enabled = true
+    prefix  = "log/"
     transition = [{
       days          = 180
       storage_class = "GLACIER"
