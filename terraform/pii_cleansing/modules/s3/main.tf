@@ -548,9 +548,9 @@ module "ccc_callaudioaccesslogs_bucket" {
   lifecycle_rule = [{
     id      = "transition-rule"
     enabled = true
-    filter{
+    filter=[{
         prefix  = "log/"
-    }
+    },]
     transition = [{
       days          = 180
       storage_class = "GLACIER"
