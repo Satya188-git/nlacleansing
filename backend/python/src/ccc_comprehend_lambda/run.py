@@ -15,6 +15,33 @@ STANDARD_FULL_TRANSCRIPT_FILE_FORMAT = os.environ["STANDARD_FULL_TRANSCRIPT_FILE
 STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE = os.environ["STANDARD_FULL_TRANSCRIPT_CONTENT_TYPE"]
 
 
+def modify_and_invoke_lambda(event, error_type, status_message):
+    modified_event = {
+        'source': 'aws.lambda',
+        'detail': {
+            'bucket': {
+                'name': event['detail']['bucket']['name']
+            },
+            'object': {
+                'key': event['detail']['object']['key']
+            },
+            'status': status_message
+        }
+    }
+
+    print(modified_event)
+    
+    lambda_client = boto3.client('lambda')
+    lambda_arn = os.environ['audit_lambda_arn']
+    
+    lambda_response = lambda_client.invoke(
+        FunctionName=lambda_arn,
+        InvocationType='RequestResponse',
+        Payload=json.dumps(modified_event)
+    )
+
+
+
 def lambda_handler(event, context):
 
     try :
@@ -66,76 +93,15 @@ def lambda_handler(event, context):
             print("Do not support Analytics")
             
     except Exception as e:
-        # Handle 'NoneType' object is not subscriptable
-        print(f"TypeError: {e}")
-		
-		# Create a Lambda client
-        lambda_client = boto3.client('lambda')
-        lambda_arn = os.environ['audit_lambda_arn']
-		
-        if isinstance(e, TypeError):
-			# Modify the event data before passing it to LambdaFunctionB
-            modified_event_transcript = {
-                'source': 'aws.lambda',
-                'detail': {
-                    'bucket': {
-                        'name': event['detail']['bucket']['name']
-                    },
-                    'object': {
-                        'key': event['detail']['object']['key']
-                    },
-                    'status': 'Comprehend-lambda-failed:Transcript is missing'
-                }
-            }
-            print(modified_event_transcript)
-            # Invoke LambdaFunctionB with the modified payload
-            response = lambda_client.invoke(
-                FunctionName=lambda_arn,
-                InvocationType='RequestResponse',  # Use 'Event' for asynchronous invocation
-                Payload=json.dumps(modified_event_transcript)  # Convert the payload to JSON
-            )
-
-        elif isinstance(e, IndexError):
-            # Modify the event data before passing it to LambdaFunction
-            modified_event_meta = {
-                'source': 'aws.lambda',
-                'detail': {
-                    'bucket': {
-                        'name': event['detail']['bucket']['name']
-                    },
-                    'object': {
-                        'key': event['detail']['object']['key']
-                    },
-                    'status': 'Comprehend-lambda-failed:Metadata is missing'
-                }
-            }
-            print(modified_event_meta)
-            # Invoke LambdaFunctionB with the modified payload
-            response = lambda_client.invoke(
-                FunctionName=lambda_arn,
-                InvocationType='RequestResponse',  # Use 'Event' for asynchronous invocation
-                Payload=json.dumps(modified_event_meta)  # Convert the payload to JSON
-            )
-
-        else:
-            print(f"Other Exception: {e}")
-            modified_event_comprehend = {
-                'source': 'aws.lambda',
-                'detail': {
-                    'bucket': {
-                        'name': event['detail']['bucket']['name']
-                    },
-                    'object': {
-                        'key': event['detail']['object']['key']
-                    },
-                    'status': 'ERROR:comprehend-lambda-failed'
-                }
-            }
-            print(modified_event_comprehend)
-            # Invoke LambdaFunctionB with the modified payload
-            response = lambda_client.invoke(
-                FunctionName=lambda_arn,
-                InvocationType='RequestResponse',  # Use 'Event' for asynchronous invocation
-                Payload=json.dumps(modified_event_comprehend)  # Convert the payload to JSON
-            )
+            print(f"Exception: {e}")
+    
+            if isinstance(e, (TypeError, IndexError)):
+                error_type = 'Transcript is missing' if isinstance(e, TypeError) else 'Metadata is missing'
+                status_message = f'Comprehend-lambda-failed:{error_type}'
+                modify_and_invoke_lambda(event, e, status_message)
+    
+            else:
+                print(f"Other Exception: {e}")
+                status_message = 'ERROR:comprehend-lambda-failed'
+                modify_and_invoke_lambda(event, e, status_message)
 
