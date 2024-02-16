@@ -151,8 +151,8 @@ module "ccc_comprehend_lambda" {
     ERSolar_VECTOR_ID	                    = "1245670"  
     Emergency_NAME                        = "EnEmergency"
     Emergency_VECTOR_ID                   = "1245624"
-    EV_NAME                               = "EREV"
-    EV_VECTOR_ID                          = "111111"
+    EV_NAME                               = "ERElectric Vehicle"
+    EV_VECTOR_ID                          = "1245671"
     Retry_Count                           = 10
     audit_lambda_arn					            =   module.ccc_audit_call_lambda.lambda_function_arn
 
