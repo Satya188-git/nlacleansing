@@ -292,6 +292,39 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
   )
 }
 
+# create IAM role for Insights daily-monitoring-lambda to access PII Dynamodb tables
+module "pii-daily-monitoring-role" {
+  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version = "4.0.2"
+
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-pii-daily-monitoring"
+  description       = "IAM role for Insights daily-monitoring-lambda to access PII AWS resources (DDB table)"
+  service_resources = ["lambda.amazonaws.com"]
+  
+  additional_policy_statements = [
+    {
+        "Sid": "InsightsPermissionToAccessPII"
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::${var.insights_account_id}:root"
+        },
+        "Condition": {},
+        "Action": "sts:AssumeRole"
+    }
+  ]  
+  
+  tags = merge(
+    local.tags,
+    {
+      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}"
+    },
+  )
+}
+
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
@@ -386,6 +419,23 @@ resource "aws_iam_policy" "kms_full_access" {
           "Resource" = "arn:aws:kms:*:${var.account_id}:key/*"
         }
       ]
+  })
+}
+
+resource "aws_iam_policy" "audit_lambda_access_policy" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audit-lambda-access-policy"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": var.audit_lambda_arn
+        }
+    ]
   })
 }
 
@@ -561,6 +611,10 @@ resource "aws_iam_role_policy_attachment" "ComprehendAmazonS3ReadOnlyAccess" {
   role       = module.comprehend_lambda_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "ComprehendAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
+  role       = module.comprehend_lambda_role.name
+}
 # transribe lambda permissions
 resource "aws_iam_role_policy_attachment" "TranscribeAmazonTranscribeFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonTranscribeFullAccess"
@@ -589,6 +643,11 @@ resource "aws_iam_role_policy_attachment" "transcribe_kms_full_access" {
 
 resource "aws_iam_role_policy_attachment" "transcribe_iam_pass_role_policy" {
   policy_arn = aws_iam_policy.iam_pass_role_policy.arn
+  role       = module.transcribe_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "transcribeAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
   role       = module.transcribe_lambda_role.name
 }
 
@@ -640,6 +699,11 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonS3FullAccess" {
 }
 resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonMacieFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonMacieFullAccess"
+  role       = module.trigger_macie_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "MacieTriggerAuditLambdaAccess" {
+  policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
   role       = module.trigger_macie_lambda_role.name
 }
 
@@ -757,4 +821,9 @@ resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_re
 resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_kms_full_access" {
   role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
   policy_arn = aws_iam_policy.kms_full_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonDynamoDBFullAccess3" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+  role       = module.pii-daily-monitoring-role.name
 }

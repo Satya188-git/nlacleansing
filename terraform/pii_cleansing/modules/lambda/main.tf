@@ -69,6 +69,8 @@ module "ccc_transcribe_lambda" {
     CONF_TRANSCRIBE_LANG            = "en-US"
     KEY                             = "billing-guid"
     VALUE                           = var.billing-guid
+    audit_lambda_arn					      =   module.ccc_audit_call_lambda.lambda_function_arn
+
   }
 
   tags = merge(local.tags,
@@ -147,7 +149,13 @@ module "ccc_comprehend_lambda" {
     ERMyAccount_VECTOR_ID	                = "1245153"
     ERSolar_NAME	                        = "ERSolar"
     ERSolar_VECTOR_ID	                    = "1245670"  
+    Emergency_NAME                        = "EnEmergency"
+    Emergency_VECTOR_ID                   = "1245624"
+    EV_NAME                               = "EREV"
+    EV_VECTOR_ID                          = "111111"
     Retry_Count                           = 10
+    audit_lambda_arn					            =   module.ccc_audit_call_lambda.lambda_function_arn
+
   }
 
   s3_existing_package = {
@@ -285,6 +293,8 @@ module "ccc_macie_scan_trigger_lambda" {
     JOB_TYPE                        = "ONE_TIME"
     MANAGE_DATA_IDENTIFIER_SELECTOR = "ALL"
     SAMPLING_PERCENTAGE             = "100"
+    audit_lambda_arn					      =   module.ccc_audit_call_lambda.lambda_function_arn
+
   }
 
   s3_existing_package = {
