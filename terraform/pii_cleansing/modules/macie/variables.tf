@@ -41,3 +41,8 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
+variable "unit" {
+  type        = string
+  description = "Organizational unit"
+}

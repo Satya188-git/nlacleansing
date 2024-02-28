@@ -265,6 +265,7 @@ module "macie" {
   data-classification           = var.data-classification
   ccc_maciefindings_bucket_id   = module.s3.ccc_maciefindings_bucket_id
   kms_key_ccc_maciefindings_arn = module.kms.kms_key_ccc_maciefindings_arn
+  unit                          = var.unit
 }
 
 module "s3" {
@@ -321,6 +322,7 @@ module "sns" {
   account_id                        = local.account_id
   audioaccessnotificationemail		= var.audioaccessnotificationemail
   supervisordatanotificationemail	= var.supervisordatanotificationemail  
+  unit                              = var.unit
 }
 
 module "cloudwatch" {
