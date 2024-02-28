@@ -8,13 +8,13 @@ locals {
     region_code      = var.region_code
     owner            = var.owner
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
   }
 }
@@ -22,7 +22,7 @@ locals {
 module "callaudioaccess_log_group" {
   source = "app.terraform.io/SempraUtilities/seu-cloudwatch-log-group/aws"
   retention_in_days = 0
-  version = "4.0.3"
+  version = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   application_use  = "${local.application_use}-callaudioaccess"
@@ -32,7 +32,7 @@ module "callaudioaccess_log_group" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callaudioaccess-log-group"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callaudioaccess-log-group"
     },
   )
 }
@@ -58,7 +58,7 @@ resource "aws_cloudwatch_log_metric_filter" "callaudioaccess-metrics" {
 module "nla_audio_access_alarm" {
   depends_on = [aws_cloudwatch_log_metric_filter.callaudioaccess-metrics]
   source  = "app.terraform.io/SempraUtilities/seu-cloudwatch-alarms/aws"
-  version = "4.0.3"
+  version = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   application_use  = "${local.application_use}-callaudioaccess"
@@ -68,7 +68,7 @@ module "nla_audio_access_alarm" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-audio-access-alarm"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-audio-access-alarm"
     },
   )
 

@@ -10,13 +10,13 @@ locals {
   account_id       = data.aws_caller_identity.current.account_id
   glue_table_name  = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata"
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
   }
 }

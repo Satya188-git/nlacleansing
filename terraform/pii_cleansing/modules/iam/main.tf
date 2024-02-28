@@ -8,13 +8,13 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
   }
 }
@@ -23,7 +23,7 @@ locals {
 module "nla_replication_role" {
 
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -34,14 +34,14 @@ module "nla_replication_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
     },
   )
 }
 
 module "comprehend_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -52,13 +52,13 @@ module "comprehend_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-comprehend"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-comprehend"
     },
   )
 }
 module "transcribe_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -69,13 +69,13 @@ module "transcribe_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-transcribe"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-transcribe"
     },
   )
 }
 module "informational_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -86,14 +86,14 @@ module "informational_macie_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-macie-info"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-macie-info"
     },
   )
 }
 
 module "trigger_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -104,14 +104,14 @@ module "trigger_macie_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-trigger-macie"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-trigger-macie"
     },
   )
 }
 
 module "sns_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -122,14 +122,14 @@ module "sns_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-sns"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-sns"
     },
   )
 }
 
 module "athena_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -140,13 +140,13 @@ module "athena_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-athena"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-athena"
     },
   )
 }
 module "audit_call_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -157,14 +157,14 @@ module "audit_call_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audit-call"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audit-call"
     },
   )
 }
 
 module "autoscaler_iam_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "4.0.2"
+  version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -175,15 +175,14 @@ module "autoscaler_iam_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-autoscale"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-autoscale"
     },
   )
 }
 
 module "custom_transcribe_lambda_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -194,16 +193,15 @@ module "custom_transcribe_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-custom-transcribe"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-custom-transcribe"
     },
   )
 }
 
 // create IAM role for crawler
 module "athena_crawler_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -214,16 +212,15 @@ module "athena_crawler_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
     },
   )
 }
 
 // create IAM role for audio_copy lambda
 module "audio_copy_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -234,16 +231,15 @@ module "audio_copy_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audio-copy-role"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audio-copy-role"
     },
   )
 }
 
 #create role to be assumed by NLA Insights call-details lambda for S3 bucket
 module "insights_assumed_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -267,16 +263,15 @@ module "insights_assumed_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-insights-assumed-role"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-insights-assumed-role"
     },
   )
 }
 
 # create IAM role for ccc_audio_access_logs_to_cw lambda
 module "ccc_audio_access_logs_to_cw_lambda_role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -287,16 +282,15 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw"
     },
   )
 }
 
 # create IAM role for Insights daily-monitoring-lambda to access PII Dynamodb tables
 module "pii-daily-monitoring-role" {
-  source  = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version = "4.0.2"
-
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -320,7 +314,7 @@ module "pii-daily-monitoring-role" {
   tags = merge(
     local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-pii-daily-monitoring"
     },
   )
 }

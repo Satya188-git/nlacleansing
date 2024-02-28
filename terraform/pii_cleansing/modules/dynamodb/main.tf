@@ -8,18 +8,18 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
   }
 }
 module "dynamodb_audit_table" {
-  version     = "5.0.5"
+  version     = "10.1.0"
   region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
@@ -94,13 +94,13 @@ module "dynamodb_audit_table" {
   tags = merge(
     local.tags,
     {
-      name = "DynamoDb audit table"
-    }
-  )
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-audit-table"
+    },
+  )  
 }
 
 module "dynamodb_nla_audit_table" {
-  version     = "5.0.5"
+  version     = "10.1.0"
   region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
@@ -169,14 +169,14 @@ module "dynamodb_nla_audit_table" {
   tags = merge(
     local.tags,
     {
-      name = "DynamoDb nla audit table"
-    }
-  )
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-nla-audit-table"
+    },
+  ) 
 }
 
 
 module "dynamodb_calltype_table" {
-  version     = "5.0.5"
+  version     = "10.1.0"
   region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
@@ -228,7 +228,7 @@ module "dynamodb_calltype_table" {
   tags = merge(
     local.tags,
     {
-      name = "DynamoDb calltype table"
-    }
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-calltype-table"
+    },
   )
 }
