@@ -42,7 +42,27 @@ variable "data-classification" {
   description = "Data privacy classification"
 }
 
+variable "company_code" {
+  type        = string
+  description = "The company code prefix for Terraform resources"
+}
+
 variable "unit" {
   type        = string
   description = "Organizational unit"
+}
+
+variable "application_code" {
+  type        = string
+  description = "The application code prefix for Terraform resources"
+}
+
+variable "environment_code" {
+  type        = string
+  description = "The environment code prefix for Terraform resources"
+}
+
+variable "region_code" {
+  type        = string
+  description = "The AWS region short code prefix where to deploy Terraform resources"
 }

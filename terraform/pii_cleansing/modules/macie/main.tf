@@ -1,4 +1,8 @@
 locals {
+  company_code     = var.company_code
+  application_code = var.application_code
+  environment_code = var.environment_code
+  region_code      = var.region_code
   tags = {
     "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
 	"sempra:gov:unit"   = var.unit 				# unit                = var.unit

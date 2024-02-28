@@ -266,6 +266,10 @@ module "macie" {
   ccc_maciefindings_bucket_id   = module.s3.ccc_maciefindings_bucket_id
   kms_key_ccc_maciefindings_arn = module.kms.kms_key_ccc_maciefindings_arn
   unit                          = var.unit
+  company_code                  = var.company_code
+  application_code              = var.application_code
+  environment_code              = var.environment_code  
+  region_code                   = var.region_code  
 }
 
 module "s3" {
