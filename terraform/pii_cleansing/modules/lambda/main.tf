@@ -7,7 +7,7 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   tags = {
-    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
     support-group       = var.support-group

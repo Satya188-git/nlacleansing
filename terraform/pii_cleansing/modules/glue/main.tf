@@ -13,7 +13,7 @@ locals {
   glue_catalog_table_table_type     = "EXTERNAL_TABLE"
 
   tags = {
-    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     support-group       = var.support-group

@@ -8,7 +8,7 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   tags = {
-    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
