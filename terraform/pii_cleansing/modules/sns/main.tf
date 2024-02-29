@@ -9,7 +9,7 @@ module "sns" {
 
   tags = {
     "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-audio-access-notifications-topic"
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
 	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
@@ -36,7 +36,7 @@ module "supervisor-data-notifications-sns" {
 
   tags = {
     "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
     support-group       = var.support-group
