@@ -29,10 +29,10 @@ module "athena_kms_key" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = local.application_use # application_name = local.application_name
+  application_use  = "${var.application_use}-athena-kms-key" # application_name = local.application_name
   tags = merge(local.tags,
     {
-      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-athena-key"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athena-kms-key"
     },
   )
 }
