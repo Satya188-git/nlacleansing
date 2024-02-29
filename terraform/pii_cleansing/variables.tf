@@ -51,7 +51,7 @@ variable "owner" {
 }
 
 variable "tag-version" {
-  default     = "1"
+  default     = "2.0"
   type        = string
   description = "Holds the version of the tagging format."
 }
