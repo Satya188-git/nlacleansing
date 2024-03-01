@@ -96,7 +96,7 @@ module "ccc_comprehend_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "comprehend-lambda"
+  application_use  = "comprehend"
 
   description                       = "nla comprehend source files lambda"
   handler                           = "run.lambda_handler"
@@ -180,7 +180,7 @@ module "ccc_informational_macie_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "info-macie-lambda"
+  application_use  = "info-macie"
 
   description                       = "nla transcribed data macie informational lambda"
   handler                           = "run.lambda_handler"
@@ -229,7 +229,7 @@ module "ccc_notification_forwarder_lambda" {
   application_code                  = local.application_code
   environment_code                  = local.environment_code
   region_code                       = local.region_code
-  application_use                   = "notification-lambda"
+  application_use                   = "notification"
   kms_key_arn                       = var.kms_key_ccc_sns_lambda_arn
   description                       = "nla sns notification lambda"
   handler                           = "run.lambda_handler"
@@ -268,7 +268,7 @@ module "ccc_macie_scan_trigger_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "macie-scan-lambda"
+  application_use  = "macie-scan"
 
   description                       = "nla trigger of macie scan lambda"
   handler                           = "run.lambda_handler"
@@ -318,7 +318,7 @@ module "ccc_audit_call_lambda" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "audit-call-lambda"
+  application_use  = "audit-call"
 
   description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
