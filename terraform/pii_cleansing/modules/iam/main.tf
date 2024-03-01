@@ -8,7 +8,7 @@ locals {
   region_code      = var.region_code
   owner            = var.owner
   tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
@@ -23,7 +23,7 @@ locals {
 module "nla_replication_role" {
 
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -41,7 +41,7 @@ module "nla_replication_role" {
 
 module "comprehend_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -58,7 +58,7 @@ module "comprehend_lambda_role" {
 }
 module "transcribe_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -75,7 +75,7 @@ module "transcribe_lambda_role" {
 }
 module "informational_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -93,7 +93,7 @@ module "informational_macie_lambda_role" {
 
 module "trigger_macie_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -111,7 +111,7 @@ module "trigger_macie_lambda_role" {
 
 module "sns_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -129,7 +129,7 @@ module "sns_lambda_role" {
 
 module "athena_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -146,7 +146,7 @@ module "athena_lambda_role" {
 }
 module "audit_call_lambda_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -164,7 +164,7 @@ module "audit_call_lambda_role" {
 
 module "autoscaler_iam_role" {
   source            = "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version           = "10.0.1"
+  version 			= "10.0.2-prerelease" # version           = "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -182,7 +182,7 @@ module "autoscaler_iam_role" {
 
 module "custom_transcribe_lambda_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -201,7 +201,7 @@ module "custom_transcribe_lambda_role" {
 // create IAM role for crawler
 module "athena_crawler_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -220,7 +220,7 @@ module "athena_crawler_role" {
 // create IAM role for audio_copy lambda
 module "audio_copy_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -239,7 +239,7 @@ module "audio_copy_role" {
 #create role to be assumed by NLA Insights call-details lambda for S3 bucket
 module "insights_assumed_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -271,7 +271,7 @@ module "insights_assumed_role" {
 # create IAM role for ccc_audio_access_logs_to_cw lambda
 module "ccc_audio_access_logs_to_cw_lambda_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
@@ -290,7 +290,7 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
 # create IAM role for Insights daily-monitoring-lambda to access PII Dynamodb tables
 module "pii-daily-monitoring-role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.1"
+  version 			= "10.0.2-prerelease" # version 			= "10.0.1"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
