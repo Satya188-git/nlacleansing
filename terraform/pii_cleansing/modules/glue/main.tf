@@ -13,23 +13,21 @@ locals {
   glue_catalog_table_table_type     = "EXTERNAL_TABLE"
 
   tags = {
-    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-crawler-pii"
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     support-group       = var.support-group
-    environment_code    = var.environment_code
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
     portfolio           = var.portfolio
-    environment         = var.environment_code
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
   }
 }
 
 
 module "glue-crawler" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
-  version = "4.0.3"
+  version = "10.0.0"
 
   depends_on       = [var.athena_crawler_role_arn]
   company_code     = local.company_code
@@ -62,18 +60,29 @@ module "glue-crawler" {
       }
     }
   }
-  tags = local.tags
+  tags = merge(
+    local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-glue-crawler"
+    },
+  )
 }
 
 module "nla_glue_table" {
-  version     = "4.1.1"
+  version     = "10.0.1"
   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
   company_code     = local.company_code
   application_code = local.application_code
   application_use  = local.application_use
   environment_code = local.environment_code
   region_code      = local.region_code
-  tags             = local.tags
+  tags = merge(
+    local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-glue-table"
+    },
+  )
+  
   # glue catalog database
   glue_database_name = var.athena_database_name
   encrypt            = true
