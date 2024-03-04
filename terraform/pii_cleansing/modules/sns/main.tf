@@ -25,7 +25,7 @@ module "sns" {
   email_subscriber_list = ["${var.audioaccessnotificationemail}"]
 }
 
-module "supervisor-data-notifications-sns" {
+module "supervisor-data-notification-sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
   version          = "10.1.1"
   application_use  = "${var.application_use}-supervisor-data-notification-topic"
@@ -70,9 +70,3 @@ module "supervisor-data-notifications-sns" {
   )
 }
 
-#resource "aws_sns_topic_subscription" "supervisor_data_notifications_email_subscription" {
-#  depends_on = [ module.supervisor-data-notifications-sns.sns_topic_arn ]
-#  topic_arn = "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
-#  protocol  = "email"
-#  endpoint  = var.supervisordatanotificationemail
-#}
