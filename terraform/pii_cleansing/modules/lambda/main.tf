@@ -7,13 +7,14 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
+	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
   }
 }
 
@@ -26,7 +27,7 @@ module "layers" {
 module "ccc_transcribe_lambda" {
   depends_on       = [var.custom_transcribe_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
@@ -75,7 +76,7 @@ module "ccc_transcribe_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
     },
   )
   allowed_triggers = {
@@ -90,12 +91,12 @@ module "ccc_transcribe_lambda" {
 module "ccc_comprehend_lambda" {
   depends_on       = [var.comprehend_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "comprehend-lambda"
+  application_use  = "comprehend"
 
   description                       = "nla comprehend source files lambda"
   handler                           = "run.lambda_handler"
@@ -165,7 +166,7 @@ module "ccc_comprehend_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend"
     },
   )
 }
@@ -174,12 +175,12 @@ module "ccc_comprehend_lambda" {
 module "ccc_informational_macie_lambda" {
   depends_on       = [var.informational_macie_lambda_role_arn, module.layers.ccc_informational_macie_lambda_id]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "info-macie-lambda"
+  application_use  = "info-macie"
 
   description                       = "nla transcribed data macie informational lambda"
   handler                           = "run.lambda_handler"
@@ -214,7 +215,7 @@ module "ccc_informational_macie_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie"
     },
   )
 }
@@ -223,12 +224,12 @@ module "ccc_informational_macie_lambda" {
 module "ccc_notification_forwarder_lambda" {
   depends_on                        = [var.sns_lambda_role_arn]
   source                            = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version                           = "6.0.0-prerelease"
+  version                           = "10.0.0"
   company_code                      = local.company_code
   application_code                  = local.application_code
   environment_code                  = local.environment_code
   region_code                       = local.region_code
-  application_use                   = "notification-lambda"
+  application_use                   = "notification"
   kms_key_arn                       = var.kms_key_ccc_sns_lambda_arn
   description                       = "nla sns notification lambda"
   handler                           = "run.lambda_handler"
@@ -253,7 +254,7 @@ module "ccc_notification_forwarder_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification"
     },
   )
 }
@@ -262,12 +263,12 @@ module "ccc_notification_forwarder_lambda" {
 module "ccc_macie_scan_trigger_lambda" {
   depends_on       = [var.trigger_macie_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "macie-scan-lambda"
+  application_use  = "macie-scan"
 
   description                       = "nla trigger of macie scan lambda"
   handler                           = "run.lambda_handler"
@@ -304,7 +305,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan"
     },
   )
 }
@@ -312,12 +313,12 @@ module "ccc_macie_scan_trigger_lambda" {
 module "ccc_audit_call_lambda" {
   depends_on       = [var.audit_call_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "audit-call-lambda"
+  application_use  = "audit-call"
 
   description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
@@ -355,7 +356,7 @@ module "ccc_audit_call_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
     },
   )
 }
@@ -363,7 +364,7 @@ module "ccc_audit_call_lambda" {
 module "ccc_audio_copy_lambda" {
   depends_on       = [var.audit_call_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
@@ -400,7 +401,7 @@ module "ccc_audio_copy_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-copy"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-copy"
     },
   )
 }
@@ -408,7 +409,7 @@ module "ccc_audio_copy_lambda" {
 module "ccc_audio_access_logs_to_cw_lambda" {
   depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
-  version          = "6.0.0-prerelease"
+  version          = "10.0.0"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
@@ -444,7 +445,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
 
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-access-logs-to-cw"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-access-logs-to-cw"
     },
   )
 }

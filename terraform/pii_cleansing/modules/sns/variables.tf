@@ -81,3 +81,8 @@ variable "supervisordatanotificationemail" {
  type        = string
  description = "WFM Supervisor data upload notification email id"
 }
+
+variable "unit" {
+  type        = string
+  description = "Organizational unit"
+}

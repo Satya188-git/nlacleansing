@@ -10,13 +10,13 @@ locals {
   account_id       = data.aws_caller_identity.current.account_id
   glue_table_name  = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_pii_metadata"
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
   }
 }
@@ -80,7 +80,7 @@ module "eventbridge" {
   ccc_insights_audio_bucket_id      = module.s3.ccc_insights_audio_bucket_id
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
   ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
-  sns-supervisor-data-notifications-topic-subscription-arn = one(module.sns.sns-supervisor-data-notifications-topic-subscription-arn)
+  sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
 }
 
 module "dynamodb" {
@@ -265,6 +265,11 @@ module "macie" {
   data-classification           = var.data-classification
   ccc_maciefindings_bucket_id   = module.s3.ccc_maciefindings_bucket_id
   kms_key_ccc_maciefindings_arn = module.kms.kms_key_ccc_maciefindings_arn
+  unit                          = var.unit
+  company_code                  = var.company_code
+  application_code              = var.application_code
+  environment_code              = var.environment_code  
+  region_code                   = var.region_code  
 }
 
 module "s3" {
@@ -321,6 +326,7 @@ module "sns" {
   account_id                        = local.account_id
   audioaccessnotificationemail		= var.audioaccessnotificationemail
   supervisordatanotificationemail	= var.supervisordatanotificationemail  
+  unit                              = var.unit
 }
 
 module "cloudwatch" {
