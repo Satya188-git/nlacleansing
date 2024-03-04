@@ -28,7 +28,7 @@ module "sns" {
 module "supervisor-data-notifications-sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
   version          = "10.1.1"
-  application_use  = "${var.application_use}-supervisor-data-notifications-topic"
+  application_use  = "${var.application_use}-supervisor-data-notification-topic"
   company_code     = var.company_code
   application_code = var.application_code
   environment_code = var.environment_code
