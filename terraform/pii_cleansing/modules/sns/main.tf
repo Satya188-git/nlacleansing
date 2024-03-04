@@ -35,7 +35,7 @@ module "supervisor-data-notifications-sns" {
   region_code      = var.region_code
 
   tags = {
-    "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+    "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
     "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
@@ -46,7 +46,7 @@ module "supervisor-data-notifications-sns" {
 	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
   }
 
-  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
   kms_master_key_id     = var.sns_kms_key_id
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = ["${var.supervisordatanotificationemail}"]
@@ -63,7 +63,7 @@ module "supervisor-data-notifications-sns" {
             "Service": "events.amazonaws.com"
           },
           "Action": "sns:Publish",
-          "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notifications-topic"
+          "Resource": "arn:aws:sns:${var.region}:${var.account_id}:${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
         }
       ]
     }

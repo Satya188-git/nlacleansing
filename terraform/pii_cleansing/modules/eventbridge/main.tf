@@ -467,6 +467,6 @@ resource "aws_cloudwatch_event_target" "callrecordings_supervisor_notification_r
         key        = "$.detail.object.key"
      }
 
-     input_template = "\"Supervisor data <event> at <time> on <bucketname>/<key>\""
+     input_template = "\"Supervisor Data <event> At <time> On <bucketname>/<key>\""
     }  
 }
