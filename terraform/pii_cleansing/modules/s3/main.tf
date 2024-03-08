@@ -432,7 +432,7 @@ module "ccc_piimetadata_bucket" {
       },
     ]
     transition = [{
-      days          = 180
+      days          = 720
       storage_class = "GLACIER"
     },
     ]
