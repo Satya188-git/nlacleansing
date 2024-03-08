@@ -514,12 +514,12 @@ module "ccc_insights_audio_bucket" {
   }
 
   lifecycle_rule = [{
-    id      = "expiration-rule"
-    enabled = true
-    expiration = [
-      {
-        days = 2192
-      },
+    id           = "expiration-rule"
+    enabled      = true
+    expiration   = [
+        {
+          days = 2192
+        },
     ]
   }]
 }
