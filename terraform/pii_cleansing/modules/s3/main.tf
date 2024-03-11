@@ -432,7 +432,7 @@ module "ccc_piimetadata_bucket" {
       },
     ]
     transition = [{
-      days          = 180
+      days          = 720
       storage_class = "GLACIER"
     },
     ]
@@ -514,12 +514,12 @@ module "ccc_insights_audio_bucket" {
   }
 
   lifecycle_rule = [{
-    id      = "transition-rule"
-    enabled = true
-    transition = [{
-      days          = 180
-      storage_class = "GLACIER"
-    },
+    id           = "expiration-rule"
+    enabled      = true
+    expiration   = [
+        {
+          days = 2192
+        },
     ]
   }]
 }
