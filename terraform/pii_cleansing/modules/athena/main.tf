@@ -8,29 +8,32 @@ locals {
   namespace        = var.namespace
   owner            = var.owner
   tags = {
-    name                = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-athena"
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
-    unit                = var.unit
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     support-group       = var.support-group
-    environment_code    = var.environment_code
-    cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
     data-classification = var.data-classification
     portfolio           = var.portfolio
-    environment         = var.environment_code
+
   }
 }
 
 module "athena" {
   depends_on       = [var.ccc_athenaresults_bucket_id]
   source           = "app.terraform.io/SempraUtilities/seu-athena/aws"
-  version          = "7.1.0"
+  version          = "10.0.1"
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "nla-pii"
-  tags             = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-pii-athena"
+    },
+  )
 
   # option to create Athena workgroup and corresponding variables
   create_workgroup                   = true

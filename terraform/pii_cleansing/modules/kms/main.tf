@@ -9,30 +9,30 @@ locals {
   application_name = "nla-key"
   description      = "KMS for encrypting AWS resources"
   tags = {
-    tag-version         = var.tag-version
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
     billing-guid        = var.billing-guid
     portfolio           = var.portfolio
     support-group       = var.support-group
-    environment         = var.environment
-    cmdb-ci-id          = var.cmdb-ci-id
-    unit                = var.unit
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
     data-classification = var.data-classification
   }
 }
 
 module "athena_kms_key" {
   source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
-  version          = "4.0.2"
+  version          = "10.0.0"
   description      = local.description
   aws_region       = local.region
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_name = local.application_name
+  application_use  = "${var.application_use}-athena-kms-key" # application_name = local.application_name
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-athena-key"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athena-kms-key"
     },
   )
 }
@@ -41,7 +41,11 @@ resource "aws_kms_key" "unrefined_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-unrefined-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "unrefined_kms_key" {
@@ -61,7 +65,11 @@ resource "aws_kms_key" "initial_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-initial-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "initial_kms_key" {
@@ -73,7 +81,11 @@ resource "aws_kms_key" "clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-clean-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "clean_kms_key" {
@@ -85,7 +97,11 @@ resource "aws_kms_key" "dirty_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dirty-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "dirty_kms_key" {
@@ -97,7 +113,11 @@ resource "aws_kms_key" "verified_clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-verified-clean-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "verified_clean_kms_key" {
@@ -110,7 +130,12 @@ resource "aws_kms_key" "maciefindings_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-maciefindings-kms-key"
+    },
+  )
+  
   policy = <<EOT
     {
     "Version": "2012-10-17",
@@ -200,7 +225,11 @@ resource "aws_kms_key" "piimetadata_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-piimetadata-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "piimetadata_kms_key" {
@@ -213,7 +242,11 @@ resource "aws_kms_key" "athenaresults_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athenaresults-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "athenaresults_kms_key" {
@@ -225,7 +258,11 @@ resource "aws_kms_key" "sns_lambda_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags                    = local.tags
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-sns-lambda-kms-key"
+    },
+  )
 }
 
 resource "aws_kms_alias" "sns_lambda_kms_key" {
@@ -265,17 +302,17 @@ resource "aws_kms_grant" "ccc_macie_scan_trigger_lambda" {
 
 module "sns_kms_key" {
   source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
-  version          = "4.0.2"
+  version          = "10.0.0"
   description      = local.description
   aws_region       = local.region
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_name = "${local.application_name}-sns"
+  application_use  = "${var.application_use}-sns-kms-key" # application_name = "${local.application_name}-sns"
   tags = merge(local.tags,
     {
-      name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sns"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sns"
     },
   )
   policy = <<EOT

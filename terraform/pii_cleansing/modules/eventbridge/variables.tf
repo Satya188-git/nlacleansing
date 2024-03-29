@@ -1,6 +1,6 @@
-variable "sns-supervisor-data-notifications-topic-subscription-arn" {
+variable "sns-supervisor-data-notification-topic-subscription-arn" {
  type        = string
- description = "sns supervisor data notifications topic subscription arn"
+ description = "sns supervisor data notification topic subscription arn"
 }
 
 variable "ccc_initial_bucket_id" {
