@@ -18,7 +18,7 @@ locals {
     data-classification = var.data-classification
   }
 }
-module "dynamodb_audit_table" {
+/*module "dynamodb_audit_table" {
   version     = "10.1.0"
   region      = local.region
   region_code = local.region_code
@@ -97,7 +97,7 @@ module "dynamodb_audit_table" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-audit-table"
     },
   )  
-}
+}*/
 
 module "dynamodb_nla_audit_table" {
   version     = "10.1.0"
