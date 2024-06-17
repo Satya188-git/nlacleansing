@@ -102,10 +102,10 @@ variable "s3bucket_insights_replication_arn" {
   description = "Name of s3 bucket on insights account for object replication"
 }
 
-variable "aws_assume_role_pii" {
-  description = "AWS IAM role to assume when creation resources in the NLA PII accounts"
-  type        = string
-}
+# variable "aws_assume_role_pii" {
+#   description = "AWS IAM role to assume when creation resources in the NLA PII accounts"
+#   type        = string
+# }
 
 variable "aws_assume_role_insights" {
   description = "AWS IAM role to assume when creation resources in the NLA Insights accounts"
