@@ -524,8 +524,7 @@ module "ccc_insights_audio_bucket" {
   }]
   additional_policy_statements   = [data.aws_iam_policy_document.insights_audio_deny_iam_role_policies.json,
    data.aws_iam_policy_document.insights_audio_allow_iam_role_policies.json,
-   data.aws_iam_policy_document.insights_audio_allow_presignedURL_policies.json,
-   data.aws_iam_policy_document.insights_audio_allow_SSLreq_policies.json]  
+   data.aws_iam_policy_document.insights_audio_allow_presignedURL_policies.json]
 }
 
 data "aws_iam_policy_document" "insights_audio_deny_iam_role_policies" {
@@ -596,30 +595,7 @@ data "aws_iam_policy_document" "insights_audio_allow_presignedURL_policies" {
   }
 }
 
-data "aws_iam_policy_document" "insights_audio_allow_SSLreq_policies" {
-  statement {
-    sid    = "DenyNonSSLRequestsToAudio"
-    effect = "Deny"
 
-    resources = [
-      "{module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
-      "{module.ccc_insights_audio_bucket.s3_bucket_arn}",
-    ]
-
-    actions = ["s3:*"]
-
-    condition {
-      test     = "Bool"
-      variable = "aws:SecureTransport"
-      values   = ["false"]
-    }
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-  }
-}
 
 
 module "ccc_callrecordings_bucket" {
