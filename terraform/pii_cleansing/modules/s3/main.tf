@@ -522,8 +522,97 @@ module "ccc_insights_audio_bucket" {
         },
     ]
   }]
+  additional_policy_statements   = [data.aws_iam_policy_document.insights_audio_bucket_additional_policies.json]  
 }
 
+data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
+{
+  statement {
+    sid       = "DenyNonInsightsAssumedRoleToAudio"
+    effect    = "Deny"
+    resources = ["arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*"]
+    actions   = ["s3:*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values   = ["arn:aws:iam::183095018968:role/sdge-dtdes-dev-wus2-iam-role-nla-insights-assumed-role"]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid    = "AllowInsightsAssumedRoleToAudio"
+    effect = "Allow"
+
+    resources = [
+      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio",
+      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*",
+    ]
+
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::183095018968:role/sdge-dtdes-dev-wus2-iam-role-nla-insights-assumed-role"]
+    }
+  }
+
+  statement {
+    sid       = "AllowSSLS3PresignedURLAccessToAudio"
+    effect    = "Allow"
+    resources = ["arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*"]
+    actions   = ["s3:GetObject"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:signatureversion"
+      values   = ["AWS4-HMAC-SHA256"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["true"]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+
+  statement {
+    sid    = "DenyNonSSLRequestsToAudio"
+    effect = "Deny"
+
+    resources = [
+      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*",
+      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio",
+    ]
+
+    actions = ["s3:*"]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+}
 
 module "ccc_callrecordings_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
