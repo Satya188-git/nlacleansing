@@ -553,8 +553,8 @@ data "aws_iam_policy_document" "insights_audio_allow_iam_role_policies" {
     effect = "Allow"
 
     resources = [
-      "{module.ccc_insights_audio_bucket.s3_bucket_arn}",
-      "{module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}",
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
     ]
 
     actions = [
@@ -573,7 +573,7 @@ data "aws_iam_policy_document" "insights_audio_allow_presignedURL_policies" {
   statement {
     sid       = "AllowSSLS3PresignedURLAccessToAudio"
     effect    = "Allow"
-    resources = ["{module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
+    resources = ["${module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
     actions   = ["s3:GetObject"]
 
     condition {
