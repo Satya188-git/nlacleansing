@@ -522,21 +522,23 @@ module "ccc_insights_audio_bucket" {
         },
     ]
   }]
-  additional_policy_statements   = [data.aws_iam_policy_document.insights_audio_bucket_additional_policies.json]  
+  additional_policy_statements   = [data.aws_iam_policy_document.insights_audio_deny_iam_role_policies.json,
+   data.aws_iam_policy_document.insights_audio_allow_iam_role_policies.json,
+   data.aws_iam_policy_document.insights_audio_allow_presignedURL_policies.json,
+   data.aws_iam_policy_document.insights_audio_allow_SSLreq_policies.json]  
 }
 
-data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
-{
+data "aws_iam_policy_document" "insights_audio_deny_iam_role_policies" {
   statement {
     sid       = "DenyNonInsightsAssumedRoleToAudio"
     effect    = "Deny"
-    resources = ["arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*"]
+    resources = ["${module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
     actions   = ["s3:*"]
 
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = ["arn:aws:iam::183095018968:role/sdge-dtdes-dev-wus2-iam-role-nla-insights-assumed-role"]
+      values   = [var.insights_assumed_role_arn]
     }
 
     principals {
@@ -544,14 +546,16 @@ data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
       identifiers = ["*"]
     }
   }
-
+}
+  
+data "aws_iam_policy_document" "insights_audio_allow_iam_role_policies" {
   statement {
     sid    = "AllowInsightsAssumedRoleToAudio"
     effect = "Allow"
 
     resources = [
-      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio",
-      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*",
+      "{module.ccc_insights_audio_bucket.s3_bucket_arn}",
+      "{module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
     ]
 
     actions = [
@@ -561,14 +565,16 @@ data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::183095018968:role/sdge-dtdes-dev-wus2-iam-role-nla-insights-assumed-role"]
+      identifiers = [var.insights_assumed_role_arn]
     }
   }
+}
 
+data "aws_iam_policy_document" "insights_audio_allow_presignedURL_policies" {
   statement {
     sid       = "AllowSSLS3PresignedURLAccessToAudio"
     effect    = "Allow"
-    resources = ["arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*"]
+    resources = ["{module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
     actions   = ["s3:GetObject"]
 
     condition {
@@ -588,14 +594,16 @@ data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
       identifiers = ["*"]
     }
   }
+}
 
+data "aws_iam_policy_document" "insights_audio_allow_SSLreq_policies" {
   statement {
     sid    = "DenyNonSSLRequestsToAudio"
     effect = "Deny"
 
     resources = [
-      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio/*",
-      "arn:aws:s3:::sdge-dtdes-dev-wus2-s3-nla-audio",
+      "{module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
+      "{module.ccc_insights_audio_bucket.s3_bucket_arn}",
     ]
 
     actions = ["s3:*"]
@@ -612,7 +620,7 @@ data "aws_iam_policy_document" "insights_audio_bucket_additional_policies" {
     }
   }
 }
-}
+
 
 module "ccc_callrecordings_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"

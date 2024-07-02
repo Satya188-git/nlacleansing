@@ -66,3 +66,8 @@ output "ccc_audio_access_logs_to_cw_lambda_role_arn" {
   description = "ccc_audio_access_logs_to_cw_lambda_role arn"
   value       = module.ccc_audio_access_logs_to_cw_lambda_role.arn
 }
+
+output "insights_assumed_role_arn" {
+  description = "insights_assumed_role arn"
+  value       = module.insights_assumed_role.arn
+}

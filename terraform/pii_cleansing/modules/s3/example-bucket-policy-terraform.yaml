@@ -1,0 +1,97 @@
+module "ccc_maciefindings_bucket" {
+  source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version                        = "10.0.1"
+  company_code                   = local.company_code
+  application_code               = local.application_code
+  environment_code               = local.environment_code
+  region_code                    = local.region_code
+  application_use                = "${local.application_use}-macie-findings"
+  owner                          = "NLA Team"
+  create_bucket                  = true
+  create_log_bucket              = false
+  attach_alb_log_delivery_policy = false
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-macie-findings"
+    },
+  )
+  force_destroy                  = true
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
+  acl                            = "private"
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        kms_master_key_id = var.kms_key_ccc_maciefindings_arn
+        # kms_master_key_id = "alias/aws/kms" # revert to customer managed key after provider bug workaround
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+  lifecycle_rule = [{
+    id      = "expiration-rule"
+    enabled = true
+    expiration = [
+      {
+        days = 180
+      },
+    ]
+  }]
+
+  additional_policy_statements   = [data.aws_iam_policy_document.maciefindings_upload_additional_policies.json,
+   data.aws_iam_policy_document.maciefindings_getBucketLocation_additional_policies.json] 
+
+}
+
+data "aws_iam_policy_document" "maciefindings_upload_additional_policies" {
+	statement {
+	    sid       	= "Allow Macie to upload objects to the bucket"
+		effect 		= "Allow"
+		principals {
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
+		}
+		actions 	= ["s3:PutObject"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}/*"]
+		condition {
+                    test = "StringEquals"
+                    variable = "aws:SourceAccount"
+                    values = ["${var.account_id}"]
+            }
+		condition {
+                    test = "ArnLike"
+                    variable = "aws:SourceArn"
+                    values = [
+							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+							"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
+	}
+}
+
+data "aws_iam_policy_document" "maciefindings_getBucketLocation_additional_policies" {
+	statement {
+		sid       	= "Allow Macie to use the getBucketLocation operation"
+		effect 		= "Allow"
+		principals {
+				type = "Service"
+				identifiers = ["macie.amazonaws.com"]
+		}
+		actions 	= ["s3:GetBucketLocation"]
+		resources 	= ["${module.ccc_maciefindings_bucket.s3_bucket_arn}"]
+		condition {
+                    test = "StringEquals"
+                    variable = "aws:SourceAccount"
+                    values = ["${var.account_id}"]
+            }
+		condition {
+                    test = "ArnLike"
+                    variable = "aws:SourceArn"
+                    values = [
+							"arn:aws:macie2:${var.region}:${var.account_id}:export-configuration:*",
+							"arn:aws:macie2:${var.region}:${var.account_id}:classification-job/*"
+                    ]
+            }		
+	}
+}

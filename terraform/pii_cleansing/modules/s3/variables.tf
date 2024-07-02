@@ -123,6 +123,10 @@ variable "nla_replication_role_arn" {
   type = string
 }
 
+variable "insights_assumed_role_arn" {
+  type = string
+}
+
 variable "s3bucket_insights_replication_arn" {
   type        = string
   description = "Name of s3 bucket on insights account for object replication"
