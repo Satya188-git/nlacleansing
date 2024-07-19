@@ -643,7 +643,7 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [ #data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json,     
+  additional_policy_statements   = [   data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json,     
     data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json,
     data.aws_iam_policy_document.allow_file_transfer_role_access_additional_policies.json,
     data.aws_iam_policy_document.allow_audio_copy_role_access_additional_policies.json
@@ -652,7 +652,7 @@ module "ccc_callrecordings_bucket" {
 }
 
 
-/* data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
+  data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
   statement {
     sid       = "DenyNonrequiredAccessToCallRecordings"
     effect    = "Deny"
@@ -662,7 +662,8 @@ module "ccc_callrecordings_bucket" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+      values   = [var.audio_copy_lambda_role_arn]
+      #, var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
     principals {
@@ -670,7 +671,7 @@ module "ccc_callrecordings_bucket" {
       identifiers = ["*"]
     }
   }
-}*/
+}
 
   
 data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
