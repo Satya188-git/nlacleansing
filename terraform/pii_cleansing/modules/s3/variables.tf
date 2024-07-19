@@ -126,7 +126,24 @@ variable "nla_replication_role_arn" {
 variable "insights_assumed_role_arn" {
   type = string
 }
-
+variable "audio_copy_lambda_role_arn" {
+  type = string
+}
+variable "transcribe_lambda_role_arn" {
+  type = string
+}
+variable "custom_transcribe_lambda_role_arn" {
+  type = string
+}
+variable "comprehend_lambda_role_arn" {
+  type = string
+}
+variable "trigger_macie_lambda_role_arn" {
+  type = string
+}
+variable "file_transfer_lambda_role_arn" {
+  type = string
+}
 variable "s3bucket_insights_replication_arn" {
   type        = string
   description = "Name of s3 bucket on insights account for object replication"

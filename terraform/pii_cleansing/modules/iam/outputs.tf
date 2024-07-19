@@ -62,6 +62,18 @@ output "audio_copy_lambda_role_arn" {
   value = module.audio_copy_role.arn
 }
 
+output "transcribe_lambda_role_arn" {
+  value = module.transcribe_lambda_role.arn
+}
+
+output "comprehend_lambda_role_arn" {
+  value = module.comprehend_lambda_role.arn
+}
+
+output "file_transfer_lambda_role_arn" {
+  value = module.file_transfer_lambda_role.arn
+}
+
 output "ccc_audio_access_logs_to_cw_lambda_role_arn" {
   description = "ccc_audio_access_logs_to_cw_lambda_role arn"
   value       = module.ccc_audio_access_logs_to_cw_lambda_role.arn
