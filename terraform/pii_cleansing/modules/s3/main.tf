@@ -720,7 +720,7 @@ data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_poli
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
     principals {

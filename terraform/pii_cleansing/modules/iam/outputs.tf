@@ -62,14 +62,6 @@ output "audio_copy_lambda_role_arn" {
   value = module.audio_copy_role.arn
 }
 
-output "transcribe_lambda_role_arn" {
-  value = module.transcribe_lambda_role.arn
-}
-
-output "comprehend_lambda_role_arn" {
-  value = module.comprehend_lambda_role.arn
-}
-
 output "file_transfer_lambda_role_arn" {
   value = module.file_transfer_lambda_role.arn
 }
