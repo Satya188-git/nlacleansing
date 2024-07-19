@@ -643,14 +643,16 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json,     
+  additional_policy_statements   = [ #data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json,     
     data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json,
     data.aws_iam_policy_document.allow_file_transfer_role_access_additional_policies.json,
     data.aws_iam_policy_document.allow_audio_copy_role_access_additional_policies.json
   ]
   
 }
-data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
+
+
+/* data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
   statement {
     sid       = "DenyNonrequiredAccessToCallRecordings"
     effect    = "Deny"
@@ -668,7 +670,8 @@ data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_poli
       identifiers = ["*"]
     }
   }
-}
+}*/
+
   
 data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
     statement {
