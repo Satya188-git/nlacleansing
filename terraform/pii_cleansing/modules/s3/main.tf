@@ -643,15 +643,33 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [      
+  additional_policy_statements   = [data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json     
     data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json,
     data.aws_iam_policy_document.allow_file_transfer_role_access_additional_policies.json,
-    data.aws_iam_policy_document.allow_audio_copy_role_access_additional_policies.json,
-    data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json
+    data.aws_iam_policy_document.allow_audio_copy_role_access_additional_policies.json
   ]
   
 }
+data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
+  statement {
+    sid       = "DenyNonrequiredAccessToCallRecordings"
+    effect    = "Deny"
+    resources = ["${module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
+    actions   = ["s3:*"]
 
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+  
 data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
     statement {
         sid    = "AllowEdixUserAccessToCallRecordings"
@@ -709,27 +727,6 @@ data "aws_iam_policy_document" "allow_audio_copy_role_access_additional_policies
     }
   }
 }
-
-data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
-  statement {
-    sid       = "DenyNonrequiredAccessToCallRecordings"
-    effect    = "Deny"
-    resources = ["${module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
-    actions   = ["s3:*"]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
-    }
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-  }
-}
-
 
 ########################################
 
