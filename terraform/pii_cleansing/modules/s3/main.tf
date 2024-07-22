@@ -632,7 +632,7 @@ module "ccc_dirty_bucket" {
   }]
   additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_dirty_policies.json,
    data.aws_iam_policy_document.allow_file_transfer_role_access_dirty_policies.json,
-   data.aws_iam_policy_document.allow_comprehend_role_access_dirty_policies] 
+   data.aws_iam_policy_document.allow_comprehend_role_access_dirty_policies.json] 
 }
 
 data "aws_iam_policy_document" "deny_other_access_dirty_policies" {
