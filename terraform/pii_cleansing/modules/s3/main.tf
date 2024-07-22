@@ -524,7 +524,7 @@ module "ccc_insights_audio_bucket" {
   }]
   additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_audio_policies.json,
    data.aws_iam_policy_document.allow_insights_assumed_role_access_audio_policies.json,
-   data.aws_iam_policy_document.allow_file_transfer_role_access_audio_policies
+   data.aws_iam_policy_document.allow_file_transfer_role_access_audio_policies.json,
    data.aws_iam_policy_document.allow_presignedURL_access_audio_policies.json]
 }
 
@@ -538,7 +538,7 @@ data "aws_iam_policy_document" "deny_other_access_audio_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn,var.file_transfer_lambda_role_arn]
+      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn]
     }
 
     principals {
