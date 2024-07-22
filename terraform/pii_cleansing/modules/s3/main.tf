@@ -24,6 +24,11 @@ data "aws_s3_bucket" "tfartifacts" {
   bucket = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-tf-artifacts"
 }
 
+# data.aws_iam_role.oidc.arn access is needed by azure pipeline to modify the infra
+data "aws_iam_role" "oidc" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-iam-role-tfc-oidc"
+}
+
 resource "aws_s3_bucket_versioning" "tfartifacts_versioning" {
   bucket = data.aws_s3_bucket.tfartifacts.id
   versioning_configuration {
@@ -538,7 +543,7 @@ data "aws_iam_policy_document" "deny_other_access_audio_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn]
+      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, ${data.aws_iam_role.oidc.arn}]
     }
 
     principals {
@@ -663,11 +668,32 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [   data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json
-    #data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,
-    #data.aws_iam_policy_document.allow_file_transfer_role_access_CallRecordings_policies.json,
-    #data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
+  additional_policy_statements   = [ data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json
+    data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,
+    data.aws_iam_policy_document.allow_file_transfer_role_access_CallRecordings_policies.json,
+    data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
   ]  
+}
+
+data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
+  statement {
+    sid       = "DenyOtherAccessToCallRecordings"
+    effect    = "Deny"
+    resources = ["${module.ccc_callrecordings_bucket.s3_bucket_arn}/*"]
+    actions   = ["s3:*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values   = [var.audio_copy_lambda_role_arn , var.file_transfer_lambda_role_arn, ${data.aws_iam_role.oidc.arn} ,
+        "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
 }
 
 data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" {
@@ -685,32 +711,6 @@ data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" 
         }    
     }
 }
-
-/*
-  data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
-  statement {
-    sid       = "DenyOtherAccessToCallRecordings"
-    effect    = "Deny"
-    resources = ["${module.ccc_callrecordings_bucket.s3_bucket_arn}/*"]
-    actions   = ["s3:*"]
-
-    condition {
-      test     = "StringNotEquals"
-      variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn,
-        "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
-    }
-
-    principals {
-      type        = "*"
-      identifiers = ["*"]
-    }
-  }
-}
-
-  
-
-
 
 data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_policies" {
   statement {
@@ -753,7 +753,6 @@ data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_poli
     }
   }
 }
-*/
 
 ########################################
 
