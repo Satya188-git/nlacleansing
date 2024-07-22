@@ -683,7 +683,7 @@ module "ccc_callrecordings_bucket" {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
       values   = [var.audio_copy_lambda_role_arn,
-       var.file_transfer_lambda_role_arn,  "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+        "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
     principals {
