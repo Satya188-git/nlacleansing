@@ -543,7 +543,7 @@ data "aws_iam_policy_document" "deny_other_access_audio_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, ${data.aws_iam_role.oidc.arn}]
+      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -685,7 +685,7 @@ data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn , var.file_transfer_lambda_role_arn, ${data.aws_iam_role.oidc.arn} ,
+      values   = [var.audio_copy_lambda_role_arn , var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn ,
         "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
