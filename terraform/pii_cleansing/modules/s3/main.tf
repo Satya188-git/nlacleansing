@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "deny_other_access_unrefined_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, transcribe_lambda_role_arn, custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -246,7 +246,114 @@ module "ccc_initial_bucket" {
     ]
 
   }]
+  additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_transcription_policies.json,
+   data.aws_iam_policy_document.allow_audio_copy_role_access_transcription_policies.json,
+   data.aws_iam_policy_document.allow_file_transfer_role_access_transcription_policies.json,
+   data.aws_iam_policy_document.allow_transcribe_role_access_transcription_policies.json,
+   data.aws_iam_policy_document.allow_custom_transcribe_role_access_transcription_policies.json]
 }
+
+data "aws_iam_policy_document" "deny_other_access_transcription_policies" {
+  statement {
+    sid       = "DenyOtherAccessToTranscription"
+    effect    = "Deny"
+    resources = ["${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*"]
+    actions   = ["s3:*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, transcribe_lambda_role_arn, custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_audio_copy_role_access_transcription_policies" {
+  statement {
+    sid    = "AllowAudioCopyRoleToAccessToTranscription"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*",
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.audio_copy_lambda_role_arn]
+    }
+  }
+}
+  
+
+data "aws_iam_policy_document" "allow_file_transfer_role_access_transcription_policies" {
+  statement {
+    sid    = "AllowFileTransferRoleToAccessToTranscription"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*",
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [ var.file_transfer_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_transcribe_role_access_transcription_policies" {
+  statement {
+    sid    = "AllowTranscribeRoleToAccessToTranscription"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*",
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.transcribe_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_custom_transcribe_role_access_transcription_policies" {
+  statement {
+    sid    = "AllowCustomTranscribeRoleToAccessToTranscription"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*",
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.custom_transcribe_lambda_role_arn]
+    }
+  }
+}
+
+#######################Done nla-pii-transcription
 
 
 module "ccc_cleaned_bucket" {
