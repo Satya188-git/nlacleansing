@@ -534,7 +534,7 @@ data "aws_iam_policy_document" "deny_other_access_verified_clean_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.comprehend_lambda_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -646,7 +646,7 @@ data "aws_iam_policy_document" "deny_other_access_dirty_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
