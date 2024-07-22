@@ -663,15 +663,30 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [   data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,    
-    data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json,
+  additional_policy_statements   = [   data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json
+    #data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,
     #data.aws_iam_policy_document.allow_file_transfer_role_access_CallRecordings_policies.json,
-    data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
-  ]
-  
+    #data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
+  ]  
 }
 
+data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" {
+    statement {
+        sid    = "AllowEdixUserAccessToCallRecordings"
+        effect = "Allow"
+        resources = [
+            "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
+            "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
+        ]
+        actions = [ "s3:*" ]
+        principals{
+            type        = "AWS"
+            identifiers = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
+        }    
+    }
+}
 
+/*
   data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
   statement {
     sid       = "DenyOtherAccessToCallRecordings"
@@ -694,23 +709,9 @@ module "ccc_callrecordings_bucket" {
 }
 
   
-data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" {
-    statement {
-        sid    = "AllowEdixUserAccessToCallRecordings"
-        effect = "Allow"
-        resources = [
-            "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
-            "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
-        ]
-        actions = [ "s3:*" ]
-        principals{
-            type        = "AWS"
-            identifiers = ["arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
-        }    
-    }
-}
 
-/*
+
+
 data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_policies" {
   statement {
     sid    = "AllowFileTransferRoleToAccessToCallRecordings"
@@ -729,7 +730,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_p
     }
   }
 }
-*/
+
 
 data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_policies" {
   statement {
@@ -752,6 +753,7 @@ data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_poli
     }
   }
 }
+*/
 
 ########################################
 
