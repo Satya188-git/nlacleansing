@@ -522,14 +522,15 @@ module "ccc_insights_audio_bucket" {
         },
     ]
   }]
-  additional_policy_statements   = [data.aws_iam_policy_document.insights_audio_deny_iam_role_policies.json,
-   data.aws_iam_policy_document.insights_audio_allow_iam_role_policies.json,
-   data.aws_iam_policy_document.insights_audio_allow_presignedURL_policies.json]
+  additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_audio_policies.json,
+   data.aws_iam_policy_document.allow_insights_assumed_role_access_audio_policies.json,
+   data.aws_iam_policy_document.allow_file_transfer_role_access_audio_policies
+   data.aws_iam_policy_document.allow_presignedURL_access_audio_policies.json]
 }
 
-data "aws_iam_policy_document" "insights_audio_deny_iam_role_policies" {
+data "aws_iam_policy_document" "deny_other_access_audio_policies" {
   statement {
-    sid       = "DenyNonInsightsAssumedRoleToAudio"
+    sid       = "DenyOtherAccessToAudio"
     effect    = "Deny"
     resources = ["${module.ccc_insights_audio_bucket.s3_bucket_arn}/*"]
     actions   = ["s3:*"]
@@ -537,7 +538,7 @@ data "aws_iam_policy_document" "insights_audio_deny_iam_role_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn]
+      values   = [var.insights_assumed_role_arn,var.file_transfer_lambda_role_arn]
     }
 
     principals {
@@ -547,9 +548,9 @@ data "aws_iam_policy_document" "insights_audio_deny_iam_role_policies" {
   }
 }
   
-data "aws_iam_policy_document" "insights_audio_allow_iam_role_policies" {
+data "aws_iam_policy_document" "allow_insights_assumed_role_access_audio_policies" {
   statement {
-    sid    = "AllowInsightsAssumedRoleToAudio"
+    sid    = "AllowInsightsAssumedRoleAccessToAudio"
     effect = "Allow"
 
     resources = [
@@ -569,7 +570,26 @@ data "aws_iam_policy_document" "insights_audio_allow_iam_role_policies" {
   }
 }
 
-data "aws_iam_policy_document" "insights_audio_allow_presignedURL_policies" {
+data "aws_iam_policy_document" "allow_file_transfer_role_access_audio_policies" {
+  statement {
+    sid    = "AllowFileTransferRoleToAccessToAudio"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [ var.file_transfer_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_presignedURL_access_audio_policies" {
   statement {
     sid       = "AllowSSLS3PresignedURLAccessToAudio"
     effect    = "Allow"
@@ -643,16 +663,16 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [   data.aws_iam_policy_document.call_recordings_deny_role_access_additional_policies.json,    
-    data.aws_iam_policy_document.allow_EDIX_user_access_additional_policies.json,
-    data.aws_iam_policy_document.allow_file_transfer_role_access_additional_policies.json,
-    data.aws_iam_policy_document.allow_audio_copy_role_access_additional_policies.json
+  additional_policy_statements   = [   data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,    
+    data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json,
+    data.aws_iam_policy_document.allow_file_transfer_role_access_CallRecordings_policies.json,
+    data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
   ]
   
 }
 
 
-  data "aws_iam_policy_document" "call_recordings_deny_role_access_additional_policies" {
+  data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
   statement {
     sid       = "DenyOtherAccessToCallRecordings"
     effect    = "Deny"
@@ -674,7 +694,7 @@ module "ccc_callrecordings_bucket" {
 }
 
   
-data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
+data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" {
     statement {
         sid    = "AllowEdixUserAccessToCallRecordings"
         effect = "Allow"
@@ -690,7 +710,7 @@ data "aws_iam_policy_document" "allow_EDIX_user_access_additional_policies" {
     }
 }
 
-data "aws_iam_policy_document" "allow_file_transfer_role_access_additional_policies" {
+data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_policies" {
   statement {
     sid    = "AllowFileTransferRoleToAccessToCallRecordings"
     effect = "Allow"
@@ -710,7 +730,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_additional_polic
 }
 
 
-data "aws_iam_policy_document" "allow_audio_copy_role_access_additional_policies" {
+data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_policies" {
   statement {
     sid    = "AllowAudioCopyRoleToAccessToCallRecordings"
     effect = "Allow"
