@@ -584,8 +584,6 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_verified_clean_p
 
 ########################Done verified_clean
 
-# Only specific File Transfer IAM Role Access is required to allow/deny rest , for ccc_dirty_bucket
-
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
   version                        = "10.0.1"
@@ -633,7 +631,8 @@ module "ccc_dirty_bucket" {
     ]
   }]
   additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_dirty_policies.json,
-   data.aws_iam_policy_document.allow_file_transfer_role_access_dirty_policies.json] 
+   data.aws_iam_policy_document.allow_file_transfer_role_access_dirty_policies.json,
+   data.aws_iam_policy_document.allow_comprehend_role_access_dirty_policies] 
 }
 
 data "aws_iam_policy_document" "deny_other_access_dirty_policies" {
@@ -646,7 +645,7 @@ data "aws_iam_policy_document" "deny_other_access_dirty_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.file_transfer_lambda_role_arn, var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -671,6 +670,25 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_dirty_policies" 
     principals {
       type        = "AWS"
       identifiers = [ var.file_transfer_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_comprehend_role_access_dirty_policies" {
+  statement {
+    sid    = "AllowComprehendRoleToAccessToDirty"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_dirty_bucket.s3_bucket_arn}/*",
+      "${module.ccc_dirty_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.comprehend_lambda_role_arn]
     }
   }
 }
