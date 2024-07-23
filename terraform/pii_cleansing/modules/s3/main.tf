@@ -877,7 +877,7 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_maciefindings_polic
 
 ########################Done maciefindings
 
-# Source for Glue, No specific IAM Role Access is required to allow/deny
+# Source for Glue
 
 module "ccc_piimetadata_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -925,8 +925,50 @@ module "ccc_piimetadata_bucket" {
     },
     ]
   }]
+  additional_policy_statements   = [
+    data.aws_iam_policy_document.deny_other_access_piimetadata_policies.json,
+    data.aws_iam_policy_document.allow_replication_role_access_piimetadata_policies.json] 
+
 }
 
+data "aws_iam_policy_document" "deny_other_access_piimetadata_policies" {
+  statement {
+    sid       = "DenyOtherAccessToPiimetadata"
+    effect    = "Deny"
+    resources = ["${module.ccc_piimetadata_bucket.s3_bucket_arn}/*"]
+    actions   = ["s3:*"]
+
+    condition {
+      test     = "StringNotEquals"
+      variable = "aws:PrincipalArn"
+      values   = [var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
+    }
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_replication_role_access_piimetadata_policies" {
+  statement {
+    sid    = "AllowReplicationRoleToAccessToPiimetadata"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_piimetadata_bucket.s3_bucket_arn}/*",
+      "${module.ccc_piimetadata_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.nla_replication_role_arn]
+    }
+  }
+}
 
 
 module "ccc_athenaresults_bucket" {
