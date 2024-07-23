@@ -81,7 +81,8 @@ module "ccc_unrefined_call_data_bucket" {
    data.aws_iam_policy_document.allow_audio_copy_role_access_unrefined_policies.json,
    data.aws_iam_policy_document.allow_file_transfer_role_access_unrefined_policies.json,
    data.aws_iam_policy_document.allow_transcribe_role_access_unrefined_policies.json,
-   data.aws_iam_policy_document.allow_custom_transcribe_role_access_unrefined_policies.json]
+   data.aws_iam_policy_document.allow_custom_transcribe_role_access_unrefined_policies.json,
+   data.aws_iam_policy_document.allow_replication_role_access_unrefined_policies.json]
 }
 
 data "aws_iam_policy_document" "deny_other_access_unrefined_policies" {
@@ -94,7 +95,7 @@ data "aws_iam_policy_document" "deny_other_access_unrefined_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.custom_transcribe_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -180,6 +181,25 @@ data "aws_iam_policy_document" "allow_custom_transcribe_role_access_unrefined_po
     principals {
       type        = "AWS"
       identifiers = [var.custom_transcribe_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_replication_role_access_unrefined_policies" {
+  statement {
+    sid    = "AllowReplicationRoleToAccessToUnrefined"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}/*",
+      "${module.ccc_unrefined_call_data_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.nla_replication_role_arn]
     }
   }
 }
@@ -970,6 +990,8 @@ data "aws_iam_policy_document" "allow_replication_role_access_piimetadata_polici
   }
 }
 
+#################### Done Pii_metadata
+
 
 module "ccc_athenaresults_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -1098,7 +1120,8 @@ module "ccc_insights_audio_bucket" {
   additional_policy_statements   = [data.aws_iam_policy_document.deny_other_access_audio_policies.json,
    data.aws_iam_policy_document.allow_insights_assumed_role_access_audio_policies.json,
    data.aws_iam_policy_document.allow_file_transfer_role_access_audio_policies.json,
-   data.aws_iam_policy_document.allow_presignedURL_access_audio_policies.json]
+   data.aws_iam_policy_document.allow_presignedURL_access_audio_policies.json,
+   data.aws_iam_policy_document.allow_replication_role_access_audio_policies.json]
 }
 
 data "aws_iam_policy_document" "deny_other_access_audio_policies" {
@@ -1111,7 +1134,7 @@ data "aws_iam_policy_document" "deny_other_access_audio_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -1188,6 +1211,24 @@ data "aws_iam_policy_document" "allow_presignedURL_access_audio_policies" {
   }
 }
 
+data "aws_iam_policy_document" "allow_replication_role_access_audio_policies" {
+  statement {
+    sid    = "AllowReplicationRoleToAccessToAudio"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}/*",
+      "${module.ccc_insights_audio_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.nla_replication_role_arn]
+    }
+  }
+}
 
 #############################Done Audio
 
@@ -1236,14 +1277,15 @@ module "ccc_callrecordings_bucket" {
     ]
   }]
 
-  additional_policy_statements   = [ data.aws_iam_policy_document.allow_EDIX_user_access_CallRecordings_policies.json,
-    data.aws_iam_policy_document.deny_other_access_CallRecordings_policies.json,
-    data.aws_iam_policy_document.allow_file_transfer_role_access_CallRecordings_policies.json,
-    data.aws_iam_policy_document.allow_audio_copy_role_access_CallRecordings_policies.json
+  additional_policy_statements   = [ data.aws_iam_policy_document.allow_EDIX_user_access_callRecordings_policies.json,
+    data.aws_iam_policy_document.deny_other_access_callRecordings_policies.json,
+    data.aws_iam_policy_document.allow_file_transfer_role_access_callRecordings_policies.json,
+    data.aws_iam_policy_document.allow_audio_copy_role_access_callRecordings_policies.json,
+    data.aws_iam_policy_document.allow_replication_role_access_callRecordings_policies.json
   ]  
 }
 
-data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
+data "aws_iam_policy_document" "deny_other_access_callRecordings_policies" {
   statement {
     sid       = "DenyOtherAccessToCallRecordings"
     effect    = "Deny"
@@ -1253,7 +1295,7 @@ data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn , var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn ,
+      values   = [var.audio_copy_lambda_role_arn , var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn ,
         "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
@@ -1264,7 +1306,7 @@ data "aws_iam_policy_document" "deny_other_access_CallRecordings_policies" {
   }
 }
 
-data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" {
+data "aws_iam_policy_document" "allow_EDIX_user_access_callRecordings_policies" {
     statement {
         sid    = "AllowEdixUserAccessToCallRecordings"
         effect = "Allow"
@@ -1280,7 +1322,7 @@ data "aws_iam_policy_document" "allow_EDIX_user_access_CallRecordings_policies" 
     }
 }
 
-data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_policies" {
+data "aws_iam_policy_document" "allow_file_transfer_role_access_callRecordings_policies" {
   statement {
     sid    = "AllowFileTransferRoleToAccessToCallRecordings"
     effect = "Allow"
@@ -1300,7 +1342,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_CallRecordings_p
 }
 
 
-data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_policies" {
+data "aws_iam_policy_document" "allow_audio_copy_role_access_callRecordings_policies" {
   statement {
     sid    = "AllowAudioCopyRoleToAccessToCallRecordings"
     effect = "Allow"
@@ -1318,6 +1360,25 @@ data "aws_iam_policy_document" "allow_audio_copy_role_access_CallRecordings_poli
     principals {
       type        = "AWS"
       identifiers = [var.audio_copy_lambda_role_arn]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "allow_replication_role_access_callRecordings_policies" {
+  statement {
+    sid    = "AllowReplicationRoleToAccessToCallRecordings"
+    effect = "Allow"
+
+    resources = [
+      "${module.ccc_callrecordings_bucket.s3_bucket_arn}/*",
+      "${module.ccc_callrecordings_bucket.s3_bucket_arn}"
+    ]
+
+    actions = [ "s3:*" ]
+
+    principals {
+      type        = "AWS"
+      identifiers = [var.nla_replication_role_arn]
     }
   }
 }
