@@ -14,11 +14,14 @@ def lambda_handler(event, context):
             'Bucket': bucket_name,
             'Key': file_name
         }
-        destination_bucket = 'sdge-dtdes-dev-wus2-s3-nla-callrecordings'
-        destFileObjectKey = 'EDIX_AUDIO/' + file_name
+        if 'unrefined' in bucket_name:
+            destination_bucket = 'sdge-dtdes-dev-wus2-s3-nla-callrecordings'
+            destFileObjectKey = 'EDIX_AUDIO/' + file_name
+        else:
+            destination_bucket = 'sdge-dtdes-dev-wus2-s3-nla-callrecordings'
+            destFileObjectKey = 'EDIX_METADATA/' + file_name
         
         s3.copy(copy_source, destination_bucket, destFileObjectKey)
-        
         logger.info(f"File is copied from '{bucket_name}/{file_name}' to '{destination_bucket}/{destFileObjectKey}'.")
         
         s3.delete_object(Bucket=bucket_name, Key=file_name)
@@ -26,3 +29,4 @@ def lambda_handler(event, context):
         
     except Exception as e:
         logger.info(e)
+
