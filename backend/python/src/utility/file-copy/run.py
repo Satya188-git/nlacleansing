@@ -30,3 +30,16 @@ def lambda_handler(event, context):
     except Exception as e:
         logger.info(e)
 
+'''
+Role - Audio-Copy-Role
+FileTestEvent-
+{
+  "bucket": "sdge-dtdes-dev-wus2-s3-nla-pii-metadata",
+  "file": "EDIX_METADATA/NLA_ERMyAcctInq_2023-10-23.csv"
+}
+MetadataTestEvent-
+{
+  "bucket": "sdge-dtdes-dev-wus2-s3-nla-pii-metadata",
+  "file": "EDIX_METADATA/NLA_ERMyAcctInq_2023-10-23.csv"
+}
+'''
