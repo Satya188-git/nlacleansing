@@ -275,6 +275,7 @@ parameters:
 extends:
   template: Pipeline-Templates/Terraform-Only/Pipeline/Pipeline.yml@DevSecOpsYAML
   parameters:
+    UseOIDC: true
     DestinationCloud: ${{ parameters.DestinationCloud }}
     # IncludeContainer: ${{ parameters.IncludeContainer }}
     # ContainerInfo: ${{ parameters.ContainerInfo }}
