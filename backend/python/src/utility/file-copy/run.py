@@ -34,8 +34,8 @@ def lambda_handler(event, context):
 Role - Audio-Copy-Role
 FileTestEvent-
 {
-  "bucket": "sdge-dtdes-dev-wus2-s3-nla-pii-metadata",
-  "file": "EDIX_METADATA/NLA_ERMyAcctInq_2023-10-23.csv"
+  "bucket": "sdge-dtdes-dev-wus2-s3-nla-unrefined",
+  "file": "NLA_1245624_7376977128867301215_Summed.wav"
 }
 MetadataTestEvent-
 {
