@@ -319,6 +319,25 @@ module "pii-daily-monitoring-role" {
   )
 }
 
+// create IAM role for file_transfer lambda
+module "file_transfer_lambda_role" {
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.2" # version 			= "10.0.2-prerelease" # version 			= "10.0.1"
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-file-transfer-lambda-role"
+  description       = "IAM role for file transfer lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-file-transfer-lambda-role"
+    },
+  )
+}
+
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
@@ -820,4 +839,20 @@ resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_kms_full_
 resource "aws_iam_role_policy_attachment" "AmazonDynamoDBFullAccess3" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
   role       = module.pii-daily-monitoring-role.name
+}
+
+
+resource "aws_iam_role_policy_attachment" "file_transfer_AWSLambdaBasicExecutionRole" {
+  role       = module.file_transfer_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "file_transfer_kms_full_access" {
+  role       = module.file_transfer_lambda_role.name
+  policy_arn = aws_iam_policy.kms_full_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "file_transfer_s3_put_read" {
+  role       = module.file_transfer_lambda_role.name
+  policy_arn = aws_iam_policy.s3_put_read.arn
 }

@@ -300,6 +300,13 @@ module "s3" {
   kms_key_ccc_athenaresults_arn     = module.kms.kms_key_ccc_athenaresults_arn
   macie_info_trigger_arn            = module.lambda.macie_info_trigger_arn
   nla_replication_role_arn          = module.iam.nla_replication_role_arn
+  insights_assumed_role_arn     	= module.iam.insights_assumed_role_arn
+  audio_copy_lambda_role_arn		= module.iam.audio_copy_lambda_role_arn
+  transcribe_lambda_role_arn 		= module.iam.transcribe_lambda_role_arn
+  custom_transcribe_lambda_role_arn = module.iam.custom_transcribe_lambda_role_arn
+  comprehend_lambda_role_arn        = module.iam.comprehend_lambda_role_arn
+  trigger_macie_lambda_role_arn		= module.iam.trigger_macie_lambda_role_arn
+  file_transfer_lambda_role_arn		= module.iam.file_transfer_lambda_role_arn
   s3bucket_insights_replication_arn = var.s3bucket_insights_replication_arn
   account_id                        = local.account_id
   insights_account_id               = var.insights_account_id
