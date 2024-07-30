@@ -1492,6 +1492,45 @@ module "ccc_callaudioaccesslogs_bucket" {
   }]
 }
 
+# access denied bucket
+module "ccc_nla_access_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "10.0.1"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-nla-access"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-nla-access"
+    },
+  )
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256" 
+      }
+    }
+  }
+
+  lifecycle_rule = [{
+    id      = "transition-rule"
+    enabled = true
+    transition = [{
+      days          = 180
+      storage_class = "GLACIER"
+    },
+    ]
+  }]
+}
 
 
 #source to target replication configurations
@@ -1694,6 +1733,12 @@ resource "aws_s3_bucket_notification" "ccc_callaudioaccesslogs_bucket_notificati
   eventbridge = true
 }
 
+# enabling eventbridge rule on access denied bucket.
+resource "aws_s3_bucket_notification" "ccc_nla_access_bucket_notification" {
+  bucket      = module.ccc_nla_access_bucket.s3_bucket_id
+  eventbridge = true
+}
+
 
 resource "aws_s3_object" "edix_audio_prefix" {
   key        = "EDIX_AUDIO/"
@@ -1720,6 +1765,48 @@ resource "aws_s3_object" "edix_supervisor_prefix" {
 resource "aws_s3_object" "access_logs_prefix" {
   key        = "log/"
   bucket     = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "callrecording_logs_prefix" {
+  key        = "callrecordinglogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "transciption_logs_prefix" {
+  key        = "transcriptionlogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_logs_prefix" {
+  key        = "callaudiologs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_logs_prefix" {
+  key        = "unrefinedlogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_logs_prefix" {
+  key        = "cleanedlogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_logs_prefix" {
+  key        = "verifiedcleanedlogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_logs_prefix" {
+  key        = "dirtylogs/"
+  bucket     = module.ccc_nla_access_bucket.s3_bucket_id
   source     = "/dev/null"
 }
 
@@ -1864,16 +1951,66 @@ resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
 }
 
 # Below Part added for S3-Presigned-URL
-resource "aws_s3_bucket_acl" "ccc_callaudioaccesslogs_bucket_acl" {
-  depends_on = [ module.ccc_callaudioaccesslogs_bucket.s3_bucket_id ]
-  bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
-  acl    = "log-delivery-write"  
-}
+# resource "aws_s3_bucket_acl" "ccc_callaudioaccesslogs_bucket_acl" {
+#   depends_on = [ module.ccc_callaudioaccesslogs_bucket.s3_bucket_id ]
+#   bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+#   acl    = "log-delivery-write"  
+# }
 
  
 
-resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
+# resource "aws_s3_bucket_logging" "ccc_callaudioaccesslogs_bucket_logging" {
+#   bucket = module.ccc_insights_audio_bucket.s3_bucket_id
+#   target_bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
+#   target_prefix = "log/"
+# }
+
+#Below part is to add serverl logging permissions to nla-access bucket
+resource "aws_s3_bucket_acl" "ccc_nla_access_bucket_acl" {
+  depends_on = [ module.ccc_nla_access_bucket.s3_bucket_id ]
+  bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  acl    = "log-delivery-write"  
+}
+
+#Below part is for access denied notification
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
   bucket = module.ccc_insights_audio_bucket.s3_bucket_id
-  target_bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
-  target_prefix = "log/"
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "callaudiolog/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_callrecordings_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "callrecordinglogs/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_initial_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "transcriptionlogs/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_unrefined_call_data_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "unrefinedlogs/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_cleaned_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "cleanedlogs/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_verified_clean_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "verifiedcleanedlogs/"
+}
+
+resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+  bucket = module.ccc_dirty_bucket.s3_bucket_id
+  target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
+  target_prefix = "dirtylogs/"
 }

@@ -81,6 +81,8 @@ module "eventbridge" {
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
   ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
   sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
+  ccc_nla_access_bucket_id          = module.s3.ccc_nla_access_bucket_id
+  ccc_access_denied_notification_lambda_arn = module.lambda.ccc_access_denied_notification_lambda_arn
 }
 
 module "dynamodb" {
@@ -160,6 +162,7 @@ module "iam" {
   ccc_insights_audio_bucket_arn      = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn      = module.s3.ccc_callrecordings_bucket_arn
   audit_lambda_arn      			 = module.lambda.ccc_audit_call_lambda_arn
+  access_denied_notification_topic_arn = module.sns.access_denied_notification_sns.topic_arn
 }
 
 module "kms" {
@@ -252,6 +255,8 @@ module "lambda" {
   callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
   ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
   ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
+  ccc_access_denied_notification_lambda_role_arn         = module.iam.ccc_access_denied_notification_lambda_role_arn
+  ccc_access_denied_notification_logs_s3_event_rule_arn  = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
 }
 
 module "macie" {
@@ -334,6 +339,7 @@ module "sns" {
   audioaccessnotificationemail		= var.audioaccessnotificationemail
   supervisordatanotificationemail	= var.supervisordatanotificationemail  
   unit                              = var.unit
+  nlaaudioaccessnotificationemail   = var.nlaaudioaccessnotificationemail
 }
 
 module "cloudwatch" {

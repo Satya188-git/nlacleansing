@@ -309,12 +309,12 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_access_logs_s3_event_rule" {
   "detail": {
     "bucket": {
       "name": [
-        "${var.ccc_callaudioaccesslogs_bucket_id}"
+        "${var.ccc_nla_access_bucket_id}"
       ]
     },
     "object": {
         "key": [{
-          "prefix": "log/"
+          "prefix": "callaudiolog/"
         }]
     }
   }
@@ -382,6 +382,49 @@ resource "aws_cloudwatch_event_rule" "ccc_pii_maciescan_scheduler_rule" {
   ) 
 }
 
+#Below rule is for access denied notification lambda
+resource "aws_cloudwatch_event_rule" "ccc_access_denied_notification_logs_s3_event_rule" {
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-nla-access-denied-notification-event-rule"
+  description   = "activate access-denied-notification-lambda when s3 access log object is created into bucket nla-access"
+  event_pattern = <<EOF
+{
+  "source": [
+    "aws.s3"
+  ],
+  "detail-type": [
+    "Object Created"
+  ],
+  "detail": {
+    "bucket": {
+      "name": [
+        "${var.ccc_nla_access_bucket_id}"
+      ]
+    },
+    "object": {
+      "key": [{
+        "prefix": "callrecordinglogs/"
+      }, {
+        "prefix": "transcriptionlogs/"
+      }, {
+        "prefix": "callaudiologs/"
+      }, {
+        "prefix": "unrefinedlogs/"
+      },{
+        "prefix": "verifiedcleanedlogs/"
+      },{
+        "prefix": "dirtylogs/"
+      }]
+    }
+  }
+}
+EOF
+
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-nla-access-denied-notification-event-rule"
+    },
+  )
+}
 
 # select lambda target for eventbridge rule
 resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target1" {
@@ -452,6 +495,11 @@ resource "aws_cloudwatch_event_target" "audio_access_logs_to_cw_lambda_target" {
 resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_target" {
   arn  = var.macie_scan_trigger_arn
   rule = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.name
+}
+
+resource "aws_cloudwatch_event_target" "access_denied_notification_lambda_target" {
+  arn  = var.ccc_access_denied_notification_lambda_arn
+  rule = aws_cloudwatch_event_rule.ccc_access_denied_notification_logs_s3_event_rule.name
 }
 
 # select SNS target for eventbridge rule

@@ -141,3 +141,8 @@ variable "audit_lambda_arn" {
   type        = string
   description = "audit_lambda_arn"
 }
+
+variable "access_denied_notification_topic_arn" {
+  type        = string
+  description = "access_denied_notification_arn"
+}

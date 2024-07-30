@@ -294,3 +294,13 @@ variable "customercallcenterpiimaciescanscheduler_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiimaciescanscheduler_s3_event_rule_arn"
 }
+
+variable "ccc_access_denied_notification_lambda_role_arn" {
+  type        = string
+  description = "ccc_access_denied_notification_lambda_role_arn"
+}
+
+variable "ccc_access_denied_notification_logs_s3_event_rule_arn" {
+  type        = string
+  description = "ccc_access_denied_notification_logs_s3_event_rule_arn"
+}
