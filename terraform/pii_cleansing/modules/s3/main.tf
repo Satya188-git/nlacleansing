@@ -1786,25 +1786,25 @@ resource "aws_s3_object" "audio_logs_prefix" {
   source     = "/dev/null"
 }
 
-resource "aws_s3_object" "audio_logs_prefix" {
+resource "aws_s3_object" "unrefined_logs_prefix" {
   key        = "unrefinedlogs/"
   bucket     = module.ccc_nla_access_bucket.s3_bucket_id
   source     = "/dev/null"
 }
 
-resource "aws_s3_object" "audio_logs_prefix" {
+resource "aws_s3_object" "cleaned_logs_prefix" {
   key        = "cleanedlogs/"
   bucket     = module.ccc_nla_access_bucket.s3_bucket_id
   source     = "/dev/null"
 }
 
-resource "aws_s3_object" "audio_logs_prefix" {
+resource "aws_s3_object" "verifiedcleaned_logs_prefix" {
   key        = "verifiedcleanedlogs/"
   bucket     = module.ccc_nla_access_bucket.s3_bucket_id
   source     = "/dev/null"
 }
 
-resource "aws_s3_object" "audio_logs_prefix" {
+resource "aws_s3_object" "dirty_logs_prefix" {
   key        = "dirtylogs/"
   bucket     = module.ccc_nla_access_bucket.s3_bucket_id
   source     = "/dev/null"
