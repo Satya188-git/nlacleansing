@@ -8,3 +8,4 @@ s3bucket_insights_replication_arn = "arn:aws:s3:::sdge-dmeti-dev-wus2-s3-nla-rep
 insights_s3kms_arn                = "arn:aws:kms:us-west-2:713342716921:key/789c07aa-352b-49ed-ae62-f6960eb451da"
 audioaccessnotificationemail	  = "Ksaha@sdgecontractor.com"
 supervisordatanotificationemail	  = "Ksaha@sdgecontractor.com"
+nlaaudioaccessnotificationemail   = "SShirsat@sdgecontractor.com"
