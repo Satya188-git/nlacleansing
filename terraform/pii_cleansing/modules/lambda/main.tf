@@ -485,7 +485,7 @@ module "ccc_access_denied_notification_lambda" {
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "pipeline-artifact/ccc_access_denied_notification.zip"
+    key    = "pipeline-artifact/ccc_access_denied_notification_lambda.zip"
   }
 
   tags = merge(local.tags,
