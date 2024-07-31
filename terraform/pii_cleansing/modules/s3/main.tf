@@ -1973,43 +1973,43 @@ resource "aws_s3_bucket_acl" "ccc_nla_access_bucket_acl" {
 }
 
 #Below part is for access denied notification
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_insights_audio_bucket_logging" {
   bucket = module.ccc_insights_audio_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "callaudiolog/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_callrecordings_bucket_logging" {
   bucket = module.ccc_callrecordings_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "callrecordinglogs/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_initial_bucket_logging" {
   bucket = module.ccc_initial_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "transcriptionlogs/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_unrefined_call_data_bucket_logging" {
   bucket = module.ccc_unrefined_call_data_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "unrefinedlogs/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_cleaned_bucket_logging" {
   bucket = module.ccc_cleaned_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "cleanedlogs/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_verified_clean_bucket_logging" {
   bucket = module.ccc_verified_clean_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "verifiedcleanedlogs/"
 }
 
-resource "aws_s3_bucket_logging" "ccc_nla_access_bucket_logging" {
+resource "aws_s3_bucket_logging" "ccc_dirty_bucket_logging" {
   bucket = module.ccc_dirty_bucket.s3_bucket_id
   target_bucket = module.ccc_nla_access_bucket.s3_bucket_id
   target_prefix = "dirtylogs/"
