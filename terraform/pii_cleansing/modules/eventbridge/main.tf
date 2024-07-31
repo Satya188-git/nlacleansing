@@ -384,7 +384,7 @@ resource "aws_cloudwatch_event_rule" "ccc_pii_maciescan_scheduler_rule" {
 
 #Below rule is for access denied notification lambda
 resource "aws_cloudwatch_event_rule" "ccc_access_denied_notification_logs_s3_event_rule" {
-  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-nla-access-denied-notification-event-rule"
+  name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-access-denied-event-rule"
   description   = "activate access-denied-notification-lambda when s3 access log object is created into bucket nla-access"
   event_pattern = <<EOF
 {
@@ -421,7 +421,7 @@ EOF
 
   tags = merge(local.tags,
     {
-      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-nla-access-denied-notification-event-rule"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-access-denied-event-rule"
     },
   )
 }
