@@ -13,6 +13,7 @@ output "access-denied-topic-arn" {
   description = "ARN for access-denied-ana topic's email subscription"
 }
 
+
 output "access_denied_notification_topic_arn" {
   value       = module.access_denied_notification_sns.sns_topic_arn
   description = "ARN for access-denied-ana topic's email subscription"
