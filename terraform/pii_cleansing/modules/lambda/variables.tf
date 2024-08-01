@@ -304,3 +304,8 @@ variable "ccc_access_denied_notification_logs_s3_event_rule_arn" {
   type        = string
   description = "ccc_access_denied_notification_logs_s3_event_rule_arn"
 }
+
+variable "access_denied_notification_topic_arn" {
+  type        = string
+  description = "access_denied_notification_arn"
+}

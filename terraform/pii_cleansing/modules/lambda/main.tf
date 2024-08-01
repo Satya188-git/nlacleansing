@@ -478,7 +478,7 @@ module "ccc_access_denied_notification_lambda" {
   update_role                       = false
 
   environment_variables = {
-    # LOG_GROUP           = var.callaudioaccess_log_group_name
+    SNS_TOPIC_ARN           = var.access_denied_notification_topic_arn
     LOG_STREAM 			= "logstream"
     DEBUG               = "disabled"
     ENV                 = var.environment_code
