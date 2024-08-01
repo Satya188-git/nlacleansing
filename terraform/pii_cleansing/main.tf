@@ -257,6 +257,7 @@ module "lambda" {
   ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
   ccc_access_denied_notification_lambda_role_arn         = module.iam.ccc_access_denied_notification_lambda_role_arn
   ccc_access_denied_notification_logs_s3_event_rule_arn  = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
+  access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
 }
 
 module "macie" {
