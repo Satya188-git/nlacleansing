@@ -162,7 +162,7 @@ module "iam" {
   ccc_insights_audio_bucket_arn      = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn      = module.s3.ccc_callrecordings_bucket_arn
   audit_lambda_arn      			 = module.lambda.ccc_audit_call_lambda_arn
-  access_denied_notification_topic_arn = module.sns.access_denied_notification_topic_arn
+  access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
 }
 
 module "kms" {
