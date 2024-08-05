@@ -417,7 +417,7 @@ module "ccc_file_transfer_lambda" {
   application_use  = "file-transfer"
 
   description                       = "nla file transfer lambda"
-  handler                           = "run.lambda_handler"gi
+  handler                           = "run.lambda_handler"
   runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
