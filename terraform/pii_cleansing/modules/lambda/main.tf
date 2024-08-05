@@ -434,10 +434,10 @@ module "ccc_file_transfer_lambda" {
   update_role                       = false
 
   environment_variables = {
-    DESTINATION_BUCKET           = var.ccc_source_bucket_id
-    KEYS_TO_COPY                 = var.ccc_destination_bucket_id
+    DESTINATION_BUCKET           = ""
+    KEYS_TO_COPY                 = ""
     DELETE_RESPONSE              = ""
-    SOURCE_BUCKET                = "final_outputs"
+    SOURCE_BUCKET                = ""
 
   }
   s3_existing_package = {
