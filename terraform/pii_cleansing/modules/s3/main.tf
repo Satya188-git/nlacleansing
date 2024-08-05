@@ -1951,7 +1951,7 @@ resource "aws_s3_bucket_acl" "ccc_insights_audio_bucket_acl" {
 }
 
 #Below part is to add serverl logging permissions to nla-access-logs bucket
-resource "aws_s3_bucket_acl" "ccc_nla_access_bucket_acl" {
+resource "aws_s3_bucket_acl" "ccc_nla_access_logs_bucket_acl" {
   depends_on = [ module.ccc_nla_access_logs_bucket.s3_bucket_id ]
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   acl    = "log-delivery-write"  
