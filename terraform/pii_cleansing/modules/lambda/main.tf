@@ -450,6 +450,7 @@ module "ccc_file_transfer_lambda" {
     },
   )
 }
+
 # Lambda for forwarding call audio s3 access logs to CW logs
 module "ccc_audio_access_logs_to_cw_lambda" {
   depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
