@@ -22,7 +22,6 @@ module "layers" {
   source = "./layers"
 }
 
-
 # CustomerCallCenter-Lambda-Transcribe
 module "ccc_transcribe_lambda" {
   depends_on       = [var.custom_transcribe_lambda_role_arn]
@@ -418,7 +417,7 @@ module "ccc_file_transfer_lambda" {
   application_use  = "file-transfer"
 
   description                       = "nla file transfer lambda"
-  handler                           = "run.lambda_handler"
+  handler                           = "run.lambda_handler"gi
   runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
