@@ -81,7 +81,7 @@ module "eventbridge" {
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
   ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
   sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
-  ccc_nla_access_bucket_id          = module.s3.ccc_nla_access_bucket_id
+  ccc_nla_access_logs_bucket_id          = module.s3.ccc_nla_access_logs_bucket_id
   ccc_access_denied_notification_lambda_arn = module.lambda.ccc_access_denied_notification_lambda_arn
 }
 

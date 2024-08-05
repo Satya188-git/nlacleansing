@@ -18,7 +18,6 @@ def lambda_handler(event, context):
         s3_client = boto3.client("s3")
         response = s3_client.get_object(Bucket=s3_bucket, Key=s3_key)
         content = response["Body"].read().decode("utf-8")
-        logger.info(content)
         check_access_denied(content, s3_bucket, s3_key)
     except Exception as e:
         logger.error(str(e))
@@ -43,9 +42,8 @@ def send_sns_notification(message):
     logger.info(f"sns topic: {sns_topic}")
     try:
         response = sns_client.publish(
-            TopicArn=sns_topic, Message=message, Subject="Access Denied Alert"
+            TopicArn=sns_topic, Message=message, Subject="NLA : S3 Access Denied Alert."
         )
     except Exception as e:
         logger.info("error in publishing msg")
         logger.error(str(e))
-    print(f"Notification sent: {response['Message']}")

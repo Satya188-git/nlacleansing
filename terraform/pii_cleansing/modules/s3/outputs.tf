@@ -102,7 +102,7 @@ output "ccc_callaudioaccesslogs_bucket_id" {
   value       = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
 }
 
-output "ccc_nla_access_bucket_id" {
-  description = "ccc_nla_access_bucket S3 bucket ID"
-  value       = module.ccc_nla_access_bucket.s3_bucket_id
+output "ccc_nla_access_logs_bucket_id" {
+  description = "ccc_nla_access_logs_bucket S3 bucket ID"
+  value       = module.ccc_nla_access_logs_bucket.s3_bucket_id
 }

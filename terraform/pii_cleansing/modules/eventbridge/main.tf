@@ -309,7 +309,7 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_access_logs_s3_event_rule" {
   "detail": {
     "bucket": {
       "name": [
-        "${var.ccc_nla_access_bucket_id}"
+        "${var.ccc_nla_access_logs_bucket_id}"
       ]
     },
     "object": {
@@ -397,7 +397,7 @@ resource "aws_cloudwatch_event_rule" "ccc_access_denied_notification_logs_s3_eve
   "detail": {
     "bucket": {
       "name": [
-        "${var.ccc_nla_access_bucket_id}"
+        "${var.ccc_nla_access_logs_bucket_id}"
       ]
     },
     "object": {

@@ -164,9 +164,9 @@ variable "ccc_audio_access_logs_to_cw_lambda_arn" {
 }
 
 #access-denied notification bucket
-variable "ccc_nla_access_bucket_id" {
+variable "ccc_nla_access_logs_bucket_id" {
   type        = string
-  description = "ccc_nla_access_bucket_id"
+  description = "ccc_nla_access_logs_bucket_id"
 }
 
 variable "ccc_access_denied_notification_lambda_arn" {

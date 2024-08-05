@@ -461,9 +461,9 @@ module "ccc_access_denied_notification_lambda" {
   region_code      = local.region_code
   application_use  = "access-denied-notification"
 
-  description                       = "forwarding call audio s3 access logs to CW logs"
+  description                       = "Sending sns notification for s3 access denied logs"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.9"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
