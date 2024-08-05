@@ -252,12 +252,13 @@ module "lambda" {
   nla_glue_database_name                                 = module.glue.nla_glue_database_name
   ccc_insights_audio_bucket_id                           = module.s3.ccc_insights_audio_bucket_id
   ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
-  callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
+  callaudioaccess_log_group_name    					           = module.cloudwatch.callaudioaccess_log_group_name
   ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
   ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
   ccc_access_denied_notification_lambda_role_arn         = module.iam.ccc_access_denied_notification_lambda_role_arn
   ccc_access_denied_notification_logs_s3_event_rule_arn  = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
   access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
+  file_transfer_lambda_role_arn                          = module.iam.file_transfer_lambda_role_arn
 }
 
 module "macie" {

@@ -658,13 +658,6 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_copy_lambda
   source_account = var.account_id
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_file_transfer_lambda" {
-  action         = "lambda:InvokeFunction"
-  function_name  = module.ccc_file_transfer_lambda.lambda_function_name
-  principal      = "events.amazonaws.com"
-  source_arn     = var.ccc_file_transfer_s3_event_rule_arn
-  source_account = var.account_id
-}
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_access_logs_to_cw_lambda" {
   statement_id   = "AllowExecutionFromCloudWatch"
