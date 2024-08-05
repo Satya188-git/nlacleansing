@@ -62,3 +62,8 @@ output "customercallcenterpiimaciescanscheduler_s3_event_rule_arn" {
   description = "customercallcenterpiimaciescanscheduler_s3_event_rule_arn"
   value       = aws_cloudwatch_event_rule.ccc_pii_maciescan_scheduler_rule.arn
 }
+
+output "ccc_access_denied_notification_logs_s3_event_rule_arn" {
+  description = "ccc_access_denied_notification_logs_s3_event_rule_arn"
+  value       = aws_cloudwatch_event_rule.ccc_access_denied_notification_logs_s3_event_rule.arn
+}

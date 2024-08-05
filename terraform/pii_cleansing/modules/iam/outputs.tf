@@ -75,3 +75,8 @@ output "insights_assumed_role_arn" {
   description = "insights_assumed_role arn"
   value       = module.insights_assumed_role.arn
 }
+
+output "ccc_access_denied_notification_lambda_role_arn" {
+  description = "ccc_access_denied_notification_lambda_role arn"
+  value       = module.ccc_access_denied_notification_lambda_role.arn
+}

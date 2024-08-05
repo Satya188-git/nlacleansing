@@ -338,6 +338,26 @@ module "file_transfer_lambda_role" {
   )
 }
 
+# IAM role for nla-access-denied lambda
+module "ccc_access_denied_notification_lambda_role" {
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.2" # version 			= "10.0.2-prerelease" # version 			= "10.0.1"
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-ccc-access-denied-notification"
+  description       = "IAM role for acess denied notification lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-access-denied-notification"
+    },
+  )
+}
+
+
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
   name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-replication-policy"
@@ -580,6 +600,29 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
     ]
 }
 EOF
+}
+
+# sns policy for access denied notification lambda
+resource "aws_iam_policy" "sns_subscribe_publish" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-sns-subscribe-publish"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect" = "Allow",
+          "Action" = [
+            "sns:Publish",
+            "sns:Subscribe",
+            "sns:CreateTopic",
+            "sns:ListTopics", 
+            "sns:SetTopicAttributes", 
+            "sns:DeleteTopic"
+          ],
+          "Resource" = "${var.access_denied_notification_topic_arn}"
+        }
+      ]
+  })
 }
 
 # Policies
@@ -855,4 +898,24 @@ resource "aws_iam_role_policy_attachment" "file_transfer_kms_full_access" {
 resource "aws_iam_role_policy_attachment" "file_transfer_s3_put_read" {
   role       = module.file_transfer_lambda_role.name
   policy_arn = aws_iam_policy.s3_put_read.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_AWSLambdaBasicExecutionRole" {
+  role       = module.ccc_access_denied_notification_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_kms_full_access" {
+  role       = module.ccc_access_denied_notification_lambda_role.name
+  policy_arn = aws_iam_policy.kms_full_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put_read" {
+  role       = module.ccc_access_denied_notification_lambda_role.name
+  policy_arn = aws_iam_policy.s3_put_read.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_sns_subscribe_publish" {
+  role       = module.ccc_access_denied_notification_lambda_role.name
+  policy_arn = aws_iam_policy.sns_subscribe_publish.arn
 }

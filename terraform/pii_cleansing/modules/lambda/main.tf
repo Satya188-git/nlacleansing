@@ -450,6 +450,51 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   )
 }
 
+# Lambda to send email notification upon unauthorized download/access.
+module "ccc_access_denied_notification_lambda" {
+  depends_on       = [var.ccc_access_denied_notification_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "10.0.0"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "access-denied-notification"
+
+  description                       = "Sending sns notification for s3 access denied logs"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.11"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 180
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.ccc_access_denied_notification_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    SNS_TOPIC_ARN           = var.access_denied_notification_topic_arn
+    LOG_STREAM 			= "logstream"
+    DEBUG               = "disabled"
+    ENV                 = var.environment_code
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/ccc_access_denied_notification_lambda.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-access-denied-notification"
+    },
+  )
+}
+
 # Permissions for EventBridge
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_comprehend_lambda" {
   statement_id   = "AllowExecutionFromCloudWatch"
@@ -573,5 +618,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_access_logs
   function_name  = module.ccc_audio_access_logs_to_cw_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.ccc_audio_access_logs_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_access_denied_notification_lambda" {
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_access_denied_notification_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.ccc_access_denied_notification_logs_s3_event_rule_arn
   source_account = var.account_id
 }

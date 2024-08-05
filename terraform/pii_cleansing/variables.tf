@@ -132,5 +132,9 @@ variable "supervisordatanotificationemail" {
   description = "WFM Supervisor data upload notification email id"
 }
 
+variable "nlaaudioaccessnotificationemail" {
+  type        = string
+  description = "Access denied notification email id"
+}
 
 
