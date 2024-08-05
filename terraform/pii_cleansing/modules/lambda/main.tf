@@ -405,6 +405,51 @@ module "ccc_audio_copy_lambda" {
     },
   )
 }
+
+# Lambda for file transfer
+module "ccc_file_transfer_lambda" {
+  depends_on       = [var.file_transfer_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "10.0.0"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "file-transfer"
+
+  description                       = "nla file transfer lambda"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.11"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 180
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.file_transfer_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    DESTINATION_BUCKET           = var.ccc_source_bucket_id
+    KEYS_TO_COPY                 = var.ccc_destination_bucket_id
+    SOURCE_BUCKET                = "final_outputs"
+
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "ccc_file_transfer_lambda.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-file-transfer"
+    },
+  )
+}
 # Lambda for forwarding call audio s3 access logs to CW logs
 module "ccc_audio_access_logs_to_cw_lambda" {
   depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
@@ -609,6 +654,14 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_copy_lambda
   function_name  = module.ccc_audio_copy_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.ccc_audio_copy_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_file_transfer_lambda" {
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_file_transfer_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.ccc_file_transfer_s3_event_rule_arn
   source_account = var.account_id
 }
 
