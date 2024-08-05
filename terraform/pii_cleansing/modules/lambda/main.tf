@@ -436,6 +436,7 @@ module "ccc_file_transfer_lambda" {
   environment_variables = {
     DESTINATION_BUCKET           = var.ccc_source_bucket_id
     KEYS_TO_COPY                 = var.ccc_destination_bucket_id
+    DELETE_RESPONSE              = ""
     SOURCE_BUCKET                = "final_outputs"
 
   }
