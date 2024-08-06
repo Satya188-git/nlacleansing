@@ -122,7 +122,7 @@ jobs:
           rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_file_transfer_lambda"
           includeRootFolder: false
           archiveType: "zip"
-          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_file_transfer.zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_file_transfer_lambda.zip"
           replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         inputs:

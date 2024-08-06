@@ -484,6 +484,7 @@ resource "aws_iam_policy" "s3_put_read" {
             "s3:Get*",
             "s3:List*",
             "s3:Put*",
+            "s3:DeleteObject",
             "s3-object-lambda:Get*",
             "s3-object-lambda:List*",
             "s3-object-lambda:Put*"
