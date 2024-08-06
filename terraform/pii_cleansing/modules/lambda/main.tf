@@ -441,7 +441,7 @@ module "ccc_file_transfer_lambda" {
   }
   s3_existing_package = {
     bucket = var.tf_artifact_s3
-    key    = "ccc_file_transfer_lambda.zip"
+    key    = "pipeline-artifact/ccc_file_transfer_lambda.zip"
   }
 
   tags = merge(local.tags,
