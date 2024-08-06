@@ -27,12 +27,8 @@ def lambda_handler(event, context):
                 s3.delete_object(Bucket=source_bucket, Key=source_key)
                 
                 logger.info(f"File{source_key} deleted from source_bucket")
+
                 
-            elif delete_response.lower() == 'no':
-                logger.info(f"File{key} not deleted from source_bucket")
-            else: 
-                logger.error("Invalid response. please provide 'yes' or 'no',")
-                    
         except Exception as e:
                 logger.error(f"Error deleting file:{str(e)}")
             
