@@ -21,9 +21,8 @@ def lambda_handler(event, context):
             # Copy object to the destination bucket
             s3.copy_object(CopySource={'Bucket': source_bucket, 'Key': source_key}, Bucket=destination_bucket, Key=destination_key)
             logger.info(f"file{source_key} copied to {destination_key}")
-            
-              ##delete_marker = input(f" Do you want to delete {key} from {source_bucket}? (yes/no):")
-            
+           
+              ##delete_marker = input(f" Do you want to delete {key} from {source_bucket}? (yes/no):")            
             if delete_marker.lower() == 'yes':
                 s3.delete_object(Bucket=source_bucket, Key=source_key)
                 
