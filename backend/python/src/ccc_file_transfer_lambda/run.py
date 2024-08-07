@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     source_bucket = event['source_bucket']
     destination_bucket = event['destination_bucket']
     keys_to_copy = event['keys_to_copy']
-    delete_response = event['delete_response']
+    delete_marker = event['delete_marker']
     destination_prefix = event['destination_prefix']
     source_prefix = event['source_prefix']
     for key in keys_to_copy:
@@ -21,9 +21,9 @@ def lambda_handler(event, context):
             s3.copy_object(CopySource={'Bucket': source_bucket, 'Key': source_key}, Bucket=destination_bucket, Key=destination_key)
             logger.info(f"file{source_key} copied to {destination_key}")
             
-              ##delete_response = input(f" Do you want to delete {key} from {source_bucket}? (yes/no):")
+              ##delete_marker = input(f" Do you want to delete {key} from {source_bucket}? (yes/no):")
             
-            if delete_response.lower() == 'yes':
+            if delete_marker.lower() == 'yes':
                 s3.delete_object(Bucket=source_bucket, Key=source_key)
                 
                 logger.info(f"File{source_key} deleted from source_bucket")
