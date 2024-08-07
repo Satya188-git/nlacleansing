@@ -473,7 +473,7 @@ resource "aws_iam_policy" "audit_lambda_access_policy" {
 }
 
 resource "aws_iam_policy" "s3_put_read" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read-delete"
   policy = jsonencode(
     {
       "Version" = "2012-10-17",
