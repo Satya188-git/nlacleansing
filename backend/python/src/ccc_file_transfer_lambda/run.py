@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     source_prefix = event['source_prefix']
     for key in keys_to_copy:
         try:
-            # Create the destination key by combining the destination prefix with the file name
+            # Create the destination key by combining the destination prefix with the files name
             destination_key = destination_prefix + key.split('/')[-1]
             source_key = source_prefix + key.split('/')[-1]
             # Copy object to the destination bucket
