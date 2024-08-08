@@ -204,8 +204,6 @@ data "aws_iam_policy_document" "allow_replication_role_access_unrefined_policies
   }
 }
 
-#######################Done Unrefined
-
 
 module "ccc_initial_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -369,8 +367,6 @@ data "aws_iam_policy_document" "allow_custom_transcribe_role_access_transcriptio
   }
 }
 
-#######################Done nla-pii-transcription
-
 
 module "ccc_cleaned_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -514,8 +510,6 @@ data "aws_iam_policy_document" "allow_trigger_macie_role_access_cleaned_policies
   }
 }
 
-#######################Done Cleaned
-
 
 module "ccc_verified_clean_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -642,7 +636,6 @@ data "aws_iam_policy_document" "allow_replication_role_access_verified_clean_pol
   }
 }
 
-########################Done verified_clean
 
 module "ccc_dirty_bucket" {
   source                         = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -752,8 +745,6 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_dirty_policies" {
     }
   }
 }
-
-########################Done dirty_bucket
 
 
 module "ccc_maciefindings_bucket" {
@@ -894,7 +885,6 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_maciefindings_polic
   }
 }
 
-########################Done maciefindings
 
 # Source for Glue and Athena
 
@@ -1052,7 +1042,6 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_piimetadata_poli
   }
 }
 
-#################### Done Pii_metadata
 
 
 module "ccc_athenaresults_bucket" {
@@ -1138,7 +1127,6 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_athenaresults_polic
   }
 }
 
-################################## Done AthenaResults
 
 module "ccc_insights_audio_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -1292,7 +1280,6 @@ data "aws_iam_policy_document" "allow_replication_role_access_audio_policies" {
   }
 }
 
-#############################Done Audio
 
 module "ccc_callrecordings_bucket" {
   source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
@@ -1444,8 +1431,6 @@ data "aws_iam_policy_document" "allow_replication_role_access_callRecordings_pol
     }
   }
 }
-
-#########################################Done Callrecordings
 
 
 module "ccc_callaudioaccesslogs_bucket" {

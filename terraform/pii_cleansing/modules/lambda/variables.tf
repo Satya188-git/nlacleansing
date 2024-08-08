@@ -240,6 +240,11 @@ variable "ccc_audio_copy_s3_event_rule_arn" {
   description = "ccc_audio_copy_s3_event_rule_arn"
 }
 
+variable "file_transfer_lambda_role_arn" {
+  type        = string
+  description = "file_transfer_lambda_role_arn"
+}
+
 variable "ccc_callrecordings_bucket_id" {
   type        = string
   description = "ccc_callrecordings_bucket_id"

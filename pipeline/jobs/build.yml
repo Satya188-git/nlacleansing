@@ -116,6 +116,14 @@ jobs:
           archiveType: "zip"
           archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_access_denied_notification_lambda.zip"
           replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda ccc_file_transfer_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/ccc_file_transfer_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_file_transfer_lambda.zip"
+          replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: "$(Build.ArtifactStagingDirectory)" # Required

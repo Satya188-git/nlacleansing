@@ -472,8 +472,8 @@ resource "aws_iam_policy" "audit_lambda_access_policy" {
   })
 }
 
-resource "aws_iam_policy" "s3_put_read" {
-  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read"
+resource "aws_iam_policy" "s3_put_read_delete" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-s3-put-read-delete"
   policy = jsonencode(
     {
       "Version" = "2012-10-17",
@@ -484,6 +484,7 @@ resource "aws_iam_policy" "s3_put_read" {
             "s3:Get*",
             "s3:List*",
             "s3:Put*",
+            "s3:DeleteObject",
             "s3-object-lambda:Get*",
             "s3-object-lambda:List*",
             "s3-object-lambda:Put*"
@@ -657,8 +658,8 @@ resource "aws_iam_role_policy_attachment" "comprehend_kms_full_access" {
   role       = module.comprehend_lambda_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "s3_put_read" {
-  policy_arn = aws_iam_policy.s3_put_read.arn
+resource "aws_iam_role_policy_attachment" "s3_put_read_delete" {
+  policy_arn = aws_iam_policy.s3_put_read_delete.arn
   role       = module.comprehend_lambda_role.name
 }
 
@@ -869,9 +870,9 @@ resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_AWSLambda
   role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_read" {
+resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_s3_put_read_delete" {
   role       = module.ccc_audio_access_logs_to_cw_lambda_role.name
-  policy_arn = aws_iam_policy.s3_put_read.arn
+  policy_arn = aws_iam_policy.s3_put_read_delete.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ccc_audio_access_logs_to_cw_kms_full_access" {
@@ -895,9 +896,9 @@ resource "aws_iam_role_policy_attachment" "file_transfer_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "file_transfer_s3_put_read" {
+resource "aws_iam_role_policy_attachment" "file_transfer_s3_put_read_delete" {
   role       = module.file_transfer_lambda_role.name
-  policy_arn = aws_iam_policy.s3_put_read.arn
+  policy_arn = aws_iam_policy.s3_put_read_delete.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_AWSLambdaBasicExecutionRole" {
@@ -910,9 +911,9 @@ resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_kms_fu
   policy_arn = aws_iam_policy.kms_full_access.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put_read" {
+resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put_read_delete" {
   role       = module.ccc_access_denied_notification_lambda_role.name
-  policy_arn = aws_iam_policy.s3_put_read.arn
+  policy_arn = aws_iam_policy.s3_put_read_delete.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_sns_subscribe_publish" {
