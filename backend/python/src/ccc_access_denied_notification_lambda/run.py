@@ -27,7 +27,7 @@ def check_access_denied(content, bucket, key):
     lines = content.splitlines()
     access_denied = False
     for line in lines:
-        if "REST.GET.OBJECT" and "AccessDenied" in line:
+        if ("REST.GET.OBJECT" in line) and ("AccessDenied" in line):
             access_denied = True
             break
     if access_denied:
