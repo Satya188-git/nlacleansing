@@ -435,7 +435,7 @@ module "ccc_file_transfer_lambda" {
   environment_variables = {
     DESTINATION_BUCKET           = ""
     KEYS_TO_COPY                 = ""
-    DELETE_RESPONSE              = ""
+    DELETE_MARKER                = ""
     SOURCE_BUCKET                = ""
 
   }
