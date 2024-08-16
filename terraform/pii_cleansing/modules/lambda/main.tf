@@ -35,7 +35,7 @@ module "ccc_transcribe_lambda" {
 
   description                       = "nla transcribe source files lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -99,7 +99,7 @@ module "ccc_comprehend_lambda" {
 
   description                       = "nla comprehend source files lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -183,7 +183,7 @@ module "ccc_informational_macie_lambda" {
 
   description                       = "nla transcribed data macie informational lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -232,7 +232,7 @@ module "ccc_notification_forwarder_lambda" {
   kms_key_arn                       = var.kms_key_ccc_sns_lambda_arn
   description                       = "nla sns notification lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -271,7 +271,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   description                       = "nla trigger of macie scan lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -321,7 +321,7 @@ module "ccc_audit_call_lambda" {
 
   description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
