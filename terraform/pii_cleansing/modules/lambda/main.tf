@@ -372,7 +372,7 @@ module "ccc_audio_copy_lambda" {
 
   description                       = "nla audio copy lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.9"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -464,7 +464,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
 
   description                       = "forwarding call audio s3 access logs to CW logs"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.9"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
