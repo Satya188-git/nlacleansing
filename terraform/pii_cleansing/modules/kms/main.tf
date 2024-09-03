@@ -35,46 +35,12 @@ module "athena_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athena-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_key" "unrefined_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
   tags = merge(local.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-unrefined-kms-key"
@@ -104,23 +70,6 @@ resource "aws_kms_key" "initial_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-initial-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "initial_kms_key" {
@@ -137,23 +86,6 @@ resource "aws_kms_key" "clean_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-clean-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "clean_kms_key" {
@@ -170,23 +102,6 @@ resource "aws_kms_key" "dirty_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dirty-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "dirty_kms_key" {
@@ -203,23 +118,6 @@ resource "aws_kms_key" "verified_clean_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-verified-clean-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "verified_clean_kms_key" {
@@ -332,23 +230,6 @@ resource "aws_kms_key" "piimetadata_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-piimetadata-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "piimetadata_kms_key" {
@@ -366,23 +247,6 @@ resource "aws_kms_key" "athenaresults_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athenaresults-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "athenaresults_kms_key" {
@@ -399,23 +263,6 @@ resource "aws_kms_key" "sns_lambda_kms_key" {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-sns-lambda-kms-key"
     },
   )
-  policy = <<EOT
-    {
-    "Version": "2012-10-17",
-    "Id": "Default-Key-Policy",
-    "Statement": [
-        {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
-        }   
-      ]
-    }
-EOT
 }
 
 resource "aws_kms_alias" "sns_lambda_kms_key" {
