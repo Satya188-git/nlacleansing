@@ -628,6 +628,26 @@ resource "aws_iam_policy" "sns_subscribe_publish" {
   })
 }
 
+# Policy for macie scan lambda to access secrets manager
+resource "aws_iam_policy" "secrets_manager_macie"{
+  name    = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-secrets-manager-macie"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect" = "Allow",
+          "Action" = [
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:ListSecrets"
+          ],
+          "Resource" = "*"
+        }
+      ]
+  })
+}
+
 # Policies
 # replication policies
 resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
@@ -763,6 +783,11 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAmazonMacieFullAccess" {
 
 resource "aws_iam_role_policy_attachment" "MacieTriggerAuditLambdaAccess" {
   policy_arn = aws_iam_policy.audit_lambda_access_policy.arn
+  role       = module.trigger_macie_lambda_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "macie_trigger_secrets_manager_macie" {
+  policy_arn = aws_iam_policy.secrets_manager_macie.arn
   role       = module.trigger_macie_lambda_role.name
 }
 
