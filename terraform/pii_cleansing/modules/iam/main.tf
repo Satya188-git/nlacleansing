@@ -563,7 +563,9 @@ resource "aws_iam_policy" "s3_crawler_role_policy" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "${var.ccc_piimetadata_bucket_arn}*"
+      "Resource": ["${var.ccc_piimetadata_bucket_arn}*",
+                   "${var.ccc_historical_calls_bucket_arn}*"
+      ]
     }
   ]
 }

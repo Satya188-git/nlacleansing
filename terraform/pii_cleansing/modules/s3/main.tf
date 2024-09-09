@@ -1517,6 +1517,37 @@ module "ccc_nla_access_logs_bucket" {
   }]
 }
 
+#bucket for historical calls
+module "ccc_historical_calls_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "10.0.1"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-historical-calls"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-historical-logs"
+    },
+  )
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256" 
+      }
+    }
+  }
+
+}
+
 
 #source to target replication configurations
 resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
