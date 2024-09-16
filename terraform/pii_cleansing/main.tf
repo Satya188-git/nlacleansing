@@ -129,6 +129,7 @@ module "glue" {
   ccc_athenaresults_bucket_id = module.s3.ccc_athenaresults_bucket_id
   ccc_piimetadata_bucket_id   = module.s3.ccc_piimetadata_bucket_id
   athena_database_name        = module.athena.athena_database_name
+  ccc_historical_calls_bucket_id = module.s3.ccc_historical_calls_bucket_id
 }
 
 module "iam" {

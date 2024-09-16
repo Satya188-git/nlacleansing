@@ -588,7 +588,8 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
             "Effect": "Allow",
             "Resource": [ 
               "${var.ccc_unrefined_call_data_bucket_arn}/*",
-              "${var.ccc_insights_audio_bucket_arn}/*" 
+              "${var.ccc_insights_audio_bucket_arn}/*",
+              "${var.ccc_historical_calls_bucket_arn}/*"
             ],
             "Sid": "S3Read"
         },
@@ -875,6 +876,11 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" 
 
 resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
   policy_arn = aws_iam_policy.insights_assumed_role_policy.arn
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "historicalAmazonAthenaFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
   role       = module.insights_assumed_role.name
 }
 
