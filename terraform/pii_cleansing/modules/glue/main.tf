@@ -46,6 +46,9 @@ module "glue-crawler" {
       s3_targets = {
         s3_target1 = {
           path = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
+        },
+        s3_target2 = {
+          path = "s3://${var.ccc_historical_calls_bucket_id}/METADATA/"
         }
       }
       dynamodb_targets = {}
@@ -69,49 +72,6 @@ module "glue-crawler" {
 }
 
 #crawler for historical calls
-module "historical_calls_glue-crawler" {
-  source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
-  version = "10.0.0"
-
-  depends_on       = [var.athena_crawler_role_arn]
-  company_code     = local.company_code
-  application_code = local.application_code
-  environment_code = local.environment_code
-  region_code      = local.region_code
-  application_use  = local.application_use
-
-  iam_role_arn  = var.athena_crawler_role_arn
-  iam_role_name = var.athena_crawler_role_id
-
-  glue_crawler_map = {
-    crawler_s3 = {
-      name          = "historical-calls"
-      database_name = var.athena_database_name
-      s3_targets = {
-        s3_target1 = {
-          path = "s3://${var.ccc_historical_calls_bucket_id}/METADATA/"
-        }
-      }
-      dynamodb_targets = {}
-      jdbc_targets     = {}
-      catalog_targets  = {}
-      mongodb_targets  = {}
-      optional_arguments = {
-        description            = var.crawler_description
-        recrawl_policy         = "CRAWL_EVERYTHING"
-        schema_delete_behavior = "DEPRECATE_IN_DATABASE"
-        schema_update_behavior = "UPDATE_IN_DATABASE"
-      }
-    }
-  }
-  tags = merge(
-    local.tags,
-    {
-      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-crawler"
-    },
-  )
-}
-
 module "nla_glue_table" {
   version     = "10.0.1"
   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
