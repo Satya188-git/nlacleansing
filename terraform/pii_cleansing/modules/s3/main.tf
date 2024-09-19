@@ -1098,7 +1098,7 @@ data "aws_iam_policy_document" "deny_other_access_athenaresults_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn,var.insights_assumed_role_arn]
     }
 
     principals {
@@ -1122,7 +1122,7 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_athenaresults_polic
 
     principals {
       type        = "AWS"
-      identifiers = [var.comprehend_lambda_role_arn]
+      identifiers = [var.comprehend_lambda_role_arn,var.insights_assumed_role_arn]
     }
   }
 }
