@@ -649,6 +649,21 @@ resource "aws_iam_policy" "secrets_manager_macie"{
   })
 }
 
+resource "aws_iam_policy" "kms_historical_access" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-kms-historical-access"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect"   = "Allow",
+          "Action"   = "kms:*",
+          "Resource" = "arn:aws:kms:us-west-2:183095018968:key/a3c23fd4-06a1-4a17-9201-fbc0fef1943c"
+        }
+      ]
+  })
+}
+
 # Policies
 # replication policies
 resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
@@ -881,6 +896,11 @@ resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
 
 resource "aws_iam_role_policy_attachment" "historicalAmazonAthenaFullAccess" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "kms_historical_access" {
+  policy_arn = aws_iam_policy.kms_historical_access.arn
   role       = module.insights_assumed_role.name
 }
 
