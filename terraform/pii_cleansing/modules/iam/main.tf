@@ -589,7 +589,8 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
             "Resource": [ 
               "${var.ccc_unrefined_call_data_bucket_arn}/*",
               "${var.ccc_insights_audio_bucket_arn}/*",
-              "${var.ccc_historical_calls_bucket_arn}/*"
+              "${var.ccc_historical_calls_bucket_arn}/*",
+              "${var.ccc_athenaresults_bucket_arn}/*"
             ],
             "Sid": "S3Read"
         },
