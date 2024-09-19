@@ -151,8 +151,3 @@ variable "ccc_historical_calls_bucket_arn" {
   type        = string
   description = "ccc_historical_calls_bucket_arn"
 }
-
-variable "ccc_athenaresults_bucket_arn" {
-  type        = string
-  description = "ccc_athenaresults_bucket_arn"
-}
