@@ -662,6 +662,7 @@ resource "aws_iam_policy" "kms_historical_access" {
           "Effect"   = "Allow",
           "Action"   = "kms:*",
           "Resource" =[ "arn:aws:kms:us-west-2:183095018968:key/a3c23fd4-06a1-4a17-9201-fbc0fef1943c",
+                        "arn:aws:kms:us-west-2:183095018968:key/945ab6d1-e249-4d9d-bfc6-f4cc36268774",
                         "${var.ccc_athenaresults_bucket_arn}/*",
                         "${var.ccc_athenaresults_bucket_arn}"]
         }
