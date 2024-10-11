@@ -28,8 +28,17 @@ output "ccc_audio_copy_lambda_arn" {
   value       = module.ccc_audio_copy_lambda.lambda_function_arn
 }
 
+output "ccc_file_transfer_lambda_arn" {
+  description ="ccc_file_transfer_lambda ARN"
+  value       = module.ccc_file_transfer_lambda.lambda_function_arn
+}
+
 output "ccc_audio_access_logs_to_cw_lambda_arn" {
   description ="ccc_audio_access_logs_to_cw_lambda ARN"
   value       = module.ccc_audio_access_logs_to_cw_lambda.lambda_function_arn
 }
 
+output "ccc_access_denied_notification_lambda_arn" {
+  description ="ccc_access_denied_lambda ARN"
+  value       = module.ccc_access_denied_notification_lambda.lambda_function_arn
+}

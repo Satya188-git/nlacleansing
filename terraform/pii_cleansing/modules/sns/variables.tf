@@ -86,3 +86,8 @@ variable "unit" {
   type        = string
   description = "Organizational unit"
 }
+
+variable "nlaaudioaccessnotificationemail" {
+  type        = string
+  description = "NLA Audio access notification email id"
+}

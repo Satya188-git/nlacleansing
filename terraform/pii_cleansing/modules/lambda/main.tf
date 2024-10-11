@@ -22,7 +22,6 @@ module "layers" {
   source = "./layers"
 }
 
-
 # CustomerCallCenter-Lambda-Transcribe
 module "ccc_transcribe_lambda" {
   depends_on       = [var.custom_transcribe_lambda_role_arn]
@@ -36,7 +35,7 @@ module "ccc_transcribe_lambda" {
 
   description                       = "nla transcribe source files lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -100,7 +99,7 @@ module "ccc_comprehend_lambda" {
 
   description                       = "nla comprehend source files lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -184,7 +183,7 @@ module "ccc_informational_macie_lambda" {
 
   description                       = "nla transcribed data macie informational lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -233,7 +232,7 @@ module "ccc_notification_forwarder_lambda" {
   kms_key_arn                       = var.kms_key_ccc_sns_lambda_arn
   description                       = "nla sns notification lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -272,7 +271,7 @@ module "ccc_macie_scan_trigger_lambda" {
 
   description                       = "nla trigger of macie scan lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -322,7 +321,7 @@ module "ccc_audit_call_lambda" {
 
   description                       = "nla audit lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.8"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -373,7 +372,7 @@ module "ccc_audio_copy_lambda" {
 
   description                       = "nla audio copy lambda"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.9"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -405,6 +404,53 @@ module "ccc_audio_copy_lambda" {
     },
   )
 }
+
+# Lambda for file transfer
+module "ccc_file_transfer_lambda" {
+  depends_on       = [var.file_transfer_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "10.0.0"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "file-transfer"
+
+  description                       = "nla file transfer lambda"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.11"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 180
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.file_transfer_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    DESTINATION_BUCKET           = ""
+    KEYS_TO_COPY                 = ""
+    DELETE_MARKER                = ""
+    SOURCE_BUCKET                = ""
+
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/ccc_file_transfer_lambda.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-file-transfer"
+    },
+  )
+}
+
 # Lambda for forwarding call audio s3 access logs to CW logs
 module "ccc_audio_access_logs_to_cw_lambda" {
   depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
@@ -418,7 +464,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
 
   description                       = "forwarding call audio s3 access logs to CW logs"
   handler                           = "run.lambda_handler"
-  runtime                           = "python3.9"
+  runtime                           = "python3.11"
   publish                           = true
   architectures                     = ["x86_64"]
   attach_tracing_policy             = true
@@ -446,6 +492,51 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   tags = merge(local.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-access-logs-to-cw"
+    },
+  )
+}
+
+# Lambda to send email notification upon unauthorized download/access.
+module "ccc_access_denied_notification_lambda" {
+  depends_on       = [var.ccc_access_denied_notification_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "10.0.0"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "access-denied-notification"
+
+  description                       = "Sending sns notification for s3 access denied logs"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.11"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 180
+  cloudwatch_logs_tags              = local.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.ccc_access_denied_notification_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    SNS_TOPIC_ARN           = var.access_denied_notification_topic_arn
+    LOG_STREAM 			= "logstream"
+    DEBUG               = "disabled"
+    ENV                 = var.environment_code
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/ccc_access_denied_notification_lambda.zip"
+  }
+
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-access-denied-notification"
     },
   )
 }
@@ -567,11 +658,21 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_copy_lambda
   source_account = var.account_id
 }
 
+
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_audio_access_logs_to_cw_lambda" {
   statement_id   = "AllowExecutionFromCloudWatch"
   action         = "lambda:InvokeFunction"
   function_name  = module.ccc_audio_access_logs_to_cw_lambda.lambda_function_name
   principal      = "events.amazonaws.com"
   source_arn     = var.ccc_audio_access_logs_s3_event_rule_arn
+  source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_access_denied_notification_lambda" {
+  statement_id   = "AllowExecutionFromCloudWatch"
+  action         = "lambda:InvokeFunction"
+  function_name  = module.ccc_access_denied_notification_lambda.lambda_function_name
+  principal      = "events.amazonaws.com"
+  source_arn     = var.ccc_access_denied_notification_logs_s3_event_rule_arn
   source_account = var.account_id
 }

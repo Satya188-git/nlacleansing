@@ -8,3 +8,4 @@ s3bucket_insights_replication_arn = "arn:aws:s3:::sdge-dmeti-prd-wus2-s3-nla-rep
 insights_s3kms_arn                = "arn:aws:kms:us-west-2:610386461084:key/c467e64b-2e9e-4fd5-9d8c-adeca264a741"
 audioaccessnotificationemail	  = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
 supervisordatanotificationemail	  = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
+nlaaudioaccessnotificationemail   = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"

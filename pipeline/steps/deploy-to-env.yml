@@ -71,7 +71,19 @@ parameters:
     default: "ccc_audio_access_logs_to_cw.zip"
   - name: lambdaFunctionName8
     type: string
-    default: "lambda-audio-access-logs-to-cw"    
+    default: "lambda-audio-access-logs-to-cw" 
+  - name: s3LambdaObjectKey9
+    type: string
+    default: "ccc_access_denied_notification_lambda.zip"
+  - name: lambdaFunctionName9
+    type: string
+    default: "lambda-access-denied-notification"  
+  - name: s3LambdaObjectKey10
+    type: string
+    default: "ccc_file_transfer_lambda.zip"
+  - name: lambdaFunctionName10
+    type: string
+    default: "lambda-file-transfer" 
 
 steps:
   - template: ./lambda-deploy.yml
@@ -97,4 +109,8 @@ steps:
       s3LambdaObjectKey7: ${{ parameters.s3LambdaObjectKey7 }}
       lambdaFunctionName7: ${{ parameters.lambdaFunctionName7 }}
       s3LambdaObjectKey8: ${{ parameters.s3LambdaObjectKey8 }}
-      lambdaFunctionName8: ${{ parameters.lambdaFunctionName8 }}      
+      lambdaFunctionName8: ${{ parameters.lambdaFunctionName8 }} 
+      s3LambdaObjectKey9: ${{ parameters.s3LambdaObjectKey9 }} 
+      lambdaFunctionName9: ${{ parameters.lambdaFunctionName9 }}
+      s3LambdaObjectKey10: ${{ parameters.s3LambdaObjectKey10 }} 
+      lambdaFunctionName10: ${{ parameters.lambdaFunctionName10 }}

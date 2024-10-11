@@ -81,6 +81,8 @@ module "eventbridge" {
   ccc_audio_access_logs_to_cw_lambda_arn = module.lambda.ccc_audio_access_logs_to_cw_lambda_arn
   ccc_callaudioaccesslogs_bucket_id = module.s3.ccc_callaudioaccesslogs_bucket_id
   sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
+  ccc_nla_access_logs_bucket_id          = module.s3.ccc_nla_access_logs_bucket_id
+  ccc_access_denied_notification_lambda_arn = module.lambda.ccc_access_denied_notification_lambda_arn
 }
 
 module "dynamodb" {
@@ -160,6 +162,7 @@ module "iam" {
   ccc_insights_audio_bucket_arn      = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn      = module.s3.ccc_callrecordings_bucket_arn
   audit_lambda_arn      			 = module.lambda.ccc_audit_call_lambda_arn
+  access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
 }
 
 module "kms" {
@@ -249,9 +252,13 @@ module "lambda" {
   nla_glue_database_name                                 = module.glue.nla_glue_database_name
   ccc_insights_audio_bucket_id                           = module.s3.ccc_insights_audio_bucket_id
   ccc_piimetadata_bucket_id                              = module.s3.ccc_piimetadata_bucket_id
-  callaudioaccess_log_group_name    					 = module.cloudwatch.callaudioaccess_log_group_name
+  callaudioaccess_log_group_name    					           = module.cloudwatch.callaudioaccess_log_group_name
   ccc_audio_access_logs_to_cw_lambda_role_arn            = module.iam.ccc_audio_access_logs_to_cw_lambda_role_arn  
   ccc_audio_access_logs_s3_event_rule_arn                = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
+  ccc_access_denied_notification_lambda_role_arn         = module.iam.ccc_access_denied_notification_lambda_role_arn
+  ccc_access_denied_notification_logs_s3_event_rule_arn  = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
+  access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
+  file_transfer_lambda_role_arn                          = module.iam.file_transfer_lambda_role_arn
 }
 
 module "macie" {
@@ -300,6 +307,13 @@ module "s3" {
   kms_key_ccc_athenaresults_arn     = module.kms.kms_key_ccc_athenaresults_arn
   macie_info_trigger_arn            = module.lambda.macie_info_trigger_arn
   nla_replication_role_arn          = module.iam.nla_replication_role_arn
+  insights_assumed_role_arn     	= module.iam.insights_assumed_role_arn
+  audio_copy_lambda_role_arn		= module.iam.audio_copy_lambda_role_arn
+  transcribe_lambda_role_arn 		= module.iam.transcribe_lambda_role_arn
+  custom_transcribe_lambda_role_arn = module.iam.custom_transcribe_lambda_role_arn
+  comprehend_lambda_role_arn        = module.iam.comprehend_lambda_role_arn
+  trigger_macie_lambda_role_arn		= module.iam.trigger_macie_lambda_role_arn
+  file_transfer_lambda_role_arn		= module.iam.file_transfer_lambda_role_arn
   s3bucket_insights_replication_arn = var.s3bucket_insights_replication_arn
   account_id                        = local.account_id
   insights_account_id               = var.insights_account_id
@@ -327,6 +341,7 @@ module "sns" {
   audioaccessnotificationemail		= var.audioaccessnotificationemail
   supervisordatanotificationemail	= var.supervisordatanotificationemail  
   unit                              = var.unit
+  nlaaudioaccessnotificationemail   = var.nlaaudioaccessnotificationemail
 }
 
 module "cloudwatch" {

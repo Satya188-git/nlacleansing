@@ -240,6 +240,11 @@ variable "ccc_audio_copy_s3_event_rule_arn" {
   description = "ccc_audio_copy_s3_event_rule_arn"
 }
 
+variable "file_transfer_lambda_role_arn" {
+  type        = string
+  description = "file_transfer_lambda_role_arn"
+}
+
 variable "ccc_callrecordings_bucket_id" {
   type        = string
   description = "ccc_callrecordings_bucket_id"
@@ -293,4 +298,19 @@ variable "ccc_audio_access_logs_s3_event_rule_arn" {
 variable "customercallcenterpiimaciescanscheduler_s3_event_rule_arn" {
   type        = string
   description = "customercallcenterpiimaciescanscheduler_s3_event_rule_arn"
+}
+
+variable "ccc_access_denied_notification_lambda_role_arn" {
+  type        = string
+  description = "ccc_access_denied_notification_lambda_role_arn"
+}
+
+variable "ccc_access_denied_notification_logs_s3_event_rule_arn" {
+  type        = string
+  description = "ccc_access_denied_notification_logs_s3_event_rule_arn"
+}
+
+variable "access_denied_notification_topic_arn" {
+  type        = string
+  description = "access_denied_notification_arn"
 }
