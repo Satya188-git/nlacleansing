@@ -1545,26 +1545,40 @@ module "ccc_historical_calls_bucket" {
       }
     }
   }
-  lifecycle_rule = {
-    id      = "lifecycle-rule"
+  lifecycle_rule = [{
+    id      = "transition-rule"
     enabled = true
     filter  = [
       {
         prefix  = "AUDIO/"
       },
     ]
-    transition = {
+    transition = [{
       days          = 365
       storage_class = "GLACIER"
-    }
-    transition = {
+    },
+    {
       days          = 720
       storage_class = "DEEP_ARCHIVE"
     }
-     expiration = {
+    ]
+  },
+  {
+    id      = "expiration-rule"
+    enabled = true
+    filter  = [
+      {
+        prefix  = "AUDIO/"
+      },
+    ]
+    expiration = [
+      {
         days = 1085
-      }
+      },
+    ]
   }
+
+  ]
 
 }
 
