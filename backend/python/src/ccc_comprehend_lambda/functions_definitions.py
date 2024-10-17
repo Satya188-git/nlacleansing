@@ -7,6 +7,7 @@ import uuid
 import time
 import boto3
 import os
+import base64
 
 
 from datetime import datetime
@@ -65,6 +66,9 @@ EV_VECTOR_ID = os.environ["EV_VECTOR_ID"]
 Athena_Table = os.environ["Athena_Table"]
 Retry_Count = os.environ["Retry_Count"]
 Athena_Output_Location = os.environ["Athena_Output_Location"]
+
+#Phone Number Encryption Key
+SECRET_KEY = os.environ["PHONENO_SECRET_KEY"]
 # ------------------------------------------------------------------------------#
 
 
@@ -265,6 +269,10 @@ def comprehend_content_sentiment(comprehend, content):
 
     return sentiment_value, sentiment_score
 
+# Encrypt the customer phone number
+def customer_phone_obfuscated(data):
+    xor_encrypted = ''.join(chr(ord(c) ^ ord(SECRET_KEY[i % len(SECRET_KEY)])) for i, c in enumerate(data))
+    return base64.b64encode(xor_encrypted.encode()).decode('utf-8')
 
 # ----------------------------------------------------------------#
 # Function to capture metadata of the file using Athena Queries
@@ -343,9 +351,6 @@ def capture_file_metdadata(s3filename):
     FMT = "%Y-%m-%dT%H:%M:%S"
     time_delta = datetime.strptime(s2, FMT) - datetime.strptime(s1, FMT)
 
-    # process the customer phone number
-    customer_phone_obfuscated = uuid.uuid3(
-        uuid.NAMESPACE_DNS, data[3]['VarCharValue']).hex
     customer_area_code = data[3]['VarCharValue'][1:4]
 
     result_dict = {}
@@ -355,7 +360,7 @@ def capture_file_metdadata(s3filename):
     result_dict["fullName"] = data[0]['VarCharValue'].strip()
     result_dict["participantAgentId"] = data[1]['VarCharValue']
     result_dict["segmentCallDirectionTypeId"] = data[2]['VarCharValue']
-    result_dict["participantPhoneNumber"] = customer_phone_obfuscated
+    result_dict["participantPhoneNumber"] = customer_phone_obfuscated(str(data[3]['VarCharValue'])) if data[3].get('VarCharValue') is not None else ''
     result_dict["participantAreaCode"] = customer_area_code
     result_dict["segmentID"] = data[4]['VarCharValue']
     result_dict["segmentDialedNumber"] = data[5]['VarCharValue']
