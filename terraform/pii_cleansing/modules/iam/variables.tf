@@ -146,3 +146,8 @@ variable "access_denied_notification_topic_arn" {
   type        = string
   description = "access_denied_notification_arn"
 }
+
+variable "ccc_historical_calls_bucket_arn" {
+  type        = string
+  description = "ccc_historical_calls_bucket_arn"
+}
