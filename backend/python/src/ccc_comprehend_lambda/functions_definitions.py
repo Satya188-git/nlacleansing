@@ -351,9 +351,6 @@ def capture_file_metdadata(s3filename):
     FMT = "%Y-%m-%dT%H:%M:%S"
     time_delta = datetime.strptime(s2, FMT) - datetime.strptime(s1, FMT)
 
-    # process the customer phone number
-    # customer_phone_obfuscated = uuid.uuid3(
-    #     uuid.NAMESPACE_DNS, data[3]['VarCharValue']).hex
     customer_area_code = data[3]['VarCharValue'][1:4]
 
     result_dict = {}
