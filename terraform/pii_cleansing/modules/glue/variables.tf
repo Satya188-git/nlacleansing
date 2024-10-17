@@ -108,3 +108,8 @@ variable "data-classification" {
   type        = string
   description = "Data privacy classification"
 }
+
+variable "ccc_historical_calls_bucket_id" {
+  type        = string
+  description = "ccc_historical_calls_bucket_id"
+}

@@ -563,7 +563,9 @@ resource "aws_iam_policy" "s3_crawler_role_policy" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "${var.ccc_piimetadata_bucket_arn}*"
+      "Resource": ["${var.ccc_piimetadata_bucket_arn}*",
+                   "${var.ccc_historical_calls_bucket_arn}*"
+      ]
     }
   ]
 }
@@ -581,12 +583,16 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
         {
             "Action": [
               "s3:GetObject",
-              "s3:GetObjectAttributes"
+              "s3:GetObjectAttributes",
+              "s3:ListBucket",
+              "S3:PutObject"
             ],
             "Effect": "Allow",
             "Resource": [ 
               "${var.ccc_unrefined_call_data_bucket_arn}/*",
-              "${var.ccc_insights_audio_bucket_arn}/*" 
+              "${var.ccc_insights_audio_bucket_arn}/*",
+              "${var.ccc_historical_calls_bucket_arn}/*",
+              "${var.ccc_athenaresults_bucket_arn}/*"
             ],
             "Sid": "S3Read"
         },
@@ -621,6 +627,44 @@ resource "aws_iam_policy" "sns_subscribe_publish" {
             "sns:DeleteTopic"
           ],
           "Resource" = "${var.access_denied_notification_topic_arn}"
+        }
+      ]
+  })
+}
+
+# Policy for macie scan lambda to access secrets manager
+resource "aws_iam_policy" "secrets_manager_macie"{
+  name    = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-secrets-manager-macie"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect" = "Allow",
+          "Action" = [
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:ListSecrets"
+          ],
+          "Resource" = "*"
+        }
+      ]
+  })
+}
+
+resource "aws_iam_policy" "kms_historical_access" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-kms-historical-access"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect"   = "Allow",
+          "Action"   = "kms:*",
+          "Resource" =[ "arn:aws:kms:us-west-2:183095018968:key/a3c23fd4-06a1-4a17-9201-fbc0fef1943c",
+                        "arn:aws:kms:us-west-2:183095018968:key/945ab6d1-e249-4d9d-bfc6-f4cc36268774",
+                        "${var.ccc_athenaresults_bucket_arn}/*",
+                        "${var.ccc_athenaresults_bucket_arn}"]
         }
       ]
   })
@@ -764,6 +808,11 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAuditLambdaAccess" {
   role       = module.trigger_macie_lambda_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "macie_trigger_secrets_manager_macie" {
+  policy_arn = aws_iam_policy.secrets_manager_macie.arn
+  role       = module.trigger_macie_lambda_role.name
+}
+
 #  audit call lambda
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
   role       = module.audit_call_lambda_role.name
@@ -848,6 +897,16 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" 
 
 resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
   policy_arn = aws_iam_policy.insights_assumed_role_policy.arn
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "historicalAmazonAthenaFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "kms_historical_access" {
+  policy_arn = aws_iam_policy.kms_historical_access.arn
   role       = module.insights_assumed_role.name
 }
 

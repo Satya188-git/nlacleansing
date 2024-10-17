@@ -1098,7 +1098,7 @@ data "aws_iam_policy_document" "deny_other_access_athenaresults_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn,var.insights_assumed_role_arn]
     }
 
     principals {
@@ -1122,7 +1122,7 @@ data "aws_iam_policy_document" "allow_comprehend_role_access_athenaresults_polic
 
     principals {
       type        = "AWS"
-      identifiers = [var.comprehend_lambda_role_arn]
+      identifiers = [var.comprehend_lambda_role_arn,var.insights_assumed_role_arn]
     }
   }
 }
@@ -1517,6 +1517,71 @@ module "ccc_nla_access_logs_bucket" {
   }]
 }
 
+#bucket for historical calls
+module "ccc_historical_calls_bucket" {
+  source  = "app.terraform.io/SempraUtilities/seu-s3/aws"
+  version = "10.0.1"
+
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${local.application_use}-historical-calls"
+  create_bucket    = true
+  force_destroy    = true
+  versioning       = true
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-historical-logs"
+    },
+  )
+  object_ownership               = "BucketOwnerPreferred"
+  control_object_ownership       = true
+  server_side_encryption_configuration = {
+    rule = {
+      bucket_key_enabled = true
+      apply_server_side_encryption_by_default = {
+        sse_algorithm = "AES256" 
+      }
+    }
+  }
+  lifecycle_rule = [{
+    id      = "transition-rule"
+    enabled = true
+    filter  = [
+      {
+        prefix  = "AUDIO/"
+      },
+    ]
+    transition = [{
+      days          = 365
+      storage_class = "GLACIER"
+    },
+    {
+      days          = 720
+      storage_class = "DEEP_ARCHIVE"
+    }
+    ]
+  },
+  {
+    id      = "expiration-rule"
+    enabled = true
+    filter  = [
+      {
+        prefix  = "AUDIO/"
+      },
+    ]
+    expiration = [
+      {
+        days = 1085
+      },
+    ]
+  }
+
+  ]
+
+}
+
 
 #source to target replication configurations
 resource "aws_s3_bucket_replication_configuration" "insights_bucket_replication_rule" {
@@ -1792,6 +1857,18 @@ resource "aws_s3_object" "verifiedcleaned_logs_prefix" {
 resource "aws_s3_object" "dirty_logs_prefix" {
   key        = "dirtylogs/"
   bucket     = module.ccc_nla_access_logs_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "audio_prefix" {
+  key        = "AUDIO/"
+  bucket     = module.ccc_historical_calls_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
+resource "aws_s3_object" "metadata_prefix" {
+  key        = "METADATA/"
+  bucket     = module.ccc_historical_calls_bucket.s3_bucket_id
   source     = "/dev/null"
 }
 

@@ -46,6 +46,9 @@ module "glue-crawler" {
       s3_targets = {
         s3_target1 = {
           path = "s3://${var.ccc_piimetadata_bucket_id}/EDIX_METADATA/"
+        },
+        s3_target2 = {
+          path = "s3://${var.ccc_historical_calls_bucket_id}/METADATA/"
         }
       }
       dynamodb_targets = {}
@@ -68,6 +71,7 @@ module "glue-crawler" {
   )
 }
 
+#crawler for historical calls
 module "nla_glue_table" {
   version     = "10.0.1"
   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
@@ -194,5 +198,241 @@ module "nla_glue_table" {
         },
       ]
     }
+    "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_historical_calls" = {
+      name                           = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_historical_calls"
+      glue_catalog_table_description = local.glue_catalog_table_description
+      glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+      glue_catalog_table_parameters = {
+        "skip.header.line.count" = 1
+        "sizeKey"                = 3487703
+        "objectCount"            = 62
+        "UPDATED_BY_CRAWLER"     = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-glue-nla-s3-crawler-historical-calls"
+        "recordCount"            = 10389
+        "averageRecordSize"      = 333
+        "compressionType"        = "none"
+        "classification"         = "csv"
+        "columnsOrdered"         = true
+        "areColumnsQuoted"       = false
+        "delimiter"              = ","
+        "typeOfData"             = "file"
+      }
+
+      location                  = "s3://${var.ccc_historical_calls_bucket_id}/METADATA/"
+      input_format              = "org.apache.hadoop.mapred.TextInputFormat"
+      output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+      compressed                = false
+      stored_as_sub_directories = "false"
+      storage_descriptor_columns = [
+        {
+          columns_name = "path"
+          columns_type = "string"
+        },
+        {
+          columns_name = "file name"
+          columns_type = "string"
+        },
+        {
+          columns_name = "status"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment id"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment start time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment stop time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "internal segment client start time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "internal segment client stop time"
+          columns_type = "string"
+        },
+        {
+          columns_name = "participant station"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment ucid"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant trunk group"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant trunk number"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "segment dialed number"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "participant phone-number"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment call direction type id"
+          columns_type = "string"
+        },
+        {
+          columns_name = "participant agent id"
+          columns_type = "bigint"
+        },
+        {
+          columns_name = "full name"
+          columns_type = "string"
+        },
+        {
+          columns_name = "segment vector number"
+          columns_type = "bigint"
+        },
+      ]
+
+      storage_descriptor_ser_de_info = [
+        {
+          ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+          ser_de_info_parameters            = tomap({ "field.delim" = "," })
+        },
+      ]
+    }
   }
 }
+
+# table for historical calls
+# module "historical_calls_table" {
+#   version     = "10.0.1"
+#   source           = "app.terraform.io/SempraUtilities/seu-glue-data-catalog/aws"
+#   company_code     = local.company_code
+#   application_code = local.application_code
+#   application_use  = local.application_use
+#   environment_code = local.environment_code
+#   region_code      = local.region_code
+#   tags = merge(
+#     local.tags,
+#     {
+#       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-table"
+#     },
+#   )
+  
+#   # glue catalog database
+#   glue_database_name = var.athena_database_name
+#   encrypt            = true
+#   # glue catalog tables 
+#   glue_catalog_map = {
+#     "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_historical_calls" = {
+#       name                           = "${local.company_code}_${local.application_code}_${local.environment_code}_${local.region_code}_glue_nla_s3_crawler_historical_calls"
+#       glue_catalog_table_description = local.glue_catalog_table_description
+#       glue_catalog_table_table_type  = local.glue_catalog_table_table_type
+#       glue_catalog_table_parameters = {
+#         "skip.header.line.count" = 1
+#         "sizeKey"                = 3487703
+#         "objectCount"            = 62
+#         "UPDATED_BY_CRAWLER"     = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-glue-nla-s3-crawler-historical-calls"
+#         "recordCount"            = 10389
+#         "averageRecordSize"      = 333
+#         "compressionType"        = "none"
+#         "classification"         = "csv"
+#         "columnsOrdered"         = true
+#         "areColumnsQuoted"       = false
+#         "delimiter"              = ","
+#         "typeOfData"             = "file"
+#       }
+
+#       location                  = "s3://${var.ccc_historical_calls_bucket_id}/METADATA/"
+#       input_format              = "org.apache.hadoop.mapred.TextInputFormat"
+#       output_format             = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+#       compressed                = false
+#       stored_as_sub_directories = "false"
+#       storage_descriptor_columns = [
+#         {
+#           columns_name = "path"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "file name"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "status"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "segment id"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "segment start time"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "segment stop time"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "internal segment client start time"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "internal segment client stop time"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "participant station"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "segment ucid"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "participant trunk group"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "participant trunk number"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "segment dialed number"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "participant phone-number"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "segment call direction type id"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "participant agent id"
+#           columns_type = "bigint"
+#         },
+#         {
+#           columns_name = "full name"
+#           columns_type = "string"
+#         },
+#         {
+#           columns_name = "segment vector number"
+#           columns_type = "bigint"
+#         },
+#       ]
+
+#       storage_descriptor_ser_de_info = [
+#         {
+#           ser_de_info_serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+#           ser_de_info_parameters            = tomap({ "field.delim" = "," })
+#         },
+#       ]
+#     }
+#   }
+# }
