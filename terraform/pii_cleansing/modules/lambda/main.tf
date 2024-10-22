@@ -289,7 +289,6 @@ module "ccc_macie_scan_trigger_lambda" {
   environment_variables = {
     BUCKET_NAME                     = var.ccc_cleaned_bucket_id
     ACCOUNT_ID                      = var.account_id
-    CLIENT_TOKEN                    = "d7db50c1-faab-42a8-9d8e-8ba23644e446"
     JOB_TYPE                        = "ONE_TIME"
     MANAGE_DATA_IDENTIFIER_SELECTOR = "ALL"
     SAMPLING_PERCENTAGE             = "100"

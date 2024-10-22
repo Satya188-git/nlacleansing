@@ -48,10 +48,10 @@ resource "aws_cloudwatch_log_metric_filter" "callaudioaccess-metrics" {
   log_group_name = module.callaudioaccess_log_group.cloudwatch_log_group_name
 
   metric_transformation {
-    name      = "GetAudio"
-    namespace = "AudioAccessMetrics"
-    value     = "1"
-	unit 	  = "Count"
+      name      = "GetAudio"
+      namespace = "AudioAccessMetrics"
+      value     = "1"
+      unit 	    = "Count"
   }
 }
 
