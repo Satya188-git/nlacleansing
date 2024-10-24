@@ -158,3 +158,8 @@ variable "insights_s3kms_arn" {
   type        = string
   description = "NLA Insights account KMS key to encrypt replicated S3 objects"
 }
+
+variable "oidc_iam_role_name" {
+  type        = string
+  description = "OIDC role name for deployments"
+}

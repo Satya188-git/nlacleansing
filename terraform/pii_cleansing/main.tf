@@ -299,6 +299,7 @@ module "s3" {
   support-group                     = var.support-group
   cmdb-ci-id                        = var.cmdb-ci-id
   data-classification               = var.data-classification
+  oidc_iam_role_name                = var.oidc_iam_role_name
   kms_key_ccc_unrefined_arn         = module.kms.kms_key_ccc_unrefined_arn
   kms_key_ccc_initial_arn           = module.kms.kms_key_ccc_initial_arn
   kms_key_ccc_clean_arn             = module.kms.kms_key_ccc_clean_arn

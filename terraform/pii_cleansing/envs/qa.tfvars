@@ -9,3 +9,4 @@ insights_s3kms_arn                = "arn:aws:kms:us-west-2:437147112758:key/0411
 audioaccessnotificationemail	  = "SShirsat@sdgecontractor.com"
 supervisordatanotificationemail	  = "SShirsat@sdgecontractor.com"
 nlaaudioaccessnotificationemail   = "SShirsat@sdgecontractor.com"
+oidc_iam_role_name                = "sdge-dtdes-qa-iam-role-tfc-oidc"

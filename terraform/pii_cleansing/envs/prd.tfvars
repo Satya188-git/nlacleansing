@@ -9,3 +9,4 @@ insights_s3kms_arn                = "arn:aws:kms:us-west-2:610386461084:key/c467
 audioaccessnotificationemail	  = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
 supervisordatanotificationemail	  = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
 nlaaudioaccessnotificationemail   = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
+oidc_iam_role_name                = "sdge-dtdes-prd-iam-role-tfc-oidc"
