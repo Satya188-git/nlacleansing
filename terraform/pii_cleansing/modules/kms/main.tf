@@ -26,32 +26,7 @@ data "aws_iam_policy_document" "kms_default_policy" {
     effect    = "Allow"
     resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
     actions   = [
-      "kms:Encrypt",
-      "kms:Decrypt", 
-      "kms:ReEncrypt", 
-      "kms:GenerateDataKey", 
-      "kms:kms:GenerateDataKeyWithoutPlaintext",
-      "kms:DescribeKey", 
-      "kms:CreateGrant", 
-      "kms:PutKeyPolicy", 
-      "kms:TagResource", 
-      "kms:UntagResource", 
-      "kms:ListResourceTags", 
-      "kms:ListKeyPolicies", 
-      "kms:ListAliases", 
-      "kms:GetKeyPolicy", 
-      "kms:ListGrants",
-      "kms:ReEncryptFrom",
-      "kms:ReEncryptTo",
-      "kms:CreateAlias",
-      "kms:DeleteAlias",
-      "kms:UpdateAlias",
-      "kms:GetPublicKey",
-      "kms:UpdateKeyDescription",
-      "kms:EnableKeyRotation",
-      "kms:DisableKeyRotation",
-      "kms:UpdatePrimaryRegion",
-      "kms:ReplicateKey"
+      "kms:*"
     ]
     principals {
       type        = "AWS"
