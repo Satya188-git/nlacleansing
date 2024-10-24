@@ -137,4 +137,7 @@ variable "nlaaudioaccessnotificationemail" {
   description = "Access denied notification email id"
 }
 
-
+variable "oidc_iam_role_name" {
+  type        = string
+  description = "OIDC role name for deployments"
+}
