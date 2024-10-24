@@ -28,8 +28,9 @@ data "aws_iam_policy_document" "kms_default_policy" {
     actions   = [
       "kms:Encrypt",
       "kms:Decrypt", 
-      "kms:ReEncrypt*", 
-      "kms:GenerateDataKey*", 
+      "kms:ReEncrypt", 
+      "kms:GenerateDataKey", 
+      "kms:kms:GenerateDataKeyWithoutPlaintext",
       "kms:DescribeKey", 
       "kms:CreateGrant", 
       "kms:PutKeyPolicy", 
@@ -39,7 +40,18 @@ data "aws_iam_policy_document" "kms_default_policy" {
       "kms:ListKeyPolicies", 
       "kms:ListAliases", 
       "kms:GetKeyPolicy", 
-      "kms:ListGrants"
+      "kms:ListGrants",
+      "kms:ReEncryptFrom",
+      "kms:ReEncryptTo",
+      "kms:CreateAlias",
+      "kms:DeleteAlias",
+      "kms:UpdateAlias",
+      "kms:GetPublicKey",
+      "kms:UpdateKeyDescription",
+      "kms:EnableKeyRotation",
+      "kms:DisableKeyRotation",
+      "kms:UpdatePrimaryRegion",
+      "kms:ReplicateKey"
     ]
     principals {
       type        = "AWS"
