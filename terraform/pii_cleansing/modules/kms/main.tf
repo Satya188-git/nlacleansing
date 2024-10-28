@@ -200,7 +200,8 @@ resource "aws_kms_key" "maciefindings_kms_key" {
                 "kms:ListKeyPolicies",
                 "kms:ListAliases",
                 "kms:GetKeyPolicy",
-                "kms:ListGrants"
+                "kms:ListGrants",
+                "kms:GetKeyRotationStatus"
             ],
             "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
         },
