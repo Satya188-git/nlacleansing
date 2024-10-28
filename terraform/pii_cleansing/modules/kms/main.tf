@@ -245,8 +245,7 @@ resource "aws_kms_key" "maciefindings_kms_key" {
             "Effect": "Allow",
             "Principal": {
                 "AWS": [
-                    "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie",
-                    "arn:aws:iam::${var.account_id}:role/${var.oidc_iam_role_name}"
+                    "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"
                 ]
             },
             "Action": [

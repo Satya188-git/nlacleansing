@@ -102,8 +102,3 @@ variable "account_id" {
   type        = string
   description = "The AWS account ID"
 }
-
-variable "oidc_iam_role_name" {
-  type        = string
-  description = "oidc_iam_role_name"
-}
