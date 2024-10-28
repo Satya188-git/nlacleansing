@@ -200,7 +200,8 @@ resource "aws_kms_key" "maciefindings_kms_key" {
                 "kms:ListKeyPolicies",
                 "kms:ListAliases",
                 "kms:GetKeyPolicy",
-                "kms:ListGrants"
+                "kms:ListGrants",
+                "kms:GetKeyRotationStatus" 
             ],
             "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
         },
@@ -406,44 +407,6 @@ module "sns_kms_key" {
               },
               "Action": "kms:*",
               "Resource": "*"
-            },
-            {
-              sid       = "Enable IAM User Permissions"
-              effect    = "Allow"
-              resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
-              actions   = [
-                "kms:Encrypt",
-                "kms:Decrypt", 
-                "kms:ReEncrypt", 
-                "kms:GenerateDataKey", 
-                "kms:kms:GenerateDataKeyWithoutPlaintext",
-                "kms:DescribeKey", 
-                "kms:CreateGrant", 
-                "kms:PutKeyPolicy", 
-                "kms:TagResource", 
-                "kms:UntagResource", 
-                "kms:ListResourceTags", 
-                "kms:ListKeyPolicies", 
-                "kms:ListAliases", 
-                "kms:GetKeyPolicy", 
-                "kms:ListGrants",
-                "kms:ReEncryptFrom",
-                "kms:ReEncryptTo",
-                "kms:CreateAlias",
-                "kms:DeleteAlias",
-                "kms:UpdateAlias",
-                "kms:GetPublicKey",
-                "kms:UpdateKeyDescription",
-                "kms:EnableKeyRotation",
-                "kms:DisableKeyRotation",
-                "kms:UpdatePrimaryRegion",
-                "kms:ReplicateKey",
-                "kms:GetKeyRotationStatus"
-              ]
-              principals {
-                type        = "AWS"
-                identifiers = [ "arn:aws:iam::${var.account_id}:root" ]
-              }
             }			
         ]
       }
