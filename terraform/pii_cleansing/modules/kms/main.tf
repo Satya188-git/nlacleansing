@@ -51,7 +51,8 @@ data "aws_iam_policy_document" "kms_default_policy" {
       "kms:EnableKeyRotation",
       "kms:DisableKeyRotation",
       "kms:UpdatePrimaryRegion",
-      "kms:ReplicateKey"
+      "kms:ReplicateKey",
+      "kms:GetKeyRotationStatus"
     ]
     principals {
       type        = "AWS"
