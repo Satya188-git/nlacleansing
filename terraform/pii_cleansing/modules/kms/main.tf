@@ -25,21 +25,21 @@ data "aws_iam_policy_document" "kms_default_policy" {
     sid       = "Enable IAM User Permissions"
     effect    = "Allow"
     resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
-    actions   = [
+    actions = [
       "kms:Encrypt",
-      "kms:Decrypt", 
-      "kms:ReEncrypt", 
-      "kms:GenerateDataKey", 
+      "kms:Decrypt",
+      "kms:ReEncrypt",
+      "kms:GenerateDataKey",
       "kms:kms:GenerateDataKeyWithoutPlaintext",
-      "kms:DescribeKey", 
-      "kms:CreateGrant", 
-      "kms:PutKeyPolicy", 
-      "kms:TagResource", 
-      "kms:UntagResource", 
-      "kms:ListResourceTags", 
-      "kms:ListKeyPolicies", 
-      "kms:ListAliases", 
-      "kms:GetKeyPolicy", 
+      "kms:DescribeKey",
+      "kms:CreateGrant",
+      "kms:PutKeyPolicy",
+      "kms:TagResource",
+      "kms:UntagResource",
+      "kms:ListResourceTags",
+      "kms:ListKeyPolicies",
+      "kms:ListAliases",
+      "kms:GetKeyPolicy",
       "kms:ListGrants",
       "kms:ReEncryptFrom",
       "kms:ReEncryptTo",
@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "kms_default_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = [ "arn:aws:iam::${var.account_id}:root" ]
+      identifiers = ["arn:aws:iam::${var.account_id}:root"]
     }
   }
 }
@@ -187,21 +187,33 @@ resource "aws_kms_key" "maciefindings_kms_key" {
                 "AWS": "arn:aws:iam::${var.account_id}:root"
             },
             "Action": [
-                "kms:Encrypt",
-                "kms:Decrypt",
-                "kms:ReEncrypt*",
-                "kms:GenerateDataKey*",
-                "kms:DescribeKey",
-                "kms:CreateGrant",
-                "kms:PutKeyPolicy",
-                "kms:TagResource",
-                "kms:UntagResource",
-                "kms:ListResourceTags",
-                "kms:ListKeyPolicies",
-                "kms:ListAliases",
-                "kms:GetKeyPolicy",
-                "kms:ListGrants",
-                "kms:GetKeyRotationStatus" 
+              "kms:Encrypt",
+              "kms:Decrypt", 
+              "kms:ReEncrypt", 
+              "kms:GenerateDataKey", 
+              "kms:kms:GenerateDataKeyWithoutPlaintext",
+              "kms:DescribeKey", 
+              "kms:CreateGrant", 
+              "kms:PutKeyPolicy", 
+              "kms:TagResource", 
+              "kms:UntagResource", 
+              "kms:ListResourceTags", 
+              "kms:ListKeyPolicies", 
+              "kms:ListAliases", 
+              "kms:GetKeyPolicy", 
+              "kms:ListGrants",
+              "kms:ReEncryptFrom",
+              "kms:ReEncryptTo",
+              "kms:CreateAlias",
+              "kms:DeleteAlias",
+              "kms:UpdateAlias",
+              "kms:GetPublicKey",
+              "kms:UpdateKeyDescription",
+              "kms:EnableKeyRotation",
+              "kms:DisableKeyRotation",
+              "kms:UpdatePrimaryRegion",
+              "kms:ReplicateKey",
+              "kms:GetKeyRotationStatus"
             ],
             "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
         },
@@ -264,45 +276,7 @@ resource "aws_kms_key" "maciefindings_kms_key" {
                     "kms:GrantIsForAWSResource": "true"
                 }
             }
-        },
-        {
-            sid       = "Enable IAM User Permissions"
-            effect    = "Allow"
-            resources = ["arn:aws:kms:${var.region}:${var.account_id}:key/*"]
-            actions   = [
-              "kms:Encrypt",
-              "kms:Decrypt", 
-              "kms:ReEncrypt", 
-              "kms:GenerateDataKey", 
-              "kms:kms:GenerateDataKeyWithoutPlaintext",
-              "kms:DescribeKey", 
-              "kms:CreateGrant", 
-              "kms:PutKeyPolicy", 
-              "kms:TagResource", 
-              "kms:UntagResource", 
-              "kms:ListResourceTags", 
-              "kms:ListKeyPolicies", 
-              "kms:ListAliases", 
-              "kms:GetKeyPolicy", 
-              "kms:ListGrants",
-              "kms:ReEncryptFrom",
-              "kms:ReEncryptTo",
-              "kms:CreateAlias",
-              "kms:DeleteAlias",
-              "kms:UpdateAlias",
-              "kms:GetPublicKey",
-              "kms:UpdateKeyDescription",
-              "kms:EnableKeyRotation",
-              "kms:DisableKeyRotation",
-              "kms:UpdatePrimaryRegion",
-              "kms:ReplicateKey",
-              "kms:GetKeyRotationStatus"
-            ]
-            principals {
-              type        = "AWS"
-              identifiers = [ "arn:aws:iam::${var.account_id}:root" ]
-            }
-          }
+        }
       ]
     }
 EOT
