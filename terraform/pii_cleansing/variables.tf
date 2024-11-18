@@ -141,3 +141,8 @@ variable "oidc_iam_role_name" {
   type        = string
   description = "OIDC role name for deployments"
 }
+
+variable "nla_insights_historic_call_lambda_arn" {
+  type        = string
+  description = "Cross account lambda ARN which will be invoked by S3 bucket events"
+}
