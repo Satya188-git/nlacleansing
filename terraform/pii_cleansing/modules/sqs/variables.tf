@@ -87,8 +87,3 @@ variable "insights_account_id" {
   type        = string
   description = "AWS account id for NLA Insights accounts"
 }
-
-variable "account_id" {
-  type        = string
-  description = "The AWS account ID"
-}
