@@ -146,3 +146,8 @@ variable "nla_insights_historic_call_lambda_arn" {
   type        = string
   description = "Cross account lambda ARN which will be invoked by S3 bucket events"
 }
+
+variable "historicals_calls_etl_job_name" {
+  type        = string
+  description = "ETL job name for sqs"
+}
