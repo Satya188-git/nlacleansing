@@ -310,7 +310,12 @@ module "nla_glue_table" {
 module "historicals_calls_etl_job" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-etl/aws"
   version = "10.1.0"
-
+  tags = merge(
+    local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-historicals-etl-job"
+    },
+  )
   company_code     = local.company_code
   application_code = local.application_code
   environment_code = local.environment_code
