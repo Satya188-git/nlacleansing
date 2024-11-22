@@ -21,7 +21,7 @@ locals {
 
 module "sqs_historical_etl_output" {
   source           = "app.terraform.io/SempraUtilities/seu-sqs/aws"
-  version          = "10.1.0" # "4.0.1"
+  version          = "10.0.0" # "4.0.1"
   aws_region       = local.region
   company_code     = local.company_code
   application_code = local.application_code
