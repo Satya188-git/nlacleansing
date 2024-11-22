@@ -331,12 +331,12 @@ module "historicals_calls_etl_job" {
       name                         = "historicals_calls_etl_job"
       glue_job_description         = "This is a etl job to send all historical data into sqs for batching."
       glue_job_version             = "4.0"
-      glue_command_job_name        = ""
+      glue_command_job_name        = "job1"
       glue_command_python_version  = 3
       glue_command_script_location = "s3://sdge-dtdes-dev-wus2-s3-nla-historical-calls/ETL_SCRIPTS/run.py"
       max_concurrent_runs          = 1
       max_retries                  = 0
-      connections                  = {}
+      connections                  = []
       default_arguments            = {}
       job_resources = {
         "number_of_workers" = 10
