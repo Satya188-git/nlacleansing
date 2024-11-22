@@ -34,7 +34,7 @@ module "sqs_historical_etl_output" {
   # kms_data_key_reuse_period_seconds = 300
   tags = merge(local.tags,
   {
-    "sempra:gov:name" = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-sqs-dataloader-dlq"
+    "sempra:gov:name" = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-sqs-historical-dataloader-dlq"
   })
 }
 
