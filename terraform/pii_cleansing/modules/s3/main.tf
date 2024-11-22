@@ -1874,6 +1874,12 @@ resource "aws_s3_object" "metadata_prefix" {
   source = "/dev/null"
 }
 
+resource "aws_s3_object" "scripts_prefix" {
+  key        = "ETL_SCRIPTS/"
+  bucket     = module.ccc_historical_calls_bucket.s3_bucket_id
+  source     = "/dev/null"
+}
+
 # Encryption configuration
 # This is needed vs. using the S3 module ssl configuration because there is a bug in the Terraform Cloud Sentinel that will fail a new account deployment if we are using aws:kms encryption
 # This is a solution to get around that bug

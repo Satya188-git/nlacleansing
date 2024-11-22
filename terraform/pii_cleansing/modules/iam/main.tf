@@ -910,6 +910,11 @@ resource "aws_iam_role_policy_attachment" "kms_historical_access" {
   role       = module.insights_assumed_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "historicalAmazonSqsFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  role       = module.insights_assumed_role.name
+}
+
 resource "aws_iam_role_policy_attachment" "audio_copy_AWSLambdaBasicExecutionRole" {
   role       = module.audio_copy_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"

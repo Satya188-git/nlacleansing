@@ -368,3 +368,25 @@ module "cloudwatch" {
   data-classification = var.data-classification
   sns-topic-arn       = one(module.sns.sns-topic-arn)
 }
+
+module "sqs"{
+  source                            = "./modules/sqs"
+  account_id                        = local.account_id
+  region                            = var.region
+  environment                       = var.environment
+  application_use                   = var.application_use
+  company_code                      = var.company_code
+  application_code                  = var.application_code
+  environment_code                  = var.environment_code
+  owner                             = var.owner
+  namespace                         = var.namespace
+  region_code                       = var.region_code
+  tag-version                       = var.tag-version
+  billing-guid                      = var.billing-guid
+  unit                              = var.unit
+  portfolio                         = var.portfolio
+  support-group                     = var.support-group
+  cmdb-ci-id                        = var.cmdb-ci-id
+  data-classification               = var.data-classification
+  insights_account_id               = var.insights_account_id
+}
