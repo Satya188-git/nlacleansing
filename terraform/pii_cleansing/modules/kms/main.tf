@@ -458,6 +458,6 @@ EOT
 }
 
 resource "aws_kms_alias" "sqs_kms_key" {
-  name          = "alias/${local.application_use}-sqs-kms-key"
+  name          = "alias/${local.application_use}-sqs_kms_key"
   target_key_id = aws_kms_key.sqs_kms_key.key_id
 }
