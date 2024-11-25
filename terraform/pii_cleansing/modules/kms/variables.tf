@@ -102,3 +102,8 @@ variable "account_id" {
   type        = string
   description = "The AWS account ID"
 }
+
+variable "insights_account_id" {
+  type        = string
+  description = "The AWS insights_account_id"
+}

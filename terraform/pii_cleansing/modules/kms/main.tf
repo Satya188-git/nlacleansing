@@ -425,3 +425,39 @@ module "sns_kms_key" {
       }
   EOT  
 }
+
+# SQS Key
+resource "aws_kms_key" "sqs_kms_key" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+  enable_key_rotation     = true
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-sqs-kms-key"
+    },
+  )
+  policy = <<EOT
+    {
+    "Version": "2012-10-17",
+    "Id": "SQS-Key-Policy",
+    "Statement": [
+        {
+            "Sid": "Enable IAM Root User Permissions for KMS",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${var.account_id}:root"
+            },
+            "Action": [
+              "kms:*"
+            ],
+            "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
+        }    
+      ]
+    }
+EOT
+}
+
+resource "aws_kms_alias" "sqs_kms_key" {
+  name          = "alias/${local.application_use}-sqs-kms-key"
+  target_key_id = aws_kms_key.sqs_kms_key.key_id
+}

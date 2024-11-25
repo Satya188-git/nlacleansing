@@ -186,6 +186,7 @@ module "kms" {
   cmdb-ci-id                          = var.cmdb-ci-id
   data-classification                 = var.data-classification
   account_id                          = local.account_id
+  insights_account_id                 = var.insights_account_id
   transcribe_lambda_role_arn          = module.iam.transcribe_lambda_role_arn
   comprehend_lambda_role_arn          = module.iam.comprehend_lambda_role_arn
   informational_macie_lambda_role_arn = module.iam.informational_macie_lambda_role_arn
@@ -389,4 +390,5 @@ module "sqs"{
   cmdb-ci-id                        = var.cmdb-ci-id
   data-classification               = var.data-classification
   insights_account_id               = var.insights_account_id
+  sqs_kms_key_id                   = module.kms.sqs_kms_key_id
 }
