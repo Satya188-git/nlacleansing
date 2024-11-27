@@ -585,7 +585,8 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
               "s3:GetObject",
               "s3:GetObjectAttributes",
               "s3:ListBucket",
-              "S3:PutObject"
+              "S3:PutObject",
+              "S3:RestoreObject"
             ],
             "Effect": "Allow",
             "Resource": [ 
