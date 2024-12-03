@@ -337,7 +337,11 @@ module "historicals_calls_etl_job" {
       max_concurrent_runs          = 1
       max_retries                  = 0
       connections                  = []
-      default_arguments            = {}
+      default_arguments            = {
+        "--job-language"   = "python 3"
+        "--enable-continuous-cloudwatch-log" = "true"
+        "--enable-metrics" = "true"
+      }
       job_resources = {
         "number_of_workers" = 10
         "worker_type"       = "G.1X"
