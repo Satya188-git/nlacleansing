@@ -335,7 +335,7 @@ module "historicals_calls_etl_job" {
       glue_command_python_version  = 3
       glue_command_script_location = "s3://sdge-dtdes-dev-wus2-s3-nla-historical-calls/ETL_SCRIPTS/run.py"
       max_concurrent_runs          = 1
-      max_retries                  = 0
+      max_retries                  = 1
       connections                  = []
       default_arguments            = {
         "--job-language"   = "python"

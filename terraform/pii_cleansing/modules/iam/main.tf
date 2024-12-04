@@ -550,7 +550,7 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
 
 // create policy
 resource "aws_iam_policy" "s3_crawler_role_policy" {
-  name        = "S3BucketAccess"
+  name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-S3BucketAccess"
   description = "Get and Put access for S3 bucket"
 
   policy = <<EOF
@@ -894,6 +894,11 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_managed4" {
 resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" {
   policy_arn = aws_iam_policy.kms_full_access.arn
   role       = module.athena_crawler_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "athena_crawler_role_sqs_full_access" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  role       = module.athena_crawler_role.id
 }
 
 resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
