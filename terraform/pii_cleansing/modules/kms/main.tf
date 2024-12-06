@@ -445,7 +445,9 @@ resource "aws_kms_key" "sqs_kms_key" {
             "Sid": "Enable IAM Root User Permissions for KMS",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::${var.account_id}:root"
+                "AWS": [
+                    "arn:aws:iam::${var.account_id}:root",
+                    "arn:aws:iam::${var.insights_account_id}:root"
             },
             "Action": [
               "kms:*"
