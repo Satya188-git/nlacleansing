@@ -448,6 +448,7 @@ resource "aws_kms_key" "sqs_kms_key" {
                 "AWS": [
                     "arn:aws:iam::${var.account_id}:root",
                     "arn:aws:iam::${var.insights_account_id}:root"
+                  ]
             },
             "Action": [
               "kms:*"
