@@ -442,6 +442,43 @@ resource "aws_kms_key" "sqs_kms_key" {
     "Id": "SQS-Key-Policy",
     "Statement": [
         {
+            "Sid": "Enable IAM User Permissions",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::${var.account_id}:root"
+            },
+            "Action": [
+              "kms:Encrypt",
+              "kms:Decrypt", 
+              "kms:ReEncrypt", 
+              "kms:GenerateDataKey", 
+              "kms:kms:GenerateDataKeyWithoutPlaintext",
+              "kms:DescribeKey", 
+              "kms:CreateGrant", 
+              "kms:PutKeyPolicy", 
+              "kms:TagResource", 
+              "kms:UntagResource", 
+              "kms:ListResourceTags", 
+              "kms:ListKeyPolicies", 
+              "kms:ListAliases", 
+              "kms:GetKeyPolicy", 
+              "kms:ListGrants",
+              "kms:ReEncryptFrom",
+              "kms:ReEncryptTo",
+              "kms:CreateAlias",
+              "kms:DeleteAlias",
+              "kms:UpdateAlias",
+              "kms:GetPublicKey",
+              "kms:UpdateKeyDescription",
+              "kms:EnableKeyRotation",
+              "kms:DisableKeyRotation",
+              "kms:UpdatePrimaryRegion",
+              "kms:ReplicateKey",
+              "kms:GetKeyRotationStatus"
+            ],
+            "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
+        },
+        {
             "Sid": "Enable IAM Root User Permissions for KMS",
             "Effect": "Allow",
             "Principal": {
