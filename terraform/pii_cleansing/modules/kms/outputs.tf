@@ -43,6 +43,6 @@ output "sns_kms_key_id" {
 }
 
 output "sqs_kms_key_id" {
-  value = aws_kms_key.sqs_kms_key.key_id
+  value = module.sqs_nla_kms_key.key_id
 }
 
