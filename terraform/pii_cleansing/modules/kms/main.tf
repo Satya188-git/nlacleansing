@@ -502,7 +502,7 @@ module "sns_kms_key" {
 #   target_key_id = aws_kms_key.sqs_kms_key.key_id
 # }
 
-module "sqs_kms_key" {
+module "sqs_nla_kms_key" {
   source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
   version          = "10.0.0"
   description      = local.description
@@ -511,10 +511,10 @@ module "sqs_kms_key" {
   application_code = local.application_code
   environment_code = local.environment_code
   region_code      = local.region_code
-  application_use  = "${var.application_use}-sqs-kms-key" # application_name = "${local.application_name}-sns"
+  application_use  = "${var.application_use}-sqs-nla-kms-key" # application_name = "${local.application_name}-sns"
   tags = merge(local.tags,
     {
-      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-na-key-sqs"
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sqs"
     },
   )
   policy = <<EOT
