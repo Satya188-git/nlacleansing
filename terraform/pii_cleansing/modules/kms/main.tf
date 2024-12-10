@@ -425,3 +425,43 @@ module "sns_kms_key" {
       }
   EOT  
 }
+
+module "sqs_nla_kms_key" {
+  source           = "app.terraform.io/SempraUtilities/seu-kms/aws"
+  version          = "10.0.0"
+  description      = local.description
+  aws_region       = local.region
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "${var.application_use}-sqs-nla-kms-key" # application_name = "${local.application_name}-sns"
+  tags = merge(local.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sqs"
+    },
+  )
+  policy = <<EOT
+      {
+      "Version": "2012-10-17",
+      "Id": "SQS-Key-Policy",
+      "Statement": [
+          {
+              "Sid": "Enable IAM Root User Permissions for KMS",
+              "Effect": "Allow",
+              "Principal": {
+                  "AWS": [
+                      "arn:aws:iam::${var.account_id}:root",
+                      "arn:aws:iam::${var.insights_account_id}:root"
+                    ]
+              },
+              "Action": [
+                "kms:*"
+              ],
+              "Resource": "arn:aws:kms:${var.region}:${var.account_id}:key/*"
+          }    
+      ]
+    }
+  EOT
+}
+

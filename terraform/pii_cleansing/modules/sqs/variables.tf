@@ -87,3 +87,8 @@ variable "insights_account_id" {
   type        = string
   description = "AWS account id for NLA Insights accounts"
 }
+
+variable "sqs_kms_key_id" {
+  type        = string
+  description = "AWS kms key for sqs"
+}

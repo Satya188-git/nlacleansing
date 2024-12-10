@@ -30,7 +30,7 @@ module "sqs_historical_etl_output" {
   application_name = "historical-dataloader-q"
   message_retention_seconds = "864000"
   visibility_timeout_seconds = "300"  
-  # kms_master_key_id = var.kms_key_sqs_key_id
+  kms_master_key_id = var.sqs_kms_key_id
   # kms_data_key_reuse_period_seconds = 300
   tags = merge(local.tags,
   {
