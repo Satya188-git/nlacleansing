@@ -176,8 +176,8 @@ module "dynamodb_nla_audit_table" {
 
 
 module "dynamodb_calltype_table" {
-  version     = "10.1.5"
-  # region      = local.region
+  version     = "10.1.0"
+  region      = local.region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
   table_name  = "ccc-call-type"
