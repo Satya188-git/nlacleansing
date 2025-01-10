@@ -1797,6 +1797,7 @@ resource "aws_s3_object" "edix_audio_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
+  tags = local.tags
 }
 
 
@@ -1805,6 +1806,7 @@ resource "aws_s3_object" "edix_metadata_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
+  tags = local.tags
 }
 
 resource "aws_s3_object" "edix_supervisor_prefix" {
@@ -1812,72 +1814,84 @@ resource "aws_s3_object" "edix_supervisor_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
+  tags = local.tags
 }
 
 resource "aws_s3_object" "access_logs_prefix" {
   key    = "log/"
   bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "callrecording_logs_prefix" {
   key    = "callrecordinglogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "transciption_logs_prefix" {
   key    = "transcriptionlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "audio_logs_prefix" {
   key    = "callaudiologs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "unrefined_logs_prefix" {
   key    = "unrefinedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "cleaned_logs_prefix" {
   key    = "cleanedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "verifiedcleaned_logs_prefix" {
   key    = "verifiedcleanedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "dirty_logs_prefix" {
   key    = "dirtylogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "audio_prefix" {
   key    = "AUDIO/"
   bucket = module.ccc_historical_calls_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "metadata_prefix" {
   key    = "METADATA/"
   bucket = module.ccc_historical_calls_bucket.s3_bucket_id
   source = "/dev/null"
+  tags = local.tags
 }
 
 resource "aws_s3_object" "scripts_prefix" {
   key        = "ETL_SCRIPTS/"
   bucket     = module.ccc_historical_calls_bucket.s3_bucket_id
   source     = "/dev/null"
+  tags = local.tags
 }
 
 # Encryption configuration
