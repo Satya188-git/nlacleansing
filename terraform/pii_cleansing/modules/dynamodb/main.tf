@@ -1,6 +1,7 @@
 locals {
   application_use  = var.application_use
   region           = var.region
+  aws_region           = var.region
   namespace        = var.namespace
   company_code     = var.company_code
   application_code = var.application_code
@@ -177,7 +178,7 @@ module "dynamodb_nla_audit_table" {
 
 module "dynamodb_calltype_table" {
   version     = "10.1.5"
-  region      = local.region
+  region      = local.aws_region
   region_code = local.region_code
   source      = "app.terraform.io/SempraUtilities/seu-dynamodb/aws"
   table_name  = "ccc-call-type"
