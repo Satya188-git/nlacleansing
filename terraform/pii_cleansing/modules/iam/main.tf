@@ -423,6 +423,7 @@ resource "aws_iam_policy" "s3_replication_policy" {
       }
     ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "iam_pass_role_policy" {
@@ -438,6 +439,7 @@ resource "aws_iam_policy" "iam_pass_role_policy" {
         }
       ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "kms_full_access" {
@@ -453,6 +455,7 @@ resource "aws_iam_policy" "kms_full_access" {
         }
       ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "audit_lambda_access_policy" {
@@ -470,6 +473,7 @@ resource "aws_iam_policy" "audit_lambda_access_policy" {
         }
     ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "s3_put_read_delete" {
@@ -493,6 +497,7 @@ resource "aws_iam_policy" "s3_put_read_delete" {
         }
       ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
@@ -546,6 +551,7 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
         }
       ]
   })
+  tags = local.tags
 }
 
 // create policy
@@ -570,6 +576,7 @@ resource "aws_iam_policy" "s3_crawler_role_policy" {
   ]
 }
 EOF
+tags = local.tags
 }
 
 resource "aws_iam_policy" "insights_assumed_role_policy" {
@@ -608,6 +615,7 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
     ]
 }
 EOF
+tags = local.tags
 }
 
 # sns policy for access denied notification lambda
@@ -631,6 +639,7 @@ resource "aws_iam_policy" "sns_subscribe_publish" {
         }
       ]
   })
+  tags = local.tags
 }
 
 # Policy for macie scan lambda to access secrets manager
@@ -651,6 +660,7 @@ resource "aws_iam_policy" "secrets_manager_macie"{
         }
       ]
   })
+  tags = local.tags
 }
 
 resource "aws_iam_policy" "kms_historical_access" {
@@ -669,6 +679,7 @@ resource "aws_iam_policy" "kms_historical_access" {
         }
       ]
   })
+  tags = local.tags
 }
 
 # Policies
