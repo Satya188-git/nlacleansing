@@ -20,6 +20,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 data "aws_iam_policy_document" "kms_default_policy" {
   statement {
     sid       = "Enable IAM User Permissions"

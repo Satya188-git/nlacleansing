@@ -99,6 +99,8 @@ locals {
   )  
 }*/
 
+data "aws_default_tags" "aws_tags" {}
+
 module "dynamodb_nla_audit_table" {
   version     = "10.1.0"
   region      = local.region

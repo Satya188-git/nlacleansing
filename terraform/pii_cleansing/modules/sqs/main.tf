@@ -38,6 +38,8 @@ module "sqs_historical_etl_output" {
   })
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 resource "aws_sqs_queue_policy" "sqs_historical_etl_output_access" {
   queue_url = module.sqs_historical_etl_output.id
   policy = <<POLICY

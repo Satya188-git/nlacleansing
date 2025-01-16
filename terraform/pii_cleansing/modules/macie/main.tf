@@ -15,6 +15,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 resource "aws_macie2_account" "nla_macie" {
   status                       = "ENABLED"
 }

@@ -24,6 +24,7 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
 
 module "glue-crawler" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"

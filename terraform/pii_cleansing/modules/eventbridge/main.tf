@@ -19,6 +19,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_event_rule" {
   name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
   description   = "activate lambda when object is created into bucket pii-transcription"

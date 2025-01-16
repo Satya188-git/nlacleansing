@@ -19,6 +19,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 module "callaudioaccess_log_group" {
   source = "app.terraform.io/SempraUtilities/seu-cloudwatch-log-group/aws"
   retention_in_days = 0

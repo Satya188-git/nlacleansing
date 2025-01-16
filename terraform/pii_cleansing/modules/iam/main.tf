@@ -19,6 +19,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 # Define IAM roles
 module "nla_replication_role" {
 

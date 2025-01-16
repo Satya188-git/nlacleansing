@@ -18,6 +18,7 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
 
 # Enable tfartifacts bucket versioning
 data "aws_s3_bucket" "tfartifacts" {

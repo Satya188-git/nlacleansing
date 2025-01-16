@@ -18,6 +18,8 @@ locals {
   # }
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 module "layers" {
   source = "./layers"
 }

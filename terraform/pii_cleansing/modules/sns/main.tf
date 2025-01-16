@@ -25,6 +25,8 @@ module "sns" {
   email_subscriber_list = ["${var.audioaccessnotificationemail}"]
 }
 
+data "aws_default_tags" "aws_tags" {}
+
 module "supervisor-data-notification-sns" {
   source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
   version          = "10.1.1"
