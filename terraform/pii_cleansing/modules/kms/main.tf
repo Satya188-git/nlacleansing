@@ -8,16 +8,16 @@ locals {
   region_code      = var.region_code
   application_name = "nla-key"
   description      = "KMS for encrypting AWS resources"
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version
-    billing-guid             = var.billing-guid
-    portfolio                = var.portfolio
-    support-group            = var.support-group
-    "sempra:gov:environment" = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id
-    "sempra:gov:unit"        = var.unit
-    data-classification      = var.data-classification
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version
+  #   billing-guid             = var.billing-guid
+  #   portfolio                = var.portfolio
+  #   support-group            = var.support-group
+  #   "sempra:gov:environment" = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id
+  #   "sempra:gov:unit"        = var.unit
+  #   data-classification      = var.data-classification
+  # }
 }
 
 data "aws_iam_policy_document" "kms_default_policy" {
@@ -71,7 +71,7 @@ module "athena_kms_key" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "${var.application_use}-athena-kms-key"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athena-kms-key"
     },
@@ -82,7 +82,7 @@ resource "aws_kms_key" "unrefined_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-unrefined-kms-key"
     },
@@ -100,7 +100,7 @@ resource "aws_kms_key" "initial_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-initial-kms-key"
     },
@@ -117,7 +117,7 @@ resource "aws_kms_key" "clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-clean-kms-key"
     },
@@ -134,7 +134,7 @@ resource "aws_kms_key" "dirty_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dirty-kms-key"
     },
@@ -151,7 +151,7 @@ resource "aws_kms_key" "verified_clean_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-verified-clean-kms-key"
     },
@@ -169,7 +169,7 @@ resource "aws_kms_key" "maciefindings_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-maciefindings-kms-key"
     },
@@ -293,7 +293,7 @@ resource "aws_kms_key" "piimetadata_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-piimetadata-kms-key"
     },
@@ -311,7 +311,7 @@ resource "aws_kms_key" "athenaresults_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-athenaresults-kms-key"
     },
@@ -328,7 +328,7 @@ resource "aws_kms_key" "sns_lambda_kms_key" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
   enable_key_rotation     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-sns-lambda-kms-key"
     },
@@ -381,7 +381,7 @@ module "sns_kms_key" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "${var.application_use}-sns-kms-key" # application_name = "${local.application_name}-sns"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sns"
     },
@@ -436,7 +436,7 @@ module "sqs_nla_kms_key" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "${var.application_use}-sqs-nla-kms-key" # application_name = "${local.application_name}-sns"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-kms-nla-key-sqs"
     },

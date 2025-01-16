@@ -7,18 +7,20 @@ locals {
   region_code      = var.region_code
   namespace        = var.namespace
   owner            = var.owner
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-    portfolio           = var.portfolio
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+  #   portfolio           = var.portfolio
 
-  }
+  # }
 }
+
+data "aws_default_tags" "aws_tags" {}
 
 module "athena" {
   depends_on       = [var.ccc_athenaresults_bucket_id]
@@ -29,7 +31,7 @@ module "athena" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_use  = "nla-pii"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-pii-athena"
     },

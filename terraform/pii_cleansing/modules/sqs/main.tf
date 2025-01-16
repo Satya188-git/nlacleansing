@@ -7,16 +7,16 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   owner            = var.owner
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    portfolio           = var.portfolio
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   portfolio           = var.portfolio
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+	# "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  # }
 }
 
 module "sqs_historical_etl_output" {
@@ -32,7 +32,7 @@ module "sqs_historical_etl_output" {
   visibility_timeout_seconds = "300"  
   kms_master_key_id = var.sqs_kms_key_id
   # kms_data_key_reuse_period_seconds = 300
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
   {
     "sempra:gov:name" = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-sqs-historical-dataloader-dlq"
   })

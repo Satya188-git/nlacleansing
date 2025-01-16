@@ -6,16 +6,16 @@ locals {
   application_code = var.application_code
   environment_code = var.environment_code
   region_code      = var.region_code
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    portfolio           = var.portfolio
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   portfolio           = var.portfolio
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+	# "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  # }
 }
 
 module "layers" {
@@ -42,7 +42,7 @@ module "ccc_transcribe_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   reserved_concurrent_executions    = 100
@@ -73,7 +73,7 @@ module "ccc_transcribe_lambda" {
 
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-lambda-transcribe"
     },
@@ -106,7 +106,7 @@ module "ccc_comprehend_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   reserved_concurrent_executions    = 100
@@ -163,7 +163,7 @@ module "ccc_comprehend_lambda" {
     key    = "pipeline-artifact/ccc_comprehend_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-comprehend"
     },
@@ -190,7 +190,7 @@ module "ccc_informational_macie_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   reserved_concurrent_executions    = 100
@@ -212,7 +212,7 @@ module "ccc_informational_macie_lambda" {
     key    = "pipeline-artifact/ccc_informational_macie_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-info-macie"
     },
@@ -239,7 +239,7 @@ module "ccc_notification_forwarder_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -251,7 +251,7 @@ module "ccc_notification_forwarder_lambda" {
     key    = "pipeline-artifact/ccc_notification_forwarder_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-notification"
     },
@@ -278,7 +278,7 @@ module "ccc_macie_scan_trigger_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   reserved_concurrent_executions    = 100
@@ -301,7 +301,7 @@ module "ccc_macie_scan_trigger_lambda" {
     key    = "pipeline-artifact/ccc_macie_scan_trigger_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-macie-scan"
     },
@@ -327,7 +327,7 @@ module "ccc_audit_call_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -352,7 +352,7 @@ module "ccc_audit_call_lambda" {
     key    = "pipeline-artifact/ccc_audit_call_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audit-call"
     },
@@ -378,7 +378,7 @@ module "ccc_audio_copy_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -397,7 +397,7 @@ module "ccc_audio_copy_lambda" {
     key    = "pipeline-artifact/ccc_audio_copy.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-copy"
     },
@@ -424,7 +424,7 @@ module "ccc_file_transfer_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -443,7 +443,7 @@ module "ccc_file_transfer_lambda" {
     key    = "pipeline-artifact/ccc_file_transfer_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-file-transfer"
     },
@@ -470,7 +470,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -488,7 +488,7 @@ module "ccc_audio_access_logs_to_cw_lambda" {
     key    = "pipeline-artifact/ccc_audio_access_logs_to_cw.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-audio-access-logs-to-cw"
     },
@@ -515,7 +515,7 @@ module "ccc_access_denied_notification_lambda" {
   attach_dead_letter_policy         = true
   attach_cloudwatch_logs_policy     = true
   cloudwatch_logs_retention_in_days = 180
-  cloudwatch_logs_tags              = local.tags
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
   memory_size                       = 128
   timeout                           = 180
   tracing_mode                      = "PassThrough"
@@ -533,7 +533,7 @@ module "ccc_access_denied_notification_lambda" {
     key    = "pipeline-artifact/ccc_access_denied_notification_lambda.zip"
   }
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-access-denied-notification"
     },
