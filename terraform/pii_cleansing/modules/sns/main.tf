@@ -9,17 +9,17 @@ module "sns" {
   environment_code = var.environment_code
   region_code      = var.region_code
 
-  # tags = {
-  #   "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-audio-access-notifications-topic"
-  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-	# "sempra:gov:unit"   = var.unit 				# unit                = var.unit
-  #   billing-guid        = var.billing-guid
-  #   portfolio           = var.portfolio
-  #   support-group       = var.support-group
-  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
-  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-  #   data-classification = var.data-classification
-  # }
+  tags = {
+    "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-audio-access-notifications-topic"
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
+    billing-guid        = var.billing-guid
+    portfolio           = var.portfolio
+    support-group       = var.support-group
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+    data-classification = var.data-classification
+  }
 
   name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-audio-access-notifications-topic"
   kms_master_key_id     = var.sns_kms_key_id
@@ -37,7 +37,17 @@ module "supervisor-data-notification-sns" {
   environment_code = var.environment_code
   region_code      = var.region_code
 
-  tags = data.aws_default_tags.aws_tags.tags
+  tags = {
+    "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+    billing-guid        = var.billing-guid
+    portfolio           = var.portfolio
+    support-group       = var.support-group
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+    data-classification = var.data-classification
+	"sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  }
 
   name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-supervisor-data-notification-topic"
   kms_master_key_id     = var.sns_kms_key_id
@@ -73,7 +83,17 @@ module "access_denied_notification_sns" {
   environment_code = var.environment_code
   region_code      = var.region_code
 
-  tags = data.aws_default_tags.aws_tags.tags
+  tags = {
+    "sempra:gov:name"   = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-access-denied-notification-topic"
+    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+	  "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+    billing-guid        = var.billing-guid
+    portfolio           = var.portfolio
+    support-group       = var.support-group
+    "sempra:gov:environment" = var.environment 	# environment         = var.environment
+    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+    data-classification = var.data-classification
+  }
 
   name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-access-denied-notification-topic"
   kms_master_key_id     = var.sns_kms_key_id
