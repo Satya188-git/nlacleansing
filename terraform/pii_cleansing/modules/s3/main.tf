@@ -6,18 +6,19 @@ locals {
   application_code = var.application_code
   environment_code = var.environment_code
   region_code      = var.region_code
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version # tag-version         = var.tag-version
-    "sempra:gov:unit"        = var.unit        # unit                = var.unit
-    billing-guid             = var.billing-guid
-    portfolio                = var.portfolio
-    support-group            = var.support-group
-    "sempra:gov:environment" = var.environment # environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id  # cmdb-ci-id          = var.cmdb-ci-id
-    data-classification      = var.data-classification
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version # tag-version         = var.tag-version
+  #   "sempra:gov:unit"        = var.unit        # unit                = var.unit
+  #   billing-guid             = var.billing-guid
+  #   portfolio                = var.portfolio
+  #   support-group            = var.support-group
+  #   "sempra:gov:environment" = var.environment # environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id  # cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification      = var.data-classification
+  # }
 }
 
+data "aws_default_tags" "aws_tags" {}
 
 # Enable tfartifacts bucket versioning
 data "aws_s3_bucket" "tfartifacts" {
@@ -48,7 +49,7 @@ module "ccc_unrefined_call_data_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-unrefined"
     },
@@ -217,7 +218,7 @@ module "ccc_initial_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription"
     },
@@ -380,7 +381,7 @@ module "ccc_cleaned_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-cleaned"
     },
@@ -524,7 +525,7 @@ module "ccc_verified_clean_bucket" {
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
   versioning                     = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-verified-clean"
     },
@@ -649,7 +650,7 @@ module "ccc_dirty_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-dirty"
     },
@@ -759,7 +760,7 @@ module "ccc_maciefindings_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-macie-findings"
     },
@@ -900,7 +901,7 @@ module "ccc_piimetadata_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-metadata"
     },
@@ -1056,7 +1057,7 @@ module "ccc_athenaresults_bucket" {
   create_bucket                  = true
   create_log_bucket              = false
   attach_alb_log_delivery_policy = false
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-athena-results"
     },
@@ -1142,7 +1143,7 @@ module "ccc_insights_audio_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio"
     },
@@ -1297,7 +1298,7 @@ module "ccc_callrecordings_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-callrecordings"
     },
@@ -1449,7 +1450,7 @@ module "ccc_callaudioaccesslogs_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-callaudioaccesslogs"
     },
@@ -1494,7 +1495,7 @@ module "ccc_nla_access_logs_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-access-logs"
     },
@@ -1534,7 +1535,7 @@ module "ccc_historical_calls_bucket" {
   create_bucket    = true
   force_destroy    = true
   versioning       = true
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-historical-logs"
     },
@@ -1797,7 +1798,7 @@ resource "aws_s3_object" "edix_audio_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 
@@ -1806,7 +1807,7 @@ resource "aws_s3_object" "edix_metadata_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "edix_supervisor_prefix" {
@@ -1814,84 +1815,84 @@ resource "aws_s3_object" "edix_supervisor_prefix" {
   bucket     = module.ccc_callrecordings_bucket.s3_bucket_id
   source     = "/dev/null"
   kms_key_id = var.kms_key_ccc_piimetadata_arn
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "access_logs_prefix" {
   key    = "log/"
   bucket = module.ccc_callaudioaccesslogs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "callrecording_logs_prefix" {
   key    = "callrecordinglogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "transciption_logs_prefix" {
   key    = "transcriptionlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "audio_logs_prefix" {
   key    = "callaudiologs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "unrefined_logs_prefix" {
   key    = "unrefinedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "cleaned_logs_prefix" {
   key    = "cleanedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "verifiedcleaned_logs_prefix" {
   key    = "verifiedcleanedlogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "dirty_logs_prefix" {
   key    = "dirtylogs/"
   bucket = module.ccc_nla_access_logs_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "audio_prefix" {
   key    = "AUDIO/"
   bucket = module.ccc_historical_calls_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "metadata_prefix" {
   key    = "METADATA/"
   bucket = module.ccc_historical_calls_bucket.s3_bucket_id
   source = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_s3_object" "scripts_prefix" {
   key        = "ETL_SCRIPTS/"
   bucket     = module.ccc_historical_calls_bucket.s3_bucket_id
   source     = "/dev/null"
-  tags = local.tags
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 # Encryption configuration

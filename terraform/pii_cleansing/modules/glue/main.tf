@@ -12,18 +12,19 @@ locals {
   glue_catalog_table_description    = "nla glue table"
   glue_catalog_table_table_type     = "EXTERNAL_TABLE"
 
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
-    support-group       = var.support-group
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-    portfolio           = var.portfolio
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  #   support-group       = var.support-group
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+  #   portfolio           = var.portfolio
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment_code
+  # }
 }
 
+data "aws_default_tags" "aws_tags" {}
 
 module "glue-crawler" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-crawler/aws"
@@ -64,7 +65,7 @@ module "glue-crawler" {
     }
   }
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-glue-crawler"
     },
@@ -81,7 +82,7 @@ module "nla_glue_table" {
   environment_code = local.environment_code
   region_code      = local.region_code
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-s3-glue-table"
     },
@@ -311,7 +312,7 @@ module "historicals_calls_etl_job" {
   source  = "app.terraform.io/SempraUtilities/seu-glue-etl/aws"
   version = "10.1.0"
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-historicals-etl-job"
     },
