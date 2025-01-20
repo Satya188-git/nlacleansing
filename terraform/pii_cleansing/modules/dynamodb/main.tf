@@ -7,16 +7,16 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   owner            = var.owner
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
-    portfolio           = var.portfolio
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  #   portfolio           = var.portfolio
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+  # }
 }
 /*module "dynamodb_audit_table" {
   version     = "10.1.0"
@@ -92,12 +92,14 @@ locals {
   }
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-audit-table"
     },
   )  
 }*/
+
+data "aws_default_tags" "aws_tags" {}
 
 module "dynamodb_nla_audit_table" {
   version     = "10.1.0"
@@ -167,7 +169,7 @@ module "dynamodb_nla_audit_table" {
   #}
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-nla-audit-table"
     },
@@ -226,7 +228,7 @@ module "dynamodb_calltype_table" {
   }
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-dynamodb-calltype-table"
     },

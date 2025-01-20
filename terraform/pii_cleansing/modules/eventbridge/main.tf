@@ -7,17 +7,19 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   owner            = var.owner
-  tags = {
-    "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    "sempra:gov:unit"   = var.unit				# unit                = var.unit
-    portfolio           = var.portfolio
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-  }
+  # tags = {
+  #   "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   "sempra:gov:unit"   = var.unit				# unit                = var.unit
+  #   portfolio           = var.portfolio
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+  # }
 }
+
+data "aws_default_tags" "aws_tags" {}
 
 resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_event_rule" {
   name          = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
@@ -43,7 +45,7 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiitranscription_s3_even
   }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-transcription-rule"
     },
@@ -71,7 +73,7 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiiunrefined_s3_event_ru
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-unrefined-rule"
     },
@@ -99,7 +101,7 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiicleaned_s3_event_rule
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-rule"
     },
@@ -127,7 +129,7 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiicleanedverified_s3_ev
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-cleaned-verified-rule"
     },
@@ -161,7 +163,7 @@ resource "aws_cloudwatch_event_rule" "customercallcenterpiimacieinfo_s3_event_ru
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-macie-info-rule"
     },
@@ -195,7 +197,7 @@ resource "aws_cloudwatch_event_rule" "callrecordings_audio_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-audio-rule"
     },
@@ -229,7 +231,7 @@ resource "aws_cloudwatch_event_rule" "callrecordings_metadata_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-metadata-rule"
     },
@@ -258,7 +260,7 @@ resource "aws_cloudwatch_event_rule" "pii_metadata_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-pii-metadata-rule"
     },
@@ -287,7 +289,7 @@ resource "aws_cloudwatch_event_rule" "audio_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-nla-audio-rule"
     },
@@ -321,7 +323,7 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_access_logs_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-access-logs-s3-event-rule"
     },
@@ -353,7 +355,7 @@ resource "aws_cloudwatch_event_rule" "callrecordings_supervisor_s3_event_rule" {
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-callrecordings-supervisor-notification-rule"
     },
@@ -364,7 +366,7 @@ resource "aws_cloudwatch_event_rule" "ccc_audio_copy_s3_event_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
   description = "run lambda at 5 minute intervals"
   schedule_expression = "rate(5 minutes)"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-audio-copy-rule"
     },
@@ -375,7 +377,7 @@ resource "aws_cloudwatch_event_rule" "ccc_pii_maciescan_scheduler_rule" {
   name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-scheduler-rule"
   description = "run lambda at 5 minute intervals"
   schedule_expression = "rate(5 minutes)"
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-pii-maciescan-scheduler-rule"
     },
@@ -419,7 +421,7 @@ resource "aws_cloudwatch_event_rule" "ccc_access_denied_notification_logs_s3_eve
 }
 EOF
 
-  tags = merge(local.tags,
+  tags = merge(data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-ccc-access-denied-event-rule"
     },
