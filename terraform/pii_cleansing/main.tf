@@ -323,6 +323,7 @@ module "s3" {
   account_id                            = local.account_id
   insights_account_id                   = var.insights_account_id
   insights_s3kms_arn                    = var.insights_s3kms_arn
+  athena_access_role                    = var.athena_access_role
 }
 
 

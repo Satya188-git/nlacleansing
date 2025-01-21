@@ -147,7 +147,8 @@ variable "nla_insights_historic_call_lambda_arn" {
   description = "Cross account lambda ARN which will be invoked by S3 bucket events"
 }
 
-# variable "historicals_calls_etl_job_name" {
-#   type        = string
-#   description = "ETL job name for sqs"
-# }
+
+variable "athena_access_role" {
+  type        = string
+  description = "IAM role arn to enable athena query"
+}
