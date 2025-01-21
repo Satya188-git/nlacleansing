@@ -96,7 +96,7 @@ data "aws_iam_policy_document" "deny_other_access_unrefined_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.custom_transcribe_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.audio_copy_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.custom_transcribe_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -143,7 +143,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_unrefined_polici
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn,"arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -282,7 +282,7 @@ data "aws_iam_policy_document" "deny_other_access_transcription_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.file_transfer_lambda_role_arn, var.transcribe_lambda_role_arn, var.comprehend_lambda_role_arn, var.custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.file_transfer_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.transcribe_lambda_role_arn, var.comprehend_lambda_role_arn, var.custom_transcribe_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -306,7 +306,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_transcription_po
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -570,7 +570,7 @@ data "aws_iam_policy_document" "deny_other_access_verified_clean_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.comprehend_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -613,7 +613,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_verified_clean_p
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -699,7 +699,7 @@ data "aws_iam_policy_document" "deny_other_access_dirty_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.file_transfer_lambda_role_arn, var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.file_transfer_lambda_role_arn, var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn,"arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
 
     principals {
@@ -723,7 +723,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_dirty_policies" 
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn,"arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -954,7 +954,7 @@ data "aws_iam_policy_document" "deny_other_access_piimetadata_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.nla_replication_role_arn, var.comprehend_lambda_role_arn, var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.nla_replication_role_arn, var.athena_access_role, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.comprehend_lambda_role_arn, var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
@@ -1038,7 +1038,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_piimetadata_poli
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -1101,7 +1101,7 @@ data "aws_iam_policy_document" "deny_other_access_athenaresults_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn, var.insights_assumed_role_arn]
+      values   = [var.comprehend_lambda_role_arn, var.athena_access_role ,data.aws_iam_role.oidc.arn, var.insights_assumed_role_arn]
     }
 
     principals {
@@ -1189,7 +1189,7 @@ data "aws_iam_policy_document" "deny_other_access_audio_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.insights_assumed_role_arn, var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn,"arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
 
     principals {
@@ -1235,7 +1235,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_audio_policies" 
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn,"arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
@@ -1349,7 +1349,7 @@ data "aws_iam_policy_document" "deny_other_access_callRecordings_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values = [var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn,
+      values = [var.audio_copy_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie" , var.file_transfer_lambda_role_arn, var.nla_replication_role_arn, data.aws_iam_role.oidc.arn,
       "arn:aws:iam::${var.account_id}:user/${local.company_code}-${local.application_code}-${local.environment_code}-iam-user-edix"]
     }
 
@@ -1390,7 +1390,7 @@ data "aws_iam_policy_document" "allow_file_transfer_role_access_callRecordings_p
 
     principals {
       type        = "AWS"
-      identifiers = [var.file_transfer_lambda_role_arn]
+      identifiers = [var.file_transfer_lambda_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }

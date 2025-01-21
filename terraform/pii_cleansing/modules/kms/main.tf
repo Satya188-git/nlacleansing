@@ -58,7 +58,7 @@ data "aws_iam_policy_document" "kms_default_policy" {
     ]
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.account_id}:root"]
+      identifiers = ["arn:aws:iam::${var.account_id}:root","arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie"]
     }
   }
 }
