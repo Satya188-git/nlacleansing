@@ -1101,7 +1101,7 @@ data "aws_iam_policy_document" "deny_other_access_athenaresults_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.comprehend_lambda_role_arn, data.aws_iam_role.oidc.arn, var.insights_assumed_role_arn]
+      values   = [var.comprehend_lambda_role_arn, var.athena_access_role ,data.aws_iam_role.oidc.arn, var.insights_assumed_role_arn]
     }
 
     principals {
