@@ -954,7 +954,7 @@ data "aws_iam_policy_document" "deny_other_access_piimetadata_policies" {
     condition {
       test     = "StringNotEquals"
       variable = "aws:PrincipalArn"
-      values   = [var.nla_replication_role_arn, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.comprehend_lambda_role_arn, var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
+      values   = [var.nla_replication_role_arn, var.athena_access_role, "arn:aws:iam::${var.account_id}:role/aws-service-role/macie.amazonaws.com/AWSServiceRoleForAmazonMacie", var.comprehend_lambda_role_arn, var.audio_copy_lambda_role_arn, var.file_transfer_lambda_role_arn, data.aws_iam_role.oidc.arn]
     }
 
     principals {
