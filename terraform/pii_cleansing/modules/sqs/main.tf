@@ -28,7 +28,7 @@ module "sqs_historical_etl_output" {
   environment_code = local.environment_code
   region_code      = local.region_code
   application_name = "historical-dataloader-q"
-  message_retention_seconds = "864000"
+  message_retention_seconds = "180"
   visibility_timeout_seconds = "300"  
   kms_master_key_id = var.sqs_kms_key_id
   # kms_data_key_reuse_period_seconds = 300
