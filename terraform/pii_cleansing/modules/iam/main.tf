@@ -1077,14 +1077,3 @@ resource "aws_iam_role_policy_attachment" "key_rotation_AWSLambdaBasicExecutionR
   role       = module.key_rotation_alert_lambda_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
-# policies for key rotation alert lambda role
-resource "aws_iam_role_policy_attachment" "key_rotation_access" {
-  role       = module.key_rotation_alert_lambda_role.name
-  policy_arn = aws_iam_policy.key_rotation_alert_role_policy.arn
-}
-
-resource "aws_iam_role_policy_attachment" "key_rotation_AWSLambdaBasicExecutionRole" {
-  role       = module.key_rotation_alert_lambda_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
