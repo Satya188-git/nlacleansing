@@ -84,6 +84,9 @@ parameters:
   - name: lambdaFunctionName10
     type: string
     default: "lambda-file-transfer" 
+  - name: lambdaFunctionName11
+    type: string
+    default: "key-rotation-alert.zip"
 
 steps:
   - template: ./lambda-deploy.yml
@@ -114,3 +117,5 @@ steps:
       lambdaFunctionName9: ${{ parameters.lambdaFunctionName9 }}
       s3LambdaObjectKey10: ${{ parameters.s3LambdaObjectKey10 }} 
       lambdaFunctionName10: ${{ parameters.lambdaFunctionName10 }}
+      s3LambdaObjectKey11: ${{ parameters.s3LambdaObjectKey11 }} 
+      lambdaFunctionName11: ${{ parameters.lambdaFunctionName11 }}

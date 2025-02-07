@@ -83,6 +83,7 @@ module "eventbridge" {
   sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
   ccc_nla_access_logs_bucket_id                           = module.s3.ccc_nla_access_logs_bucket_id
   ccc_access_denied_notification_lambda_arn               = module.lambda.ccc_access_denied_notification_lambda_arn
+  key_rotation_alert_lambda_arn                           = module.lambda.key_rotation_alert_lambda_arn
 }
 
 module "dynamodb" {
@@ -160,11 +161,13 @@ module "iam" {
   insights_account_id                  = var.insights_account_id
   s3bucket_insights_replication_arn    = var.s3bucket_insights_replication_arn
   kms_key_ccc_unrefined_arn            = module.kms.kms_key_ccc_unrefined_arn
+  sns_kms_key_id                       = module.kms.sns_kms_key_id
   ccc_insights_audio_bucket_arn        = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn        = module.s3.ccc_callrecordings_bucket_arn
   audit_lambda_arn                     = module.lambda.ccc_audit_call_lambda_arn
   access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
   ccc_historical_calls_bucket_arn      = module.s3.ccc_historical_calls_bucket_arn
+  key_rotation_sns_arn                 = module.sns.key_rotation_sns_arn
 }
 
 module "kms" {
@@ -260,6 +263,7 @@ module "lambda" {
   ccc_audio_access_logs_s3_event_rule_arn                   = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
   ccc_access_denied_notification_lambda_role_arn            = module.iam.ccc_access_denied_notification_lambda_role_arn
   ccc_access_denied_notification_logs_s3_event_rule_arn     = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
+  key_rotation_alert_lambda_role_arn                        = one(module.sns.key_rotation_alert_lambda_role_arn)
   access_denied_notification_topic_arn                      = one(module.sns.access_denied_notification_topic_arn)
   file_transfer_lambda_role_arn                             = module.iam.file_transfer_lambda_role_arn
 }
@@ -348,6 +352,7 @@ module "sns" {
   supervisordatanotificationemail = var.supervisordatanotificationemail
   unit                            = var.unit
   nlaaudioaccessnotificationemail = var.nlaaudioaccessnotificationemail
+  sns_email1                      = var.sns_email1
 }
 
 module "cloudwatch" {

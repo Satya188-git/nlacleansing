@@ -152,3 +152,9 @@ variable "athena_access_role" {
   type        = string
   description = "IAM role arn to enable athena query"
 }
+
+variable "sns_email1" {
+  type        = string
+  description = "SNS Email"
+  default     = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
+}

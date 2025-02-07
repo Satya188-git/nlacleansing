@@ -452,6 +452,49 @@ module "ccc_file_transfer_lambda" {
   )
 }
 
+# Lambda for key rotation alert
+module "key_rotation_alert_lambda" {
+  depends_on       = [var.file_transfer_lambda_role_arn]
+  source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
+  version          = "10.0.0"
+  company_code     = local.company_code
+  application_code = local.application_code
+  environment_code = local.environment_code
+  region_code      = local.region_code
+  application_use  = "key-rotation-alert"
+
+  description                       = "key rotation alert lambda"
+  handler                           = "run.lambda_handler"
+  runtime                           = "python3.11"
+  publish                           = true
+  architectures                     = ["x86_64"]
+  attach_tracing_policy             = true
+  attach_dead_letter_policy         = true
+  attach_cloudwatch_logs_policy     = true
+  cloudwatch_logs_retention_in_days = 180
+  cloudwatch_logs_tags              = data.aws_default_tags.aws_tags.tags
+  memory_size                       = 128
+  timeout                           = 180
+  tracing_mode                      = "PassThrough"
+  lambda_role                       = var.key_rotation_alert_lambda_role_arn
+  update_role                       = false
+
+  environment_variables = {
+    ROTATION_ALERT_SNS_ARN = var.key_alert_sns_arn
+    REGION                 = var.region
+  }
+  s3_existing_package = {
+    bucket = var.tf_artifact_s3
+    key    = "pipeline-artifact/key_rotation_alert_lambda.zip"
+  }
+
+  tags = merge(data.aws_default_tags.aws_tags.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-key-rotation-alert"
+    },
+  )
+}
+
 # Lambda for forwarding call audio s3 access logs to CW logs
 module "ccc_audio_access_logs_to_cw_lambda" {
   depends_on       = [var.ccc_audio_access_logs_to_cw_lambda_role_arn]
@@ -676,4 +719,12 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_ccc_access_denied_not
   principal      = "events.amazonaws.com"
   source_arn     = var.ccc_access_denied_notification_logs_s3_event_rule_arn
   source_account = var.account_id
+}
+
+resource "aws_lambda_permission" "allow_EventbridgeScheduler_invoke_keyrotationalert_lambda" {
+  statement_id  = "AllowExecutionFromEventbridgeScheduler"
+  action        = "lambda:InvokeFunction"
+  function_name = module.key_rotation_alert_lambda.lambda_function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = var.key_rotation_alert_lambda_scheduler_rule_arn
 }

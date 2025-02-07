@@ -428,6 +428,18 @@ EOF
   )
 }
 
+#Schedule key rotation alert lambda
+resource "aws_cloudwatch_event_rule" "key_rotation_alert_lambda_scheduler_rule" {
+  name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-key-rotation-alert-lambda-scheduler-rule"
+  description = "Run key_rotation_alert_lambda every day at 12:30 PM UTC i.e. 6.00 PM IST"
+  schedule_expression = "cron(30 12 ? * * *)"
+  tags = merge(data.aws_default_tags.aws_tags.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-key-rotation-event-rule"
+    },
+  )
+}
+
 # select lambda target for eventbridge rule
 resource "aws_cloudwatch_event_target" "customercallcenterpiitranscription_lambda_target1" {
   arn  = var.comprehend_lambda_arn
@@ -502,6 +514,12 @@ resource "aws_cloudwatch_event_target" "customercallcenterpiimaciescan_lambda_ta
 resource "aws_cloudwatch_event_target" "access_denied_notification_lambda_target" {
   arn  = var.ccc_access_denied_notification_lambda_arn
   rule = aws_cloudwatch_event_rule.ccc_access_denied_notification_logs_s3_event_rule.name
+}
+
+# select key rotation lambda target for eventbridge rule
+resource "aws_cloudwatch_event_target" "key_rotation_alert_lambda_target" {
+  arn  = var.key_rotation_alert_lambda_arn
+  rule = aws_cloudwatch_event_rule.key_rotation_alert_lambda_scheduler_rule.name
 }
 
 # select SNS target for eventbridge rule

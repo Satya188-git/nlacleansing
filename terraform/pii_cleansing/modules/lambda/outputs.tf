@@ -42,3 +42,8 @@ output "ccc_access_denied_notification_lambda_arn" {
   description ="ccc_access_denied_lambda ARN"
   value       = module.ccc_access_denied_notification_lambda.lambda_function_arn
 }
+
+output "key_rotation_alert_lambda_arn" {
+  description = "key_rotation_alert_lambda function ARN"
+  value       = module.key_rotation_alert_lambda.lambda_function_arn
+}

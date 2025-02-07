@@ -151,3 +151,13 @@ variable "ccc_historical_calls_bucket_arn" {
   type        = string
   description = "ccc_historical_calls_bucket_arn"
 }
+
+variable "key_rotation_sns_arn" {
+  type        = string
+  description = "key_rotation_sns_arn"
+}
+
+variable "sns_kms_key_id" {
+  type        = string
+  description = "sns_kms_key_id"
+}

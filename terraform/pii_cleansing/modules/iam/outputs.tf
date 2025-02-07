@@ -80,3 +80,8 @@ output "ccc_access_denied_notification_lambda_role_arn" {
   description = "ccc_access_denied_notification_lambda_role arn"
   value       = module.ccc_access_denied_notification_lambda_role.arn
 }
+
+output "key_rotation_alert_lambda_role_arn" {
+  description = "arn for the key_rotation_alert_lambda_role"
+  value       = module.key_rotation_alert_lambda_role.arn
+}

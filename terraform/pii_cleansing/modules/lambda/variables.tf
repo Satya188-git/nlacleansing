@@ -314,3 +314,13 @@ variable "access_denied_notification_topic_arn" {
   type        = string
   description = "access_denied_notification_arn"
 }
+
+variable "key_rotation_alert_lambda_role_arn" {
+  type        = string
+  description = "key_rotation_alert_lambda_role_arn"
+}
+
+variable "key_rotation_alert_lambda_scheduler_rule_arn" {
+  type        = string
+  description = "key_rotation_alert_lambda_scheduler_rule_arn"
+}

@@ -173,3 +173,8 @@ variable "ccc_access_denied_notification_lambda_arn" {
   type        = string
   description = "ccc_access_denied_notification_lambda_arn"
 }
+
+variable "key_rotation_alert_lambda_arn" {
+  type        = string
+  description = "key_rotation_alert_lambda_arn"
+}

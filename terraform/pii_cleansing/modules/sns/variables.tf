@@ -91,3 +91,8 @@ variable "nlaaudioaccessnotificationemail" {
   type        = string
   description = "NLA Audio access notification email id"
 }
+
+variable "sns_email1" {
+  type        = string
+  description = "sns_email1"
+}
