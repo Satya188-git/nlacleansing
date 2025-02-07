@@ -157,7 +157,8 @@ variable "key_rotation_sns_arn" {
   description = "key_rotation_sns_arn"
 }
 
-variable "sns_kms_key_id" {
+variable "sns_kms_key_arn" {
   type        = string
-  description = "sns_kms_key_id"
+  description = "sns_kms_key_arn"
 }
+

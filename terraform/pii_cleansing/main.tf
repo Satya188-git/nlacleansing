@@ -161,13 +161,13 @@ module "iam" {
   insights_account_id                  = var.insights_account_id
   s3bucket_insights_replication_arn    = var.s3bucket_insights_replication_arn
   kms_key_ccc_unrefined_arn            = module.kms.kms_key_ccc_unrefined_arn
-  sns_kms_key_id                       = module.kms.sns_kms_key_id
   ccc_insights_audio_bucket_arn        = module.s3.ccc_insights_audio_bucket_arn
   ccc_callrecordings_bucket_arn        = module.s3.ccc_callrecordings_bucket_arn
   audit_lambda_arn                     = module.lambda.ccc_audit_call_lambda_arn
   access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
   ccc_historical_calls_bucket_arn      = module.s3.ccc_historical_calls_bucket_arn
   key_rotation_sns_arn                 = one(module.sns.key_rotation_sns_arn)
+  sns_kms_key_arn                      = module.kms.sns_kms_key_arn
 }
 
 module "kms" {

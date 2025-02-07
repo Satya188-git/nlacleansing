@@ -716,7 +716,9 @@ resource "aws_iam_policy" "key_rotation_alert_role_policy" {
             "iam:ListUsers",
             "iam:ListAccessKeys"
           ],
-          "Resource":  [ "arn:aws:iam::${var.account_id}:user/*" ]
+          "Resource":  [ 
+            "arn:aws:iam::${var.account_id}:user/*" 
+          ]
         },
         {
             "Sid": "AllowSendingToSNS",
@@ -736,7 +738,7 @@ resource "aws_iam_policy" "key_rotation_alert_role_policy" {
                 "kms:Decrypt"
             ],
             "Resource": [
-                "${var.sns_kms_key_id}"
+                "${var.sns_kms_key_arn}"
             ]
           }
       ]
@@ -1063,6 +1065,17 @@ resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put
 resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_sns_subscribe_publish" {
   role       = module.ccc_access_denied_notification_lambda_role.name
   policy_arn = aws_iam_policy.sns_subscribe_publish.arn
+}
+
+# policies for key rotation alert lambda role
+resource "aws_iam_role_policy_attachment" "key_rotation_access" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = aws_iam_policy.key_rotation_alert_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "key_rotation_AWSLambdaBasicExecutionRole" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 # policies for key rotation alert lambda role
