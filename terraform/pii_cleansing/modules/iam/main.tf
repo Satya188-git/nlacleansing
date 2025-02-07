@@ -359,6 +359,24 @@ module "ccc_access_denied_notification_lambda_role" {
   )
 }
 
+# IAM role for nla-access-denied lambda
+module "key_rotation_alert_lambda_role" {
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.2" # version 			= "10.0.2-prerelease" # version 			= "10.0.1"
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-key-rotation-alert"
+  description       = "IAM role for ky rotation lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    data.aws_default_tags.aws_tags.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-key-rotation-alert"
+    },
+  )
+}
 
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
@@ -684,6 +702,51 @@ resource "aws_iam_policy" "kms_historical_access" {
   tags = data.aws_default_tags.aws_tags.tags
 }
 
+#Policy for key rotation lambda
+resource "aws_iam_policy" "key_rotation_alert_role_policy" {
+  depends_on = [ module.key_rotation_alert_lambda_role ]
+  name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-key-rotation-alert-role-policy"
+  policy = jsonencode(
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "iam:ListUsers",
+            "iam:ListAccessKeys"
+          ],
+          "Resource":  [ 
+            "arn:aws:iam::${var.account_id}:user/*" 
+          ]
+        },
+        {
+            "Sid": "AllowSendingToSNS",
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish"
+            ],
+            "Resource": [
+                "${var.key_rotation_sns_arn}"
+            ]
+          },
+          {
+            "Sid": "AllowAccesstoSNSKMS",
+            "Effect": "Allow",
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Resource": [
+                "${var.sns_kms_key_arn}"
+            ]
+          }
+      ]
+    }
+  )
+  tags = data.aws_default_tags.aws_tags.tags
+}
+
 # Policies
 # replication policies
 resource "aws_iam_role_policy_attachment" "s3_replication_role_policy" {
@@ -1002,4 +1065,15 @@ resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put
 resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_sns_subscribe_publish" {
   role       = module.ccc_access_denied_notification_lambda_role.name
   policy_arn = aws_iam_policy.sns_subscribe_publish.arn
+}
+
+# policies for key rotation alert lambda role
+resource "aws_iam_role_policy_attachment" "key_rotation_access" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = aws_iam_policy.key_rotation_alert_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "key_rotation_AWSLambdaBasicExecutionRole" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }

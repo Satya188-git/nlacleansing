@@ -120,6 +120,14 @@ jobs:
           archiveType: "zip"
           archiveFile: "$(Build.ArtifactStagingDirectory)/ccc_file_transfer_lambda.zip"
           replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: "Archive Lambda key_rotation_alert_lambda files"
+        inputs:
+          rootFolderOrFile: "$(Build.Repository.LocalPath)/backend/python/src/key_rotation_alert_lambda"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "$(Build.ArtifactStagingDirectory)/key_rotation_alert_lambda.zip"
+          replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: "$(Build.ArtifactStagingDirectory)" # Required

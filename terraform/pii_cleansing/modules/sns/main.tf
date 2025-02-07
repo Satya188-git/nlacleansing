@@ -70,3 +70,21 @@ module "access_denied_notification_sns" {
   create_email_topic    = true # Must be set to true to enable email subscriptions
   email_subscriber_list = ["${var.nlaaudioaccessnotificationemail}"]
 }
+
+# sns for access denied notification
+module "key_rotation_sns" {
+  source           = "app.terraform.io/SempraUtilities/seu-sns/aws"
+  version          = "10.1.1"
+  application_use  = "${var.application_use}-key-rotation-topic"
+  company_code     = var.company_code
+  application_code = var.application_code
+  environment_code = var.environment_code
+  region_code      = var.region_code
+
+  tags = data.aws_default_tags.aws_tags.tags
+
+  name                  = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-sns-nla-key-rotation-topic"
+  kms_master_key_id     = var.sns_kms_key_id
+  create_email_topic    = true # Must be set to true to enable email subscriptions
+  email_subscriber_list = ["${var.sns_email1}"]
+}

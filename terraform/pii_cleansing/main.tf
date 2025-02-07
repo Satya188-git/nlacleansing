@@ -83,6 +83,7 @@ module "eventbridge" {
   sns-supervisor-data-notification-topic-subscription-arn = one(module.sns.sns-supervisor-data-notification-topic-subscription-arn)
   ccc_nla_access_logs_bucket_id                           = module.s3.ccc_nla_access_logs_bucket_id
   ccc_access_denied_notification_lambda_arn               = module.lambda.ccc_access_denied_notification_lambda_arn
+  key_rotation_alert_lambda_arn                           = module.lambda.key_rotation_alert_lambda_arn
 }
 
 module "dynamodb" {
@@ -165,6 +166,8 @@ module "iam" {
   audit_lambda_arn                     = module.lambda.ccc_audit_call_lambda_arn
   access_denied_notification_topic_arn = one(module.sns.access_denied_notification_topic_arn)
   ccc_historical_calls_bucket_arn      = module.s3.ccc_historical_calls_bucket_arn
+  key_rotation_sns_arn                 = one(module.sns.key_rotation_sns_arn)
+  sns_kms_key_arn                      = module.kms.sns_kms_key_arn
 }
 
 module "kms" {
@@ -250,6 +253,7 @@ module "lambda" {
   callrecordings_metadata_s3_event_rule_arn                 = module.eventbridge.callrecordings_metadata_s3_event_rule_arn
   pii_metadata_s3_event_rule_arn                            = module.eventbridge.pii_metadata_s3_event_rule_arn
   audio_s3_event_rule_arn                                   = module.eventbridge.audio_s3_event_rule_arn
+  key_rotation_alert_lambda_scheduler_rule_arn              = module.eventbridge.key_rotation_alert_lambda_scheduler_rule_arn
   athena_database_name                                      = module.athena.athena_database_name
   nla_glue_table_name                                       = module.glue.nla_glue_table_name[local.glue_table_name]
   nla_glue_database_name                                    = module.glue.nla_glue_database_name
@@ -260,8 +264,10 @@ module "lambda" {
   ccc_audio_access_logs_s3_event_rule_arn                   = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
   ccc_access_denied_notification_lambda_role_arn            = module.iam.ccc_access_denied_notification_lambda_role_arn
   ccc_access_denied_notification_logs_s3_event_rule_arn     = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
+  key_rotation_alert_lambda_role_arn                        = module.iam.key_rotation_alert_lambda_role_arn
   access_denied_notification_topic_arn                      = one(module.sns.access_denied_notification_topic_arn)
   file_transfer_lambda_role_arn                             = module.iam.file_transfer_lambda_role_arn
+  key_rotation_sns_arn                                      = one(module.sns.key_rotation_sns_arn)
 }
 
 module "macie" {
@@ -348,6 +354,7 @@ module "sns" {
   supervisordatanotificationemail = var.supervisordatanotificationemail
   unit                            = var.unit
   nlaaudioaccessnotificationemail = var.nlaaudioaccessnotificationemail
+  sns_email1                      = var.sns_email1
 }
 
 module "cloudwatch" {
