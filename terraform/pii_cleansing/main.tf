@@ -264,7 +264,7 @@ module "lambda" {
   ccc_audio_access_logs_s3_event_rule_arn                   = module.eventbridge.ccc_audio_access_logs_s3_event_rule_arn
   ccc_access_denied_notification_lambda_role_arn            = module.iam.ccc_access_denied_notification_lambda_role_arn
   ccc_access_denied_notification_logs_s3_event_rule_arn     = module.eventbridge.ccc_access_denied_notification_logs_s3_event_rule_arn
-  key_rotation_alert_lambda_role_arn                        = module.sns.key_rotation_alert_lambda_role_arn
+  key_rotation_alert_lambda_role_arn                        = module.iam.key_rotation_alert_lambda_role_arn
   access_denied_notification_topic_arn                      = one(module.sns.access_denied_notification_topic_arn)
   file_transfer_lambda_role_arn                             = module.iam.file_transfer_lambda_role_arn
   key_rotation_sns_arn                                      = module.sns.key_rotation_sns_arn
