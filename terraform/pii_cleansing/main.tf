@@ -253,6 +253,7 @@ module "lambda" {
   callrecordings_metadata_s3_event_rule_arn                 = module.eventbridge.callrecordings_metadata_s3_event_rule_arn
   pii_metadata_s3_event_rule_arn                            = module.eventbridge.pii_metadata_s3_event_rule_arn
   audio_s3_event_rule_arn                                   = module.eventbridge.audio_s3_event_rule_arn
+  key_rotation_alert_lambda_scheduler_rule_arn              = module.eventbridge.key_rotation_alert_lambda_scheduler_rule_arn
   athena_database_name                                      = module.athena.athena_database_name
   nla_glue_table_name                                       = module.glue.nla_glue_table_name[local.glue_table_name]
   nla_glue_database_name                                    = module.glue.nla_glue_database_name
