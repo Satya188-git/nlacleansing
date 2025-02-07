@@ -86,7 +86,7 @@ parameters:
     default: "lambda-file-transfer" 
   - name: lambdaFunctionName11
     type: string
-    default: "key_rotation_alert"
+    default: "key_rotation_alert_lambda"
 
 steps:
   - template: ./lambda-deploy.yml
