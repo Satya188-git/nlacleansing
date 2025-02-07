@@ -324,3 +324,8 @@ variable "key_rotation_alert_lambda_scheduler_rule_arn" {
   type        = string
   description = "key_rotation_alert_lambda_scheduler_rule_arn"
 }
+
+variable "key_rotation_sns_arn" {
+  type        = string
+  description = "key_rotation_sns_arn"
+}

@@ -480,7 +480,7 @@ module "key_rotation_alert_lambda" {
   update_role                       = false
 
   environment_variables = {
-    ROTATION_ALERT_SNS_ARN = var.key_alert_sns_arn
+    ROTATION_ALERT_SNS_ARN = var.key_rotation_sns_arn
     REGION                 = var.region
   }
   s3_existing_package = {
