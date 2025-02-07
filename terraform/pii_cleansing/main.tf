@@ -267,7 +267,7 @@ module "lambda" {
   key_rotation_alert_lambda_role_arn                        = module.iam.key_rotation_alert_lambda_role_arn
   access_denied_notification_topic_arn                      = one(module.sns.access_denied_notification_topic_arn)
   file_transfer_lambda_role_arn                             = module.iam.file_transfer_lambda_role_arn
-  key_rotation_sns_arn                                      = module.sns.key_rotation_sns_arn
+  key_rotation_sns_arn                                      = one(module.sns.key_rotation_sns_arn)
 }
 
 module "macie" {
