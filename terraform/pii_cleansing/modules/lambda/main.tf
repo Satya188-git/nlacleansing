@@ -454,7 +454,7 @@ module "ccc_file_transfer_lambda" {
 
 # Lambda for key rotation alert
 module "key_rotation_alert_lambda" {
-  depends_on       = [var.file_transfer_lambda_role_arn]
+  depends_on       = [var.key_rotation_alert_lambda_role_arn]
   source           = "app.terraform.io/SempraUtilities/seu-lambda/aws"
   version          = "10.0.0"
   company_code     = local.company_code
