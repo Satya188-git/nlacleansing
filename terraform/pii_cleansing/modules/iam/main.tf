@@ -359,10 +359,10 @@ module "ccc_access_denied_notification_lambda_role" {
   )
 }
 
-# IAM role for nla-access-denied lambda
+# IAM role for key rotation alert lambda
 module "key_rotation_alert_lambda_role" {
   source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
-  version 			= "10.0.2" # version 			= "10.0.2-prerelease" # version 			= "10.0.1"
+  version 			= "10.0.2"
   company_code      = local.company_code
   application_code  = local.application_code
   environment_code  = local.environment_code
