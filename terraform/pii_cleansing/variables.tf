@@ -137,4 +137,24 @@ variable "nlaaudioaccessnotificationemail" {
   description = "Access denied notification email id"
 }
 
+variable "oidc_iam_role_name" {
+  type        = string
+  description = "OIDC role name for deployments"
+}
 
+variable "nla_insights_historic_call_lambda_arn" {
+  type        = string
+  description = "Cross account lambda ARN which will be invoked by S3 bucket events"
+}
+
+
+variable "athena_access_role" {
+  type        = string
+  description = "IAM role arn to enable athena query"
+}
+
+variable "sns_email1" {
+  type        = string
+  description = "SNS Email"
+  default     = "ACC-SDGE-PERSISTENT-TEAM@accenture.com"
+}

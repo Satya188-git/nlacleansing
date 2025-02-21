@@ -1,0 +1,1 @@
+# This is an ETL script which need to be run after we get historical calls data. This script will send all the data into sqs.

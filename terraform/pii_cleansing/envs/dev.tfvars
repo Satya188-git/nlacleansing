@@ -9,3 +9,6 @@ insights_s3kms_arn                = "arn:aws:kms:us-west-2:713342716921:key/789c
 audioaccessnotificationemail	  = "SShirsat@sdgecontractor.com"
 supervisordatanotificationemail	  = "SShirsat@sdgecontractor.com"
 nlaaudioaccessnotificationemail   = "SShirsat@sdgecontractor.com"
+oidc_iam_role_name                = "sdge-dtdes-dev-terraform-oidc-role"
+nla_insights_historic_call_lambda_arn = "arn:aws:lambda:us-west-2:713342716921:function:sdge-dmeti-dev-wus2-lambda-historic-call"
+athena_access_role                = "arn:aws:iam::183095018968:role/aws-reserved/sso.amazonaws.com/us-west-2/AWSReservedSSO_sdge-dtdes-dev-developer_cf9bf2d4311cc107"

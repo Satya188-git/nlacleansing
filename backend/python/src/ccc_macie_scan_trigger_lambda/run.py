@@ -4,7 +4,6 @@ import os
 from datetime import datetime, timedelta
 from datetime import timezone
 
-CLIENT_TOKEN = os.environ["CLIENT_TOKEN"]
 JOB_TYPE = os.environ["JOB_TYPE"]
 MANAGE_DATA_IDENTIFIER_SELECTOR = os.environ["MANAGE_DATA_IDENTIFIER_SELECTOR"]
 ACCOUNT_ID = os.environ["ACCOUNT_ID"]
@@ -87,7 +86,6 @@ def lambda_handler(event, context):
                     else:
                         # Create a new job
                         response = macie_client.create_classification_job(
-                            clientToken=CLIENT_TOKEN,
                             initialRun=False,
                             jobType=JOB_TYPE,
                             managedDataIdentifierSelector=MANAGE_DATA_IDENTIFIER_SELECTOR,

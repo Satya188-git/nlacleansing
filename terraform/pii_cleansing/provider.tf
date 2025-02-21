@@ -6,8 +6,14 @@ provider "aws" {
   # }
   default_tags {
     tags = {
-      "sempra:gov:environment" = var.environment
-      "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id
+      "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+      billing-guid        = var.billing-guid
+      "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+      portfolio           = var.portfolio
+      support-group       = var.support-group
+      "sempra:gov:environment" = var.environment 	# environment         = var.environment
+      "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+      data-classification = var.data-classification
     }
   }  
 }

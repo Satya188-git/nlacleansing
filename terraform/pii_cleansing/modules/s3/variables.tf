@@ -158,3 +158,18 @@ variable "insights_s3kms_arn" {
   type        = string
   description = "NLA Insights account KMS key to encrypt replicated S3 objects"
 }
+
+variable "oidc_iam_role_name" {
+  type        = string
+  description = "OIDC role name for deployments"
+}
+
+variable "nla_insights_historic_call_lambda_arn" {
+  type        = string
+  description = "Cross account lambda ARN which will be invoked by S3 bucket events"
+}
+
+variable "athena_access_role" {
+  type        = string
+  description = "IAM role arn to enable athena query"
+}

@@ -7,17 +7,19 @@ locals {
   environment_code = var.environment_code
   region_code      = var.region_code
   owner            = var.owner
-  tags = {
-    # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
-    billing-guid        = var.billing-guid
-    "sempra:gov:unit"   = var.unit 				# unit                = var.unit
-    portfolio           = var.portfolio
-    support-group       = var.support-group
-    "sempra:gov:environment" = var.environment 	# environment         = var.environment
-    "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
-    data-classification = var.data-classification
-  }
+  # tags = {
+  #   # "sempra:gov:tag-version" = var.tag-version  # tag-version         = var.tag-version
+  #   billing-guid        = var.billing-guid
+  #   "sempra:gov:unit"   = var.unit 				# unit                = var.unit
+  #   portfolio           = var.portfolio
+  #   support-group       = var.support-group
+  #   "sempra:gov:environment" = var.environment 	# environment         = var.environment
+  #   "sempra:gov:cmdb-ci-id"  = var.cmdb-ci-id 	# cmdb-ci-id          = var.cmdb-ci-id
+  #   data-classification = var.data-classification
+  # }
 }
+
+data "aws_default_tags" "aws_tags" {}
 
 # Define IAM roles
 module "nla_replication_role" {
@@ -32,7 +34,7 @@ module "nla_replication_role" {
   service_resources = ["s3.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-replication"
     },
@@ -50,7 +52,7 @@ module "comprehend_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-comprehend"
     },
@@ -67,7 +69,7 @@ module "transcribe_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-transcribe"
     },
@@ -84,7 +86,7 @@ module "informational_macie_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-macie-info"
     },
@@ -102,7 +104,7 @@ module "trigger_macie_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-trigger-macie"
     },
@@ -120,7 +122,7 @@ module "sns_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-sns"
     },
@@ -138,7 +140,7 @@ module "athena_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-athena"
     },
@@ -155,7 +157,7 @@ module "audit_call_lambda_role" {
   service_resources = ["lambda.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audit-call"
     },
@@ -173,7 +175,7 @@ module "autoscaler_iam_role" {
   service_resources = ["application-autoscaling.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-autoscale"
     },
@@ -191,7 +193,7 @@ module "custom_transcribe_lambda_role" {
   service_resources = ["transcribe.amazonaws.com"]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-custom-transcribe"
     },
@@ -210,7 +212,7 @@ module "athena_crawler_role" {
   description       = "IAM role for Athena Glue Crawler"
   service_resources = ["glue.amazonaws.com"]
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-glue-crawler-role"
     },
@@ -229,7 +231,7 @@ module "audio_copy_role" {
   description       = "IAM role for EDIX audio copy lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-audio-copy-role"
     },
@@ -261,7 +263,7 @@ module "insights_assumed_role" {
   ]
 
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-insights-assumed-role"
     },
@@ -280,7 +282,7 @@ module "ccc_audio_access_logs_to_cw_lambda_role" {
   description       = "IAM role for transfering audio_access_logs_to_cw lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-audio-access-logs-to-cw"
     },
@@ -312,7 +314,7 @@ module "pii-daily-monitoring-role" {
   ]  
   
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-pii-daily-monitoring"
     },
@@ -331,7 +333,7 @@ module "file_transfer_lambda_role" {
   description       = "IAM role for file transfer lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-file-transfer-lambda-role"
     },
@@ -350,13 +352,31 @@ module "ccc_access_denied_notification_lambda_role" {
   description       = "IAM role for acess denied notification lambda"
   service_resources = ["lambda.amazonaws.com"]
   tags = merge(
-    local.tags,
+    data.aws_default_tags.aws_tags.tags,
     {
       "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-ccc-access-denied-notification"
     },
   )
 }
 
+# IAM role for key rotation alert lambda
+module "key_rotation_alert_lambda_role" {
+  source  			= "app.terraform.io/SempraUtilities/seu-iam-role/aws"
+  version 			= "10.0.2"
+  company_code      = local.company_code
+  application_code  = local.application_code
+  environment_code  = local.environment_code
+  region_code       = local.region_code
+  application_use   = "${local.application_use}-key-rotation-alert"
+  description       = "IAM role for ky rotation lambda"
+  service_resources = ["lambda.amazonaws.com"]
+  tags = merge(
+    data.aws_default_tags.aws_tags.tags,
+    {
+      "sempra:gov:name" = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-key-rotation-alert"
+    },
+  )
+}
 
 # custom policies
 resource "aws_iam_policy" "s3_replication_policy" {
@@ -423,6 +443,7 @@ resource "aws_iam_policy" "s3_replication_policy" {
       }
     ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "iam_pass_role_policy" {
@@ -438,6 +459,7 @@ resource "aws_iam_policy" "iam_pass_role_policy" {
         }
       ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "kms_full_access" {
@@ -453,6 +475,7 @@ resource "aws_iam_policy" "kms_full_access" {
         }
       ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "audit_lambda_access_policy" {
@@ -470,6 +493,7 @@ resource "aws_iam_policy" "audit_lambda_access_policy" {
         }
     ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "s3_put_read_delete" {
@@ -493,6 +517,7 @@ resource "aws_iam_policy" "s3_put_read_delete" {
         }
       ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
@@ -546,11 +571,12 @@ resource "aws_iam_policy" "custom_transcribe_lambda_policy" {
         }
       ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 // create policy
 resource "aws_iam_policy" "s3_crawler_role_policy" {
-  name        = "S3BucketAccess"
+  name        = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-S3BucketAccess"
   description = "Get and Put access for S3 bucket"
 
   policy = <<EOF
@@ -563,11 +589,14 @@ resource "aws_iam_policy" "s3_crawler_role_policy" {
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "${var.ccc_piimetadata_bucket_arn}*"
+      "Resource": ["${var.ccc_piimetadata_bucket_arn}*",
+                   "${var.ccc_historical_calls_bucket_arn}*"
+      ]
     }
   ]
 }
 EOF
+tags = data.aws_default_tags.aws_tags.tags
 }
 
 resource "aws_iam_policy" "insights_assumed_role_policy" {
@@ -581,12 +610,17 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
         {
             "Action": [
               "s3:GetObject",
-              "s3:GetObjectAttributes"
+              "s3:GetObjectAttributes",
+              "s3:ListBucket",
+              "S3:PutObject",
+              "S3:RestoreObject"
             ],
             "Effect": "Allow",
             "Resource": [ 
               "${var.ccc_unrefined_call_data_bucket_arn}/*",
-              "${var.ccc_insights_audio_bucket_arn}/*" 
+              "${var.ccc_insights_audio_bucket_arn}/*",
+              "${var.ccc_historical_calls_bucket_arn}/*",
+              "${var.ccc_athenaresults_bucket_arn}/*"
             ],
             "Sid": "S3Read"
         },
@@ -601,6 +635,7 @@ resource "aws_iam_policy" "insights_assumed_role_policy" {
     ]
 }
 EOF
+tags = data.aws_default_tags.aws_tags.tags
 }
 
 # sns policy for access denied notification lambda
@@ -624,6 +659,92 @@ resource "aws_iam_policy" "sns_subscribe_publish" {
         }
       ]
   })
+  tags = data.aws_default_tags.aws_tags.tags
+}
+
+# Policy for macie scan lambda to access secrets manager
+resource "aws_iam_policy" "secrets_manager_macie"{
+  name    = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-secrets-manager-macie"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect" = "Allow",
+          "Action" = [
+            "secretsmanager:DescribeSecret",
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:ListSecrets"
+          ],
+          "Resource" = "*"
+        }
+      ]
+  })
+  tags = data.aws_default_tags.aws_tags.tags
+}
+
+resource "aws_iam_policy" "kms_historical_access" {
+  name = "${local.company_code}-${local.application_code}-${local.environment_code}-${local.region_code}-${local.application_use}-kms-historical-access"
+  policy = jsonencode(
+    {
+      "Version" = "2012-10-17",
+      "Statement" = [
+        {
+          "Effect"   = "Allow",
+          "Action"   = "kms:*",
+          "Resource" =[ "arn:aws:kms:us-west-2:183095018968:key/a3c23fd4-06a1-4a17-9201-fbc0fef1943c",
+                        "arn:aws:kms:us-west-2:183095018968:key/945ab6d1-e249-4d9d-bfc6-f4cc36268774",
+                        "${var.ccc_athenaresults_bucket_arn}/*",
+                        "${var.ccc_athenaresults_bucket_arn}"]
+        }
+      ]
+  })
+  tags = data.aws_default_tags.aws_tags.tags
+}
+
+#Policy for key rotation lambda
+resource "aws_iam_policy" "key_rotation_alert_role_policy" {
+  depends_on = [ module.key_rotation_alert_lambda_role ]
+  name = "${var.company_code}-${var.application_code}-${var.environment_code}-${var.region_code}-${var.application_use}-key-rotation-alert-role-policy"
+  policy = jsonencode(
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "iam:ListUsers",
+            "iam:ListAccessKeys"
+          ],
+          "Resource":  [ 
+            "arn:aws:iam::${var.account_id}:user/*" 
+          ]
+        },
+        {
+            "Sid": "AllowSendingToSNS",
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish"
+            ],
+            "Resource": [
+                "${var.key_rotation_sns_arn}"
+            ]
+          },
+          {
+            "Sid": "AllowAccesstoSNSKMS",
+            "Effect": "Allow",
+            "Action": [
+                "kms:GenerateDataKey",
+                "kms:Decrypt"
+            ],
+            "Resource": [
+                "${var.sns_kms_key_arn}"
+            ]
+          }
+      ]
+    }
+  )
+  tags = data.aws_default_tags.aws_tags.tags
 }
 
 # Policies
@@ -764,6 +885,11 @@ resource "aws_iam_role_policy_attachment" "MacieTriggerAuditLambdaAccess" {
   role       = module.trigger_macie_lambda_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "macie_trigger_secrets_manager_macie" {
+  policy_arn = aws_iam_policy.secrets_manager_macie.arn
+  role       = module.trigger_macie_lambda_role.name
+}
+
 #  audit call lambda
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole8" {
   role       = module.audit_call_lambda_role.name
@@ -846,8 +972,28 @@ resource "aws_iam_role_policy_attachment" "athena_crawler_role_kms_full_access" 
   role       = module.athena_crawler_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "athena_crawler_role_sqs_full_access" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  role       = module.athena_crawler_role.id
+}
+
 resource "aws_iam_role_policy_attachment" "insights_assumed_role_policy" {
   policy_arn = aws_iam_policy.insights_assumed_role_policy.arn
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "historicalAmazonAthenaFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "kms_historical_access" {
+  policy_arn = aws_iam_policy.kms_historical_access.arn
+  role       = module.insights_assumed_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "historicalAmazonSqsFullAccess" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
   role       = module.insights_assumed_role.name
 }
 
@@ -919,4 +1065,15 @@ resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_s3_put
 resource "aws_iam_role_policy_attachment" "ccc_access_denied_notification_sns_subscribe_publish" {
   role       = module.ccc_access_denied_notification_lambda_role.name
   policy_arn = aws_iam_policy.sns_subscribe_publish.arn
+}
+
+# policies for key rotation alert lambda role
+resource "aws_iam_role_policy_attachment" "key_rotation_access" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = aws_iam_policy.key_rotation_alert_role_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "key_rotation_AWSLambdaBasicExecutionRole" {
+  role       = module.key_rotation_alert_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }

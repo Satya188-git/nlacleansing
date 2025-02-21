@@ -67,3 +67,8 @@ output "ccc_access_denied_notification_logs_s3_event_rule_arn" {
   description = "ccc_access_denied_notification_logs_s3_event_rule_arn"
   value       = aws_cloudwatch_event_rule.ccc_access_denied_notification_logs_s3_event_rule.arn
 }
+
+output "key_rotation_alert_lambda_scheduler_rule_arn" {
+  description = "key_rotation_alert_lambda_scheduler_rule"
+  value       = aws_cloudwatch_event_rule.key_rotation_alert_lambda_scheduler_rule.arn
+}

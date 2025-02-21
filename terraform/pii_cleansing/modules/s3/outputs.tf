@@ -106,3 +106,13 @@ output "ccc_nla_access_logs_bucket_id" {
   description = "ccc_nla_access_logs_bucket S3 bucket ID"
   value       = module.ccc_nla_access_logs_bucket.s3_bucket_id
 }
+
+output "ccc_historical_calls_bucket_id" {
+  description = "ccc_historical_calls_bucket S3 bucket ID"
+  value = module.ccc_historical_calls_bucket.s3_bucket_id
+}
+
+output "ccc_historical_calls_bucket_arn" {
+  description = "ccc_historical_calls_bucket S3 bucket ID"
+  value = module.ccc_historical_calls_bucket.s3_bucket_arn
+}

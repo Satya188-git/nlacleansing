@@ -41,3 +41,12 @@ output "athena_kms_key_arn" {
 output "sns_kms_key_id" {
   value = module.sns_kms_key.key_id
 }
+
+output "sns_kms_key_arn" {
+  value = module.sns_kms_key.key_arn
+}
+
+output "sqs_kms_key_id" {
+  value = module.sqs_nla_kms_key.key_id
+}
+
