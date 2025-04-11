@@ -9,6 +9,33 @@ on:
         required: true
         type: string
 
+      awsRegionCode: 
+        description: 'Deployment Environment'
+        required: true
+        type: string
+        default: "us-west-2"
+      awsRegionAbbreviation: 
+        description: 'Deployment Environment'
+        required: true
+        type: string
+        default: "wus2"
+      s3ArtifactBucketSuffix: 
+        required: true
+        type: string
+        default: "s3-tf-artifacts"
+      s3ArtifactBucketFolder: 
+        required: true
+        type: string
+        default: "pipeline-artifact"
+      s3LambdaObjectKey1: 
+        required: true
+        type: string
+        default: "ccc_audit_call_lambda.zip"
+      lambdaFunctionName1: 
+        required: true
+        type: string
+        default: "lambda-audit-call"
+
 jobs:
   deploy-lambda:
     runs-on: ubuntu-latest
