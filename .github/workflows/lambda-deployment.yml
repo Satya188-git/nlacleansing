@@ -1,0 +1,142 @@
+name: Lambda Deploy Workflow
+
+on:
+  workflow_call:
+    # inputs:
+    #   environment:
+    #     description: 'Deployment Environment'
+    #     required: true
+    #     type: string
+    #     default: dev
+  workflow_dispatch:
+    inputs:
+      # SCName:
+      #   description: "AWS Service Connection Prefix (pipeline name)"
+      #   required: true
+      #   default: ""
+      environment:
+        description: "Current environment being deployed (e.g., dev, tst, qa, prd)"
+        required: true
+        default: ""
+
+jobs:
+  deploy:
+    name: Deploy Lambda Functions
+    runs-on: ubuntu-latest
+
+    env:
+      awsRegionCode: "us-west-2"
+      awsRegionAbbreviation: "wus2"
+      s3ArtifactBucketSuffix: "s3-tf-artifacts"
+      s3ArtifactBucketFolder: "pipeline-artifact"
+      organization: "sdge" # Replace with your organization name
+      applicationCode: "dmeti" # Replace with your application code
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2 # Change if needed  
+
+      - name: Deploy Lambda Function 1
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName1" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName1.zip" \
+            --region "${{ env.awsRegionCode }}"
+      
+      - name: Deploy Lambda Function 2
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName2" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName2.zip" \
+            --region "${{ env.awsRegionCode }}"
+      
+      - name: Deploy Lambda Function 3
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName3" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName3.zip" \
+            --region "${{ env.awsRegionCode }}"
+      
+      - name: Deploy Lambda Function 4
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName4.zip" \
+            --region "${{ env.awsRegionCode }}"
+      
+      - name: Deploy Lambda Function 5
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName5.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 6
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName6.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 7
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName7.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 8
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName8.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 4
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName4.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 9
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName9.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 10
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName10.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+      - name: Deploy Lambda Function 11
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName4" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName11.zip" \
+            --region "${{ env.awsRegionCode }}"
+
+       
