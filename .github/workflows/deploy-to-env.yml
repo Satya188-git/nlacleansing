@@ -35,3 +35,9 @@ jobs:
     with:
       #environment: ${{ github.event.inputs.environment }}
       environment: dev
+      awsRegionCode: 'us-west-2'
+      awsRegionAbbreviation: 'wus2'
+      s3ArtifactBucketSuffix: 's3-tf-artifacts'
+      s3ArtifactBucketFolder: 'pipeline-artifact'
+      s3LambdaObjectKey1: 'ccc_audit_call_lambda.zip'
+      lambdaFunctionName1: 'lambda-audit-call'

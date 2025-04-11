@@ -19,3 +19,19 @@ jobs:
       - name: Deploy to AWS Lambda
         #run: echo "Deploying Lambda to ${{ inputs.environment }}"
         run: echo "Deploying Lambda to dev"
+ 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2 # Change if needed  
+
+      - name: Deploy Lambda Function 1
+        run: |
+          aws lambda update-function-code \
+            --function-name "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-lambdaFunctionName1" \
+            --s3-bucket "${{ env.organization }}-${{ env.applicationCode }}-${{ inputs.environment }}-${{ env.awsRegionAbbreviation }}-${{ env.s3ArtifactBucketSuffix }}" \
+            --s3-key "${{ env.s3ArtifactBucketFolder }}/lambdaFunctionName1.zip" \
+            --region "${{ env.awsRegionCode }}"
+      
