@@ -3,7 +3,7 @@ name: deploy-to-env
 on:
   push:
     branches:
-      - feature/*  # Trigger on all branches starting with "feature/"
+      - master  # Trigger on all branches starting with "feature/"
   workflow_dispatch:  # Allow manual triggers
 
 jobs:
