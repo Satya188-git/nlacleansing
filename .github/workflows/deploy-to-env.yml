@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy:
-    uses: SempraUtilities/sdge-it-nla/.github/workflows/lambda-deployment.yml@dev
+    uses: SempraUtilities/sdge-it-nla/.github/workflows/lambda-deployment.yml@master
     with:
       Environment: ${{ github.ref_name }}
       awsRegionCode: 'us-west-2'
