@@ -17,4 +17,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to AWS Lambda
-        run: echo "Deploying Lambda to ${{ inputs.environment }}"
+        #run: echo "Deploying Lambda to ${{ inputs.environment }}"
+        run: echo "Deploying Lambda to ${{ github.ref }}"

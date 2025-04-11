@@ -2,17 +2,21 @@
 name: Deploy to Environment
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Target Environment (dev, tst, qa, prd)"
-        required: true
-        type: choice
-        options:
-          - dev
-          - tst
-          - qa
-          - prd
+  push:
+    branches:
+      - main
+
+#   workflow_dispatch:
+#     inputs:
+#       environment:
+#         description: "Target Environment (dev, tst, qa, prd)"
+#         required: true
+#         type: choice
+#         options:
+#           - dev
+#           - tst
+#           - qa
+#           - prd
 
 jobs:
   deploy:
@@ -22,10 +26,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to Environment
-        run: echo "Deploying to ${{ github.event.inputs.environment }}"
+        #run: echo "Deploying to ${{ github.event.inputs.environment }}"
+        run: echo "deploying to ${{ github.ref }}"
 
   call-lambda-deployment:
     needs: deploy  # Ensures Lambda deployment runs after the main deploy job
     uses: ./.github/workflows/lambda-deployment.yml  # Calls the reusable workflow
     with:
-      environment: ${{ github.event.inputs.environment }}
+      #environment: ${{ github.event.inputs.environment }}
+      environment: ${{ github.ref }}
