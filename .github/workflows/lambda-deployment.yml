@@ -3,11 +3,11 @@ name: Lambda Deployment
 
 on:
   workflow_call:  # Enables this workflow to be called from another workflow
-    # inputs:
-    #   environment:
-    #     description: "Target Environment"
-    #     required: true
-    #     type: string
+    inputs:
+      environment:
+        description: "Target Environment"
+        required: true
+        type: string
 
 jobs:
   deploy-lambda:
