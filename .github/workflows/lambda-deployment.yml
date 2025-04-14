@@ -56,12 +56,38 @@ jobs:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     aws-region: us-west-2 # Change if needed  
-      - name: Set up AWS CLI
+      # - name: Set up AWS CLI
+      #   run: |
+      #     mkdir -p ~/.aws
+      #     echo "[default]" > ~/.aws/credentials
+      #     echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+      #     echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+
+      - name: Set up AWS Credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-west-2" # Change to your region
         run: |
-          mkdir -p ~/.aws
-          echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-          echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+          echo "Configuring AWS credentials..."
+          aws sts get-caller-identity
+
+      - name: Assume Role
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-west-2" # Change to your region
+        run: |
+          echo "Assuming role..."
+          ROLE_ARN="arn:aws:iam::<account-id>:role/<role-name>" # Replace with your role ARN
+          RESPONSE=$(aws sts assume-role --role-arn $ROLE_ARN --role-session-name "GitHubActionsSession")
+          AWS_ACCESS_KEY_ID=$(echo $RESPONSE | jq -r '.Credentials.AccessKeyId')
+          AWS_SECRET_ACCESS_KEY=$(echo $RESPONSE | jq -r '.Credentials.SecretAccessKey')
+          AWS_SESSION_TOKEN=$(echo $RESPONSE | jq -r '.Credentials.SessionToken')
+          export AWS_ACCESS_KEY_ID
+          export AWS_SECRET_ACCESS_KEY
+          export AWS_SESSION_TOKEN
+          echo "Role assumed successfully."
 
       - name: Deploy Lambda Function 1
         env:
