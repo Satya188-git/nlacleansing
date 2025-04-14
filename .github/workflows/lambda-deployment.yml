@@ -79,7 +79,7 @@ jobs:
           AWS_REGION: "us-west-2" # Change to your region
         run: |
           echo "Assuming role..."
-          ROLE_ARN="arn:aws:iam::<account-id>:role/<role-name>" # Replace with your role ARN
+          ROLE_ARN="arn:aws:iam::891612551190:role/sdge-dcctr-dev-iam-role-ado" # Replace with your role ARN
           RESPONSE=$(aws sts assume-role --role-arn $ROLE_ARN --role-session-name "GitHubActionsSession")
           AWS_ACCESS_KEY_ID=$(echo $RESPONSE | jq -r '.Credentials.AccessKeyId')
           AWS_SECRET_ACCESS_KEY=$(echo $RESPONSE | jq -r '.Credentials.SecretAccessKey')
