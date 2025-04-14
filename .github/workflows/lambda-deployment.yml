@@ -39,6 +39,7 @@ on:
 jobs:
   deploy-lambda:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
