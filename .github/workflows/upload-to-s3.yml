@@ -1,14 +1,21 @@
 name: upload_to_s3
 on:
-  workflow_call:
-    secrets: 
-      AWS_ACCESS_KEY_ID:
-      AWS_SECRET_ACCESS_KEY:
-      #ASSUME_ROLE_ARN:
-       required: true
+#   workflow_call:
+#     secrets: 
+#       AWS_ACCESS_KEY_ID:
+#       AWS_SECRET_ACCESS_KEY:
+#       #ASSUME_ROLE_ARN:
+#        required: true
+  push:
+    branches:
+      - main
 jobs:
+
+  Build_NLA_Artifacts:
+
   upload:
     runs-on: ubuntu-latest
+    needs: Build_NLA_Artifacts
     steps:  
       - name: Checkout code
         uses: actions/checkout@v2

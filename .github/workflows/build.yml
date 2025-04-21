@@ -2,6 +2,9 @@ name: Build_NLA_Artifacts
 
 on:
   workflow_call:
+#   push:
+#     branches:
+#       - main  
     
   
 jobs:
