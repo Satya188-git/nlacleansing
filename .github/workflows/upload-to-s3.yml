@@ -8,7 +8,7 @@ on:
 #        required: true
   push:
     branches:
-      - main
+      - master
 jobs:
 
   Build_NLA_Artifacts:
