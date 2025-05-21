@@ -94,5 +94,5 @@ jobs:
           echo "Uploading to S3..."
           for file in ${{ github.workspace }}/build_artifacts/*.zip; do
             fname=$(basename $file)
-            aws s3 cp "$file" "s3://socal-dtdes-${{ secrets.ENVIRONMENT }}-wus2-s3-tf-artifacts=testingbucket/pipeline-artifact/$fname" --region us-west-2
+            aws s3 cp "$file" "s3://socal-dtdes-${{ secrets.ENVIRONMENT }}-wus2-s3-tf-artifacts-testingbucket/pipeline-artifact/$fname" --region us-west-2
           done
