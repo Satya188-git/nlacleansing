@@ -140,7 +140,7 @@ jobs:
 
       - name: Assume IAM role
         run: |
-          ROLE_ARN="arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/sdge-dcctr-${{ secrets.ENVIRONMENT }}-iam-role-ado"
+          ROLE_ARN="arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/sdge-dcctr-${{ inputs.environment }}-iam-role-ado"
           OUTPUT_PROFILE="AWSCLI-AssumeRole"
           ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$OUTPUT_PROFILE" --output json)
           export AWS_ACCESS_KEY_ID=$(echo "$ASSUME_ROLE_OUTPUT" | jq -r '.Credentials.AccessKeyId')
