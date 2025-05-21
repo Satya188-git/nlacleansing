@@ -9,7 +9,7 @@ on:
 
 jobs:
   set-environment:
-    runs-on: sempra-ubuntu-x64
+    runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.setenv.outputs.environment }}
     steps:

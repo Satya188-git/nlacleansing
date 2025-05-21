@@ -20,7 +20,7 @@ jobs:
   
   set-environment:
   
-    runs-on: sempra-ubuntu-x64
+    runs-on: ubuntu-latest
     outputs:
       environment: ${{ steps.setenv.outputs.environment }}
     steps:
@@ -39,7 +39,7 @@ jobs:
           fi
   
   upload:
-    runs-on: sempra-ubuntu-x64
+    runs-on: ubuntu-latest
     needs: [ Build_NLA_Artifacts , set-environment ]
     environment: ${{ needs.set-environment.outputs.environment }}
     
