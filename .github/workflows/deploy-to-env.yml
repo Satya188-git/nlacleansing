@@ -71,7 +71,7 @@ jobs:
       # lambdaFunctionName10: 'lambda-file-transfer'
       # s3LambdaObjectKey11: 'key_rotation_alert_lambda.zip'
       # lambdaFunctionName11: 'lambda-key-rotation-alert'
-      organization: 'sdge'
+      organization: 'socal'
       applicationcode: 'dtdes'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
