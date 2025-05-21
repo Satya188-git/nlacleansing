@@ -2,15 +2,21 @@ name: Build_NLA_Artifacts
 
 on:
   workflow_call:
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - qa
 #   push:
 #     branches:
 #       - main  
     
   
 jobs:
+  
   build:
     name: Build NLA Artifacts
     runs-on: ubuntu-latest
+   # needs: upload_to_s3
 
     steps:
       - name: Checkout Repository
