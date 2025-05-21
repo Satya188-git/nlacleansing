@@ -1,20 +1,203 @@
-# .github/workflows/lambda-deployment.yml
-name: Lambda Deployment
+name: Lambda Deploy Workflow
 
 on:
-  workflow_call:  # Enables this workflow to be called from another workflow
+  workflow_call:
     inputs:
-      environment:
+      Environment:
         description: "Target Environment"
         required: true
         type: string
+      awsRegionCode:
+        required: true
+        type: string
+      awsRegionAbbreviation:
+        required: true
+        type: string
+      s3ArtifactBucketSuffix:
+        required: true
+        type: string
+      s3ArtifactBucketFolder:
+        required: true
+        type: string
+      s3LambdaObjectKey1:
+        required: true
+        type: string
+      lambdaFunctionName1:
+        required: true
+        type: string
+      # s3LambdaObjectKey2:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName2:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey3:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName3:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey4:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName4:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey5:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName5:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey6:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName6:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey7:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName7:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey8:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName8:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey9:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName9:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey10:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName10:
+      #   required: true
+      #   type: string
+      # s3LambdaObjectKey11:
+      #   required: true
+      #   type: string
+      # lambdaFunctionName11:
+      #   required: true
+      #   type: string
+      # organization:
+      #   required: true
+      #   type: string
+      # applicationcode:
+      #   required: true
+      #   type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_ACCOUNT:
+        required: true
 
 jobs:
-  deploy-lambda:
+  deploy:
+    #runs-on: sempra-ubuntu-x64
+    name: Deploy to ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+    environment: ${{ inputs.environment }}
 
-      - name: Deploy to AWS Lambda
-        run: echo "Deploying Lambda to ${{ inputs.environment }}"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Clear AWS credentials
+        run: |
+          unset AWS_ACCESS_KEY_ID
+          unset AWS_SECRET_ACCESS_KEY
+          unset AWS_SESSION_TOKEN
+          unset AWS_DEFAULT_REGION
+          rm -rf ~/.aws
+
+      - name: Set up AWS CLI credentials
+        run: |
+          mkdir -p ~/.aws
+          echo "[default]" > ~/.aws/credentials
+          echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+          echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Debug AWS Credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-west-2
+        run: |
+          aws sts get-caller-identity --region $AWS_REGION    
+
+      - name: Assume IAM role
+        run: |
+          ROLE_ARN="arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/sdge-dcctr-${{ secrets.ENVIRONMENT }}-iam-role-ado"
+          OUTPUT_PROFILE="AWSCLI-AssumeRole"
+          ASSUME_ROLE_OUTPUT=$(aws sts assume-role --role-arn "$ROLE_ARN" --role-session-name "$OUTPUT_PROFILE" --output json)
+          export AWS_ACCESS_KEY_ID=$(echo "$ASSUME_ROLE_OUTPUT" | jq -r '.Credentials.AccessKeyId')
+          export AWS_SECRET_ACCESS_KEY=$(echo "$ASSUME_ROLE_OUTPUT" | jq -r '.Credentials.SecretAccessKey')
+          export AWS_SESSION_TOKEN=$(echo "$ASSUME_ROLE_OUTPUT" | jq -r '.Credentials.SessionToken')
+
+      - name: Deploy all Lambda functions
+        run: |
+          ORG="${{ inputs.organization }}"
+          APP="${{ inputs.applicationcode }}"
+          ENV="${{ inputs.Environment }}"
+          AWS_ABBR="${{ inputs.awsRegionAbbreviation }}"
+          REGION="${{ inputs.awsRegionCode }}"
+          S3_BUCKET="${ORG}-${APP}-${ENV}-${AWS_ABBR}-${{ inputs.s3ArtifactBucketSuffix }}"
+          S3_FOLDER="${{ inputs.s3ArtifactBucketFolder }}"
+
+          LAMBDA_NAMES=(
+            "${{ inputs.lambdaFunctionName1 }}"
+            # "${{ inputs.lambdaFunctionName2 }}"
+            # "${{ inputs.lambdaFunctionName3 }}"
+            # "${{ inputs.lambdaFunctionName4 }}"
+            # "${{ inputs.lambdaFunctionName5 }}"
+            # "${{ inputs.lambdaFunctionName6 }}"
+            # "${{ inputs.lambdaFunctionName7 }}"
+            # "${{ inputs.lambdaFunctionName8 }}"
+            # "${{ inputs.lambdaFunctionName9 }}"
+            # "${{ inputs.lambdaFunctionName10 }}"
+            # "${{ inputs.lambdaFunctionName11 }}"
+          )
+
+          S3_KEYS=(
+            "${{ inputs.s3LambdaObjectKey1 }}"
+            # "${{ inputs.s3LambdaObjectKey2 }}"
+            # "${{ inputs.s3LambdaObjectKey3 }}"
+            # "${{ inputs.s3LambdaObjectKey4 }}"
+            # "${{ inputs.s3LambdaObjectKey5 }}"
+            # "${{ inputs.s3LambdaObjectKey6 }}"
+            # "${{ inputs.s3LambdaObjectKey7 }}"
+            # "${{ inputs.s3LambdaObjectKey8 }}"
+            # "${{ inputs.s3LambdaObjectKey9 }}"
+            # "${{ inputs.s3LambdaObjectKey10 }}"
+            # "${{ inputs.s3LambdaObjectKey11 }}"
+          )
+
+          for i in "${!LAMBDA_NAMES[@]}"; do
+            FN_NAME="${ORG}-${APP}-${ENV}-${AWS_ABBR}-${LAMBDA_NAMES[$i]}"
+            S3_KEY="${S3_FOLDER}/${S3_KEYS[$i]}"
+            echo "Deploying $FN_NAME from $S3_KEY"
+            aws lambda update-function-code \
+              --function-name "$FN_NAME" \
+              --s3-bucket "$S3_BUCKET" \
+              --s3-key "$S3_KEY" \
+              --region "$REGION"
+            aws lambda wait function-updated --function-name "$FN_NAME" --region "$REGION"
+            echo "Deployed $FN_NAME"
+          done
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}  

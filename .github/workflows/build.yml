@@ -1,0 +1,67 @@
+name: Build_NLA_Artifacts
+
+on:
+  workflow_call:
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - qa
+#   push:
+#     branches:
+#       - main  
+    
+  
+jobs:
+  
+  build:
+    name: Build NLA Artifacts
+    runs-on: ubuntu-latest
+   # needs: upload_to_s3
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Archive Lambda audit_call files
+        run: zip -r ccc_audit_call_lambda.zip backend/python/src/ccc_audit_call_lambda
+
+      - name: Archive Lambda ccc_comprehend_lambda files
+        run: zip -r ccc_comprehend_lambda.zip backend/python/src/ccc_comprehend_lambda
+
+      - name: Archive Lambda ccc_informational_macie_lambda files
+        run: zip -r ccc_informational_macie_lambda.zip backend/python/src/ccc_informational_macie_lambda
+
+      - name: Archive Lambda ccc_macie_scan_trigger_lambda files
+        run: zip -r ccc_macie_scan_trigger_lambda.zip backend/python/src/ccc_macie_scan_trigger_lambda
+
+      - name: Archive Lambda ccc_notification_forwarder_lambda files
+        run: zip -r ccc_notification_forwarder_lambda.zip backend/python/src/ccc_notification_forwarder_lambda
+
+      - name: Archive Lambda ccc_transcribe_lambda files
+        run: zip -r ccc_transcribe_lambda.zip backend/python/src/ccc_transcribe_lambda
+
+      - name: Archive Lambda ccc_audio_copy_lambda files
+        run: zip -r ccc_audio_copy.zip backend/python/src/ccc_audio_copy_lambda
+
+      - name: Archive Lambda ccc_audio_access_logs_to_cw files
+        run: zip -r ccc_audio_access_logs_to_cw.zip backend/python/src/ccc_audio_access_logs_to_cw
+
+      - name: Archive Lambda ccc_access_denied_notification_lambda files
+        run: zip -r ccc_access_denied_notification_lambda.zip backend/python/src/ccc_access_denied_notification_lambda
+
+      - name: Archive Lambda ccc_file_transfer_lambda files
+        run: zip -r ccc_file_transfer_lambda.zip backend/python/src/ccc_file_transfer_lambda
+
+      - name: Archive Lambda key_rotation_alert_lambda files
+        run: zip -r key_rotation_alert_lambda.zip backend/python/src/key_rotation_alert_lambda
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nla-artifacts
+          path: "*.zip"
+
+
+      
