@@ -41,7 +41,7 @@ jobs:
 
   Deploy_Lambda_Functions:
     name: deploy-to-${{ needs.set-environment.outputs.environment }}
-    uses: ./.github/workflows/lambda-deploy.yml
+    uses: ./.github/workflows/lambda-deployment.yml
     needs: [upload_to_s3 , Build_NLA_Artifacts , set-environment]
     with:
       Environment: ${{ needs.set-environment.outputs.environment }}
