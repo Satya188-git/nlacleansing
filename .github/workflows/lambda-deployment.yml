@@ -85,12 +85,12 @@ on:
       # lambdaFunctionName11:
       #   required: true
       #   type: string
-      # organization:
-      #   required: true
-      #   type: string
-      # applicationcode:
-      #   required: true
-      #   type: string
+      organization:
+        required: true
+        type: string
+      applicationcode:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
