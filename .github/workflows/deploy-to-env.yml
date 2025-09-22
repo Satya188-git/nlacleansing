@@ -6,7 +6,23 @@ on:
       - dev
       - qa
   workflow_dispatch:
-
+     inputs:
+      environment:
+        description: Select the GitHub environment
+        required: true
+        type: choice
+        options:
+          - dev
+          - qa
+          - prd
+      branch:
+        description: Select branch
+        required: true
+        type: choice
+        options:
+          - dev
+          - feature/demo
+          - master   
 jobs:
   set-environment:
     runs-on: sempra-ubuntu-x64
