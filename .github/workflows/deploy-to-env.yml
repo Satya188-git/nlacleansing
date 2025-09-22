@@ -7,14 +7,18 @@ on:
       - qa
   workflow_dispatch:
      inputs:
+      # environment:
+      #   description: Select the GitHub environment
+      #   required: true
+      #   type: choice
+      #   options:
+      #     - dev
+      #     - qa
+      #     - prd
       environment:
-        description: Select the GitHub environment
+        description: GitHub Environment where Job Will Run
         required: true
-        type: choice
-        options:
-          - dev
-          - qa
-          - prd
+        type: string
       branch:
         description: Select branch
         required: true
